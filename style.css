@@ -1,9 +1,14 @@
 html {
-    height: 100%;
-    width: 100%;
-    background-color: yellow;
-  }
+  height: 100%;
+  width: 100%;
+  background-color: yellow;
+}
+
+#cornboarimage {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 #cornboar {
-    display: none;
+  display: none;
 }
