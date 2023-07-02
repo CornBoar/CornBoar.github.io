@@ -1,6 +1,6 @@
 var boarDiv = document.getElementById('cornboar');
 
-function showBoarDiv() {
+function toggleBoarDiv() {
   if (boarDiv.style.display === 'none') {
     boarDiv.style.display = 'block';
   }
