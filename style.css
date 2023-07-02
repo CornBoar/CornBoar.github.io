@@ -5,10 +5,22 @@ html {
 }
 
 #cornboarimage {
+  display: block;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 100px;
+  width: auto;
 }
 
 #cornboar {
   display: none;
+  text-align: center;
+}
+
+#dripcornboar {
+
+}
+
+#dripcornboar2 {
+  padding-left: 1262px;
 }
