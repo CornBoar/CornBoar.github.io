@@ -2,5 +2,10 @@ var boarDiv = document.getElementById('cornboar');
 
 function showBoarDiv() {
   alert('cock');
-  boarDiv.style.display = "block";
+  if (boarDiv.style.display = 'none') {
+    boarDiv.style.display = 'block';
+  }
+  else {
+    boarDiv.style.display = 'none';
+  }
 }
