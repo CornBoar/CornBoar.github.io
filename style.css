@@ -18,7 +18,8 @@ html {
 }
 
 #dripcornboar {
-
+  display: grid;
+  place-items: center;
 }
 
 #dripcornboar2 {
