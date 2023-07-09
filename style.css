@@ -9,3 +9,21 @@ html {
   display: flex;
   justify-content: center;
 }
+
+.centered {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+#backgrounddiv {
+  background-color: black;
+  border-radius: 50px;
+  height: 5000px;
+}
+
+.centeredimgs {
+  display: block;
+  margin: auto;
+}
