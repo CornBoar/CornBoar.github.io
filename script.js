@@ -1,10 +1,19 @@
-var boarDiv = document.getElementById('cornboar');
+const feetPics = document.getElementById("feetpics");
 
-function toggleBoarDiv() {
-  if (boarDiv.style.display === 'none') {
-    boarDiv.style.display = 'block';
+function imgOnClick() {
+  if (feetPics.innerHTML === "") {
+    feetPics.innerHTML = "🦶";
   }
   else {
-    boarDiv.style.display = 'none';
+    feetPics.innerHTML = "";
+  }
+}
+
+function onFootClick() {
+  if (feetPics.innerHTML === "🦶") {
+    feetPics.innerHTML = 'This link is an IP grabber but has Boar feet pics. Worth it?:&nbsp;<a href="https://boarfeetpics.redx70.repl.co/" target="_blank" rel="noopener noreferrer">https://boarfeetpics.redx70.repl.co/</a>';
+  }
+  else {
+    feetPics.innerHTML = "🦶";
   }
 }
