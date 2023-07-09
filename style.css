@@ -4,24 +4,6 @@ html {
   background-color: yellow;
 }
 
-#cornboarimage {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 100px;
-  width: auto;
-}
-
-#cornboar {
-  display: none;
-  text-align: center;
-}
-
-#dripcornboar {
-  display: grid;
-  place-items: center;
-}
-
-#dripcornboar2 {
-  padding-left: 1262px;
+#title {
+  color: brown;
 }
