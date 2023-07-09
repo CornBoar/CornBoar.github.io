@@ -6,4 +6,6 @@ html {
 
 #title {
   color: brown;
+  display: flex;
+  justify-content: center;
 }
