@@ -1,5 +1,9 @@
 const feetPics = document.getElementById("feetpics");
 
+if (typeof screen.orientation !== "undefined") {
+  alert("Sorry for how badly this is formatted on mobile 😭");
+}
+
 function imgOnClick() {
   if (feetPics.innerHTML === "") {
     feetPics.innerHTML = "🦶";
