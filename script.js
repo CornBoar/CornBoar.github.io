@@ -1,6 +1,10 @@
 const feetPics = document.getElementById("feetpics");
 
-if (ontouchstart in document.documentElement) {
+function isMobileDevice() {
+  return /Mobi/.test(navigator.userAgent);
+}
+
+if (isMobileDevice()) {
   alert("Sorry for how badly this is formatted on mobile 😭");
 }
 
