@@ -1,6 +1,6 @@
 const feetPics = document.getElementById("feetpics");
 
-if (window.orientation > 1) {
+if (ontouchstart in document.documentElement) {
   alert("Sorry for how badly this is formatted on mobile 😭");
 }
 
