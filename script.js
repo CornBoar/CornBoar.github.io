@@ -5,7 +5,7 @@ function isMobileDevice() {
 }
 
 if (isMobileDevice()) {
-  alert("Sorry for how badly this is formatted on mobile 😭");
+  alert("Sorry for how badly this is formatted on mobile 😭, I'd recommend enabling Desktop Mode.");
 }
 
 function imgOnClick() {
