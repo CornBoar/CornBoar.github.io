@@ -1,0 +1,64 @@
+html {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+  }
+  
+  .whitetext {
+    color: white;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .avatars {
+    max-height: 100px;
+    max-width: 100px;
+    min-height: 100px;
+    min-width: 100px;
+    margin: auto;
+  }
+  
+  #demonlisttext {
+    color: gold;
+  }
+  
+  #userstatstext {
+    color: gold;
+    display: none;
+  }
+  
+  #userstatstext2 {
+    display: none;
+  }
+  
+  #credits {
+    display: none;
+  }
+  
+  #userstats {
+    display: none;
+  }
+  
+  #toggle {
+    display: none;
+    margin: auto;
+    background-color: blue;
+    color: gold;
+    border-radius: 25px;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .statsvisibilitybuttons button {
+    display: none;
+    margin: auto;
+    background-color: blue;
+    color: gold;
+    border-radius: 25px;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .listvictors {
+    text-align: center;
+    font-family: "Poppins", sans-seri;
+  }
+  
