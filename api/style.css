@@ -1,0 +1,8 @@
+html {
+    background-color: black;
+  }
+.whitetext {
+  color: white;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
