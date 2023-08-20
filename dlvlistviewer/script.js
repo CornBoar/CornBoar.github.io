@@ -120,20 +120,13 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => 
             if (formattedVictors === "") {
               formattedVictors = "No Victors";
             }
-            
-            let objectCount = data["gd_stats"][data["main"][i]]["object_count"];
-            if (objectCount === "0") {
-              objectCount = "GD Servers Shit Themselves 😔";
-            }
-            let formattedGdStats = `<div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatsauthor${data["victors"][data["main"][i]].length}>Uploaded By: ${data["gd_stats"][data["main"][i]]["uploaded_by"]} (${data["gd_stats"][data["main"][i]]["author_id"]})</div>
-            <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatsdifficulty${data["victors"][data["main"][i]].length}>Difficulty: ${data["gd_stats"][data["main"][i]]["difficulty"]}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatsdownloads${data["victors"][data["main"][i]].length}>Downloads: ${data["gd_stats"][data["main"][i]]["downloads"]}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatslikes${data["victors"][data["main"][i]].length}>Likes: ${data["gd_stats"][data["main"][i]]["likes"]}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatslength${data["victors"][data["main"][i]].length}>Length: ${data["gd_stats"][data["main"][i]]["length"]}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatsobjectcount${data["victors"][data["main"][i]].length}>Object Count: ${objectCount}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatslastupdatedinversion${data["victors"][data["main"][i]].length}>Last Updated In: ${data["gd_stats"][data["main"][i]]["last_updated_in_version"]}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatssong${data["victors"][data["main"][i]].length}>Song: ${data["gd_stats"][data["main"][i]]["song"]}</div>
-                                   <div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstatslevelid${data["victors"][data["main"][i]].length}>Level ID: ${data["gd_stats"][data["main"][i]]["level_id"]}</div>`;
+            var gdStats = "";
+            fetch(`https://gdbrowser.com/api/search/${data["main"][i]}/`).then((Response) => {
+              return Response.json()
+            }).then((data) => {
+              gdStats = {"author": data[1]["name"], "difficulty": data[1]["difficulty"], "downloads": data[1]["downloads"], "likes": data[1]["likes"], "length": data[1]["length"], "objectCount": data[1]["objects"], "gameVersion": data[1]["gameVersion"], "song": data[1]["songName"], "levelId": data[1]["id"]};
+            });
+            let formattedGdStats = `<div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsauthor1">Uploaded By: ${gdStats.author}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsdifficulty1">Difficulty: ${gdStats.difficulty}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsdownloads1">Downloads: ${gdStats.downloads}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatslength1">Length: ${gdStats.length}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsobjectcount1">Object Count: ${gdStats.objectCount}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsgameversion1">Last Updated In Version: ${gdStats.gameVersion}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatssong1">Song: ${gdStats.song}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatslevelid1">Level ID: ${gdStats.levelId}</div>`;
             formattedList += `<h2 class="whitetext" id="demon${i}" onclick=toggleVictors("${data["main"][i].split(" ").join("")}")>${parseInt(i) + 1}. ${data["main"][i]}</h2><h3 style="color:gold"  id="${data["main"][i].split(" ").join("")}victors">VICTORS:</h3>${formattedVictors}<h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victorsposition">POINTERCRATE POSITION:</h3><div style="color:white" id=${data["main"][i].split(" ").join("")}victorspositions${data["victors"][data["main"][i]].length}>${data["positions"][data["main"][i]]}</div><h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victorsgdstats">GEOMETRY DASH STATS:</h3><div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstats${data["victors"][data["main"][i]].length}>${formattedGdStats}</div>`;
           }
           document.getElementById("demonlisttext").innerHTML = "DEMON LIST:";
