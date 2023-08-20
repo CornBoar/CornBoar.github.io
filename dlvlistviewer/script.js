@@ -11,14 +11,13 @@ function togglePage() {
     document.getElementById("showallstats").innerHTML = "Show All Stats";
     document.getElementById("hideallstats").innerHTML= "Hide All Stats";
     document.getElementById("real").style.display = "none";
-    document.getElementById("toggle").innerHTML = "Leaderboard/User Stats";
     document.getElementById("userstatstext2").innerHTML = "Click Username To View Stats";
+    document.getElementById("toggle").innerHTML = "Demon List";
     for (let i in document.getElementsByTagName("*")) {
       if (document.getElementsByTagName("*")[i].id.includes("victors")) {
         document.getElementsByTagName("*")[i].style.display = "none";
       }
     }
-    document.getElementById("toggle").innerHTML = "Demon List";
   }
   else {
     document.getElementById("userstatstext").style.display = "none";
@@ -27,8 +26,8 @@ function togglePage() {
     document.getElementById("real").style.display = "block";
     document.getElementById("showallstats").innerHTML = "Show All Demon Stats";
     document.getElementById("hideallstats").innerHTML= "Hide All Demon Stats";
-    document.getElementById("toggle").innerHTML = "Demon List";
     document.getElementById("userstatstext2").innerHTML = "Click Demon To Show Stats";
+    document.getElementById("toggle").innerHTML = "Leaderboard/User Stats";
     if (showVictors) {
       for (let i in document.getElementsByTagName("*")) {
         if (document.getElementsByTagName("*")[i].id.includes("victors")) {
@@ -36,7 +35,6 @@ function togglePage() {
         }
       }
     }
-    document.getElementById("toggle").innerHTML = "Leaderboard/User Stats";
   }
 }
 
