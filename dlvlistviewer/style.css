@@ -4,61 +4,61 @@ html {
     background-color: black;
   }
   
-  .whitetext {
+.whitetext {
     color: white;
     text-align: center;
     font-family: "Poppins", sans-serif;
-  }
+ }
   
-  .avatars {
+.avatars {
     max-height: 100px;
     max-width: 100px;
     min-height: 100px;
     min-width: 100px;
     margin: auto;
-  }
+}
   
-  #demonlisttext {
+#demonlisttext {
     color: gold;
-  }
+}
   
-  #userstatstext {
+#userstatstext {
     color: gold;
     display: none;
-  }
+}
   
-  #userstatstext2 {
+#userstatstext2 {
     display: none;
-  }
+}
   
-  #credits {
+#credits {
     display: none;
-  }
-  
-  #userstats {
+}
+
+#userstats {
     display: none;
-  }
+}
   
-  #toggle {
+#toggle {
     display: none;
     margin: auto;
     background-color: blue;
     color: gold;
     border-radius: 25px;
     font-family: "Poppins", sans-serif;
-  }
+}
   
-  .statsvisibilitybuttons button {
+.statsvisibilitybuttons button {
     display: none;
     margin: auto;
     background-color: blue;
     color: gold;
     border-radius: 25px;
     font-family: "Poppins", sans-serif;
-  }
+}
   
-  .listvictors {
+.listvictors {
     text-align: center;
     font-family: "Poppins", sans-seri;
-  }
+}
   
