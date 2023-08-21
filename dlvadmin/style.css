@@ -4,14 +4,14 @@ html {
     background-color: black;
   }
   
-  #adminbutton {
+ #adminbutton {
     display: none;
-  }
+ }
   
-  .onvalidate {
+ .onvalidate {
     display: none;
     justify-content: center;
     margin: auto;
     font-family: "Poppins", sans-serif;
-  }
+ }
   
