@@ -108,7 +108,7 @@ function toggleVictors(demonName) {
     }
 }
 
-fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => {
+fetch("https://api.cornboar.com/dlvlist/").then((Response) => {
           return Response.json()
       }).then((data) => {
           let formattedList = "";
@@ -118,23 +118,19 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => 
               formattedVictors += `<div style="color:white" id="${data["main"][i].split(" ").join("")}victors${data["victors"][data["main"][i]].length}">${data["victors"][data["main"][i]][e]}</div>`;
             }
             if (formattedVictors === "") {
-              formattedVictors = "No Victors";
+              formattedVictors = `<div style="color:white" id="${data["main"][i].split(" ").join("")}victors${data["victors"][data["main"][i]].length}">No Victors</div>`;
             }
-            var gdStats = "";
-            fetch(`https://gdbrowser.com/api/search/${data["main"][i]}/`).then((Response) => {
-              return Response.json()
-            }).then((data) => {
-              gdStats = {"author": data[1]["name"], "difficulty": data[1]["difficulty"], "downloads": data[1]["downloads"], "likes": data[1]["likes"], "length": data[1]["length"], "objectCount": data[1]["objects"], "gameVersion": data[1]["gameVersion"], "song": data[1]["songName"], "levelId": data[1]["id"]};
-            });
+            console.log(i);
+            let gdStats = {"author": data["gd_stats"][data["main"][i]]["author"], "difficulty": data["gd_stats"][data["main"][i]]["difficulty"], "downloads": data["gd_stats"][data["main"][i]]["downloads"], "likes": data["gd_stats"][data["main"][i]]["likes"], "length": data["gd_stats"][data["main"][i]]["length"], "objectCount": data["gd_stats"][data["main"][i]]["objectCount"], "gameVersion": data["gd_stats"][data["main"][i]]["gameVersion"], "song": data["gd_stats"][data["main"][i]]["song"], "levelId": data["gd_stats"][data["main"][i]]["levelId"]};
             let formattedGdStats = `<div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsauthor1">Uploaded By: ${gdStats.author}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsdifficulty1">Difficulty: ${gdStats.difficulty}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsdownloads1">Downloads: ${gdStats.downloads}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatslength1">Length: ${gdStats.length}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsobjectcount1">Object Count: ${gdStats.objectCount}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatsgameversion1">Last Updated In Version: ${gdStats.gameVersion}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatssong1">Song: ${gdStats.song}</div><div style="color: white; display: block;" id="${data["main"][i]}}victorsgdstatslevelid1">Level ID: ${gdStats.levelId}</div>`;
-            formattedList += `<h2 class="whitetext" id="demon${i}" onclick=toggleVictors("${data["main"][i].split(" ").join("")}")>${parseInt(i) + 1}. ${data["main"][i]}</h2><h3 style="color:gold"  id="${data["main"][i].split(" ").join("")}victors">VICTORS:</h3>${formattedVictors}<h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victorsposition">POINTERCRATE POSITION:</h3><div style="color:white" id=${data["main"][i].split(" ").join("")}victorspositions${data["victors"][data["main"][i]].length}>${data["positions"][data["main"][i]]}</div><h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victorsgdstats">GEOMETRY DASH STATS:</h3><div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstats${data["victors"][data["main"][i]].length}>${formattedGdStats}</div>`;
+            formattedList += `<h2 class="whitetext" id="demon${i}" onclick=toggleVictors("${data["main"][i].split(" ").join("")}")>${parseInt(i) + 1}. ${data["main"][i]}</h2><h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victors">VICTORS:</h3>${formattedVictors}<h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victorsposition">POINTERCRATE POSITION:</h3><div style="color:white" id=${data["main"][i].split(" ").join("")}victorspositions${data["victors"][data["main"][i]].length}>${data["positions"][data["main"][i]]}</div><h3 style="color:gold" id="${data["main"][i].split(" ").join("")}victorsgdstats">GEOMETRY DASH STATS:</h3><div style="color:white" id=${data["main"][i].split(" ").join("")}victorsgdstats${data["victors"][data["main"][i]].length}>${formattedGdStats}</div>`;
           }
           document.getElementById("demonlisttext").innerHTML = "DEMON LIST:";
           document.getElementById("real").innerHTML = formattedList;
           for (let i in data["main"]) {
             document.getElementById(`demon${i}`).style.color = data["colors"][data["main"][i]];
           }
-          for (var i in document.getElementsByTagName("*")) {
+          for (let i in document.getElementsByTagName("*")) {
             if (document.getElementsByTagName("*")[i].id) {
               if (document.getElementsByTagName("*")[i].id.includes("victors")) {
                 document.getElementsByTagName("*")[i].style.display = "none";
@@ -143,19 +139,18 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => 
           }
 });
 
-fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
+fetch("https://api.cornboar.com/dlvusers/")
   .then((Response) => {
     return Response.json();
   })
   .then((data) => {
     let formattedList = "";
-    fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/")
+    fetch("https://api.cornboar.com/dlvlist/")
       .then((Response) => {
         return Response.json();
       })
       .then((dataColors) => {
         var colors = dataColors["colors"];
-
         for (let key in data) {
           var formattedCompletions = "";
           for (let i in data[key]["completions"].reverse()) {
