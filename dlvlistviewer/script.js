@@ -108,7 +108,7 @@ function toggleVictors(demonName) {
     }
 }
 
-fetch("https://api.cornboar.com/dlvlist/").then((Response) => {
+fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => {
           return Response.json()
       }).then((data) => {
           let formattedList = "";
@@ -139,13 +139,13 @@ fetch("https://api.cornboar.com/dlvlist/").then((Response) => {
           }
 });
 
-fetch("https://api.cornboar.com/dlvusers/")
+fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
   .then((Response) => {
     return Response.json();
   })
   .then((data) => {
     let formattedList = "";
-    fetch("https://api.cornboar.com/dlvlist/")
+    fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/")
       .then((Response) => {
         return Response.json();
       })
