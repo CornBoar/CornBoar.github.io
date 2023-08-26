@@ -1,9 +1,9 @@
 function onButtonClick() {
-  console.log('clicked');
-  fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/username/${document.getElementById('box').value}}/`).then((Response) => {
+  document.getElementById('prompt').innerHTML = 'Loading...';
+  fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/username/${document.getElementById('box').value}/`).then((Response) => {
           return Response.json()
       }).then((data) => {
-          console.log(data);
+          console.log(data[document.getElementById('box').value]);
           document.getElementById('prompt').innerHTML = data[document.getElementById('box').value];
       })
   fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/stands/${document.getElementById('box').value}/`).then((Response) => {
@@ -32,14 +32,7 @@ function onButtonClick() {
   fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/is_admin/${document.getElementById('box').value}/`).then((Response) => {
             return Response.json()
         }).then((data) => {
-            function check() {
-              if (data[document.getElementById('box').value]) {
-                return " (Admin)";
-              }
-              else {
-                return "";
-              }
-            }
-            document.getElementById('prompt').innerHTML = document.getElementById('prompt').innerHTML + check();
-        })
-}
+              let adminStatus = data[document.getElementById('box').value];
+              document.getElementById('prompt').innerHTML += adminStatus ? ' (Admin)' : '';
+            });
+        }
