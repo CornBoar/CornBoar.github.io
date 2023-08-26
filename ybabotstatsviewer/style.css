@@ -1,0 +1,28 @@
+html {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+
+.whitetext {
+  color: white;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+#box {
+  display: block;
+  margin: 0 auto;
+}
+
+#boxbutton {
+  display: block;
+  margin: 10px auto 20px;
+}
+
+#pfp {
+  width: 10%;
+  display: block;
+  margin: auto;
+}
