@@ -7,7 +7,7 @@
   <title>real</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
-
+  <script src="script.js"></script>
 <body>
 </body>
 
