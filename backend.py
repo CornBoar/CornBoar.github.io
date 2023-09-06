@@ -223,3 +223,9 @@ async def dlv_remove_completion(key, user_id, xp_amount):
             return {'main': error}
     else:
         return {'main': 'invalid key'}
+
+@app.get('dlvgetpoints/{level}/')
+async def dlv_get_points(level):
+    with open(r'C:\Users\Dani1\DLVPOINTS.json', 'r+') as f:
+        dlv_keys = json.load(f)
+    return {level: dlv_keys[level.lower()]}
