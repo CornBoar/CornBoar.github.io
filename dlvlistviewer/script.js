@@ -8,8 +8,8 @@ function togglePage() {
     document.getElementById("userstatstext").style.display = "block"; 
     document.getElementById("userstats").style.display = "block";
     document.getElementById("demonlisttext").style.display = "none";
-    document.getElementById("showallstats").innerHTML = "Show All Stats";
-    document.getElementById("hideallstats").innerHTML= "Hide All Stats";
+    document.getElementById("showallstats").innerHTML = "Show All User Stats";
+    document.getElementById("hideallstats").innerHTML= "Hide All User Stats";
     document.getElementById("real").style.display = "none";
     document.getElementById("userstatstext2").innerHTML = "Click Username To View Stats";
     document.getElementById("toggle").innerHTML = "Demon List";
