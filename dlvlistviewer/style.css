@@ -3,13 +3,13 @@ html {
     width: 100%;
     background-color: black;
   }
-  
+
 .whitetext {
     color: white;
     text-align: center;
     font-family: "Poppins", sans-serif;
  }
-  
+
 .avatars {
     max-height: 100px;
     max-width: 100px;
@@ -17,20 +17,20 @@ html {
     min-width: 100px;
     margin: auto;
 }
-  
+
 #demonlisttext {
     color: gold;
 }
-  
+
 #userstatstext {
     color: gold;
     display: none;
 }
-  
+
 #userstatstext2 {
     display: none;
 }
-  
+
 #credits {
     display: none;
 }
@@ -38,7 +38,7 @@ html {
 #userstats {
     display: none;
 }
-  
+
 #toggle {
     display: none;
     margin: auto;
@@ -47,7 +47,7 @@ html {
     border-radius: 25px;
     font-family: "Poppins", sans-serif;
 }
-  
+
 .statsvisibilitybuttons button {
     display: none;
     margin: auto;
@@ -56,9 +56,8 @@ html {
     border-radius: 25px;
     font-family: "Poppins", sans-serif;
 }
-  
+
 .listvictors {
     text-align: center;
     font-family: "Poppins", sans-serif;
 }
-  
