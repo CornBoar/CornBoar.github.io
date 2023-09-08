@@ -82,6 +82,9 @@ async def get_dlv_list():
         dlv_list = json.load(f)
     with open(r'C:\Users\Dani1\DLVGDSTATS.json', 'r+') as f:
         dlv_gd_stats = json.load(f)
+    with open(r'C:\Users\Dani1\DLVPOINTS.json', 'r+') as f:
+        dlv_points = json.load(f)
+    dlv_list_points = {}
     if not all([True if i in list(dlv_gd_stats.keys()) else False for i in dlv_list['main']]):
         for i in dlv_list['main']:
             level = await geometrydash.search_level(i, 1)
@@ -94,9 +97,11 @@ async def get_dlv_list():
             dlv_gd_stats[i] = {'author': level.author.name, 'difficulty': level.difficulty, 'downloads': level.downloads, 'likes': level.likes, 'length': level.length, 'objectCount': level.objects, 'gameVersion': level.gameVersion,
                                'song': level.songName,
                                'levelId': str(level.id)}
+            dlv_list_points[i] = dlv_points[i.lower()]
             open(r'C:\Users\Dani1\DLVGDSTATS.json', 'r+').truncate()
             json.dump(dlv_gd_stats, open(r'C:\Users\Dani1\DLVGDSTATS.json', 'r+'))
     dlv_list['gd_stats'] = dlv_gd_stats
+    dlv_list['points'] = dlv_list_points
     return dlv_list
 
 @app.get('/dlvusers/')
@@ -223,9 +228,3 @@ async def dlv_remove_completion(key, user_id, xp_amount):
             return {'main': error}
     else:
         return {'main': 'invalid key'}
-
-@app.get('dlvgetpoints/{level}/')
-async def dlv_get_points(level):
-    with open(r'C:\Users\Dani1\DLVPOINTS.json', 'r+') as f:
-        dlv_keys = json.load(f)
-    return {level: dlv_keys[level.lower()]}
