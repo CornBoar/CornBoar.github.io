@@ -11,7 +11,7 @@ function unhoverImg(img) {
 }
 
 function redirect() {
-    window.location.replace("https://cornboar.com/dlvlistviewer/list/");
+    window.location.href = "https://cornboar.com/dlvlistviewer/list/";
 }
 
 function hoverImg2(img) {
@@ -27,7 +27,7 @@ function unhoverImg2(img) {
 }
 
 function redirect2() {
-    window.location.replace("https://cornboar.com/dlvlistviewer/leaderboard/");
+    window.location.href = "https://cornboar.com/dlvlistviewer/leaderboard/";
 }
 
 function hoverImg3(img) {
@@ -43,5 +43,5 @@ function unhoverImg3(img) {
 }
 
 function redirect3() {
-    window.location.replace("https://cornboar.com/dlvlistviewer/leaderboard/");
+    window.location.href = "https://cornboar.com/dlvlistviewer/leaderboard/";
 }
