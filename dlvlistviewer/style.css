@@ -17,6 +17,14 @@ html {
     min-height: 150px;
 }
 
+#accountbutton {
+    padding-top: 5px;
+    display: block;
+    margin: auto;
+    max-height: 150px;
+    min-height: 150px;
+}
+
 #logo {
     display: block;
     margin: auto;
