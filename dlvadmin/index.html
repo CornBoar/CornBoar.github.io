@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:78c895cff452b7121ce25dd02a551f288d1b46ca960b52f7be26ad7634f5d6c7
-size 2302
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>DLV Admin Page</title>
+  <link href="style.css" rel="stylesheet" type="text/css"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+  
+</head>
+
+<body>
+  
+  <script src="script.js"></script>
+  <h1 style="color:white" class="onvalidate">Add Demon To List:</h1>
+  <input type="text" placeholder="Demon Position" class="onvalidate" id="position">
+  <input type="text" placeholder="Demon Name" class="onvalidate" id="name">
+  <input type="text" placeholder="Demon Color(Hex Code)" class="onvalidate" id="color">
+  <button id="adminbutton" class="onvalidate" onclick=addDemon()>Add Demon</button>
+  <div id="statusmessage" class="onvalidate"></div>
+  <h1 style="color:white" class="onvalidate">Remove Demon From List:</h1>
+  <select id="removedemonchoice" class="onvalidate"></select>
+  <button class="onvalidate" onclick=removeDemon()>Remove Demon</button>
+  <div id="statusmessage2" class="onvalidate"></div>
+  <h1 style="color:white"class="onvalidate">Edit User Stats:</h2>
+  <h2 style="color:white" class="onvalidate">Select User:</h2>
+  <select id="selectuserchoice" class="onvalidate"></select>
+  <h2 style="color:white" class="onvalidate">Add Completion:</h2>
+  <select id="addcompletionchoice" class="onvalidate"></select>
+  <button id="addcompletionbutton" class="onvalidate" onclick=addCompletion()>Add Completion</button>
+  <div id="statusmessage3" class="onvalidate"></div>
+  <h2 style="color:white" class="onvalidate">Remove Completion:</h2>
+  <select id="removecompletionchoice" class="onvalidate"></select>
+  <button id="removecompletionbutton" class="onvalidate" onclick=removeCompletion()>Remove Completion</button>
+  <div id="statusmessage4" class="onvalidate"></div>
+  <h2 style="color:white" class="onvalidate">Edit XP:</h2>
+  <input type="text" placeholder="Value To Set XP To" id="editxpinput" class="onvalidate">
+  <button id="editxpbutton" class="onvalidate" onclick=setXP()>Set XP</button>
+  <div id="statusmessage5" class="onvalidate"></div>
+  <div id="key"></div>
+  
+</body>
+
+</html>
