@@ -89,7 +89,6 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => 
           }
         }
         document.getElementById("e").style.display = "none";
-        document.getElementById("credits").style.display = "block";
         document.getElementById("userstatstext2").style.display = "block";
         document.getElementById("hideallstats").style.display = "block";
         document.getElementById("showallstats").style.display = "block";
