@@ -27,7 +27,7 @@ function unhoverImg2(img) {
 }
 
 function redirect2() {
-    window.location.href = "https://cornboar.com/dlvlistviewer/leaderboard/";
+    window.location.href = "https://cornboar.com/dlv/leaderboard/";
 }
 
 function hoverImg3(img) {
@@ -43,5 +43,5 @@ function unhoverImg3(img) {
 }
 
 function redirect3() {
-    window.location.href = "https://cornboar.com/dlvlistviewer/account/";
+    window.location.href = "https://cornboar.com/dlv/account/";
 }
