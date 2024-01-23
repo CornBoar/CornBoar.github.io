@@ -1,0 +1,17 @@
+html {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+  }
+  
+#adminbutton {
+   display: none;
+}
+  
+.onvalidate {
+    display: none;
+    justify-content: center;
+    margin: auto;
+    font-family: "Poppins", sans-serif;
+}
+  

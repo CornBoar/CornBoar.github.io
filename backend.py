@@ -2,6 +2,11 @@ import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import geometrydash
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import random
+import string
 
 app = fastapi.FastAPI()
 
@@ -118,7 +123,7 @@ async def get_dlv_users():
 
 @app.get('/dlvusers/{user_id}/')
 async def get_dlv_user(user_id):
-    with open(r'C:\Users\Dani1\DLVusers.json', 'r+') as f:
+    with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
         dlv_users = json.load(f)
     return dlv_users[str(user_id)]
 
@@ -228,3 +233,177 @@ async def dlv_remove_completion(key, user_id, xp_amount):
             return {'main': error}
     else:
         return {'main': 'invalid key'}
+
+@app.get('/dlvsignup/{email}/{password}/')
+async def dlv_sign_up(email, password):
+    try:
+        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
+            dlv_accounts = json.load(f)
+        if email in list(dlv_accounts.keys()):
+            return {'main': 'Email Already In Use'}
+        verification_code = ''
+        for _ in range(5):
+            verification_code += random.choice(string.ascii_letters + '0123456789')
+        msg = MIMEMultipart()
+        msg['From'] = 'dlvverification@outlook.com'
+        msg['To'] = email
+        msg['Subject'] = 'Verify Demon List Verifications Account'
+        msg.attach(MIMEText(f'Your email was used to sign up for a Demon List Verifications account. Go to https://cornboar.com/dlv/verify/ and enter your email, password, and this verification '
+                            f'code: {verification_code}. If you did not sign up for a Demon List Verifications account you can ignore this email.', 'plain'))
+        server = smtplib.SMTP('smtp.office365.com', 587)
+        server.starttls()
+        server.login('dlvverification@outlook.com', 'password')
+        server.sendmail('dlvverification@outlook.com', email, msg.as_string())
+        server.quit()
+        dlv_accounts[email] = {'email': email, 'password': password, 'verified': False, 'discord_account_id': None, 'verification_code': verification_code, 'otp': None}
+        open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
+        json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
+        return {'main': 'Account Successfully Created, Check Your Email For Verification Instructions.'}
+    except Exception as error:
+        print(error)
+        return {'main': 'Error'}
+
+@app.get('/dlvverifyaccount/{email}/{password}/{verification_code}/')
+async def dlv_verify_account(email, password, verification_code):
+    try:
+        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
+            dlv_accounts = json.load(f)
+        if dlv_accounts[email]['verified']:
+            return {'email': 'This Account Is Already Verified'}
+        if verification_code == dlv_accounts[email]['verification_code'] and password == dlv_accounts[email]['password']:
+            dlv_accounts[email]['verification_code'] = None
+            dlv_accounts[email]['verified'] = True
+            open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
+            json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
+            return {'main': 'Successfully Verified Your DLV Account! You Can Log In Now.'}
+        else:
+            return {'main': 'Invalid Verification Code/Password'}
+    except Exception as error:
+        print(error)
+        return {'main': 'Error'}
+
+@app.get('/dlvlogin/{email}/{password}/')
+async def dlv_login(email, password):
+    try:
+        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
+            dlv_accounts = json.load(f)
+        if email not in list(dlv_accounts.keys()):
+            return {'main': 'Email Is Not Registered'}
+        if not dlv_accounts[email]['verified']:
+            return {'main': 'This Account has Not Been Verified Yet'}
+        if dlv_accounts[email]['password'] == password or dlv_accounts[email]['otp'] == password:
+            dlv_accounts[email]['otp'] = None
+            open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
+            json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
+            return {'main': 'Success', 'data': dlv_accounts[email]}
+        else:
+            return {'main': 'Incorrect Password'}
+    except Exception as error:
+        print(error)
+        return {'main': 'Error'}
+
+@app.get('/dlvgetaccount/{email}/{password}/')
+async def dlv_get_account(email, password):
+    try:
+        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
+            dlv_accounts = json.load(f)
+        if email in list(dlv_accounts.keys()):
+            if password == dlv_accounts[email]['password'] or password == dlv_accounts[email]['otp']:
+                if dlv_accounts[email]['verified']:
+                    if not dlv_accounts[email]['discord_account_id']:
+                        return {'email': dlv_accounts[email]['email'], 'password': dlv_accounts[email]['password'], 'discord_account_id': dlv_accounts[email]['discord_account_id'], 'otp': dlv_accounts[email]['otp']}
+                    else:
+                        with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
+                            dlv_users = json.load(f)
+                        with open(r'C:\Users\Dani1\DLVLIST.json', 'r+') as f:
+                            dlv_list = json.load(f)
+                        completions_0 = dlv_users[dlv_accounts[email]['discord_account_id']]['completions']
+                        colors = [dlv_list['colors'][i] for i in completions_0]
+                        completions = zip(completions_0, colors)
+                        with open(r'C:\Users\Dani1\DLVBOTXPSAVES.json', 'r+') as f:
+                            dlv_saves = json.load(f)
+                        sorted_saves = list(sorted(dlv_saves.items(), key=lambda x: x[1]['xp'], reverse=True))
+                        rank = 0
+                        for i in sorted_saves:
+                            if i[1]['user_id'] == dlv_accounts[email]['discord_account_id']:
+                                rank = sorted_saves.index(i) + 1
+                        with open(r'C:\Users\Dani1\DLVDEMONVFVS.json', 'r+') as f:
+                            dlv_demon_vfvs = json.load(f)
+                        verifications = []
+                        first_victors = []
+                        for i in dlv_list['main']:
+                            try:
+                                if dlv_demon_vfvs[i]['verifier']['user_id'] == str(dlv_accounts[email]['discord_account_id']):
+                                    verifications.append(i)
+                            except Exception as error:
+                                print(error)
+                        for e in dlv_list['main']:
+                            try:
+                                if dlv_demon_vfvs[e]['first_victor']['user_id'] == str(dlv_accounts[email]['discord_account_id']):
+                                    first_victors.append(e)
+                            except Exception as error:
+                                print(error)
+                        return {'email': dlv_accounts[email]['email'], 'password': dlv_accounts[email]['password'], 'discord_account_id': dlv_accounts[email]['discord_account_id'],
+                                'discord_username': dlv_users[dlv_accounts[email]['discord_account_id']]['username'], 'completions': completions, 'verifications': verifications, 'first_victors': first_victors,
+                                'xp': dlv_saves[dlv_accounts[email]['discord_account_id']]['xp'], 'rank': rank, 'avatar': dlv_users[dlv_accounts[email]['discord_account_id']]['avatar'], 'otp': dlv_accounts[email]['otp']}
+                else:
+                    return {'main': 'Account Is Not Verified'}
+            else:
+                return {'main': 'Invalid Password'}
+        else:
+            return {'main': 'Invalid Email'}
+    except Exception as error:
+        print(error)
+        return {'main': 'error'}
+
+@app.get('/dlvsendotp/{email}/')
+async def dlv_send_otp(email):
+    try:
+        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
+            dlv_accounts = json.load(f)
+        if email in list(dlv_accounts.keys()):
+            otp = ''
+            for _ in range(5):
+                otp += random.choice(string.ascii_letters + '0123456789')
+            msg = MIMEMultipart()
+            msg['From'] = 'dlvverification@outlook.com'
+            msg['To'] = email
+            msg['Subject'] = 'Verify Demon List Verifications Account'
+            dlv_accounts[email]['otp'] = otp
+            open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
+            json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
+            msg.attach(MIMEText(f'DO NOT SHARE THIS WITH ANYONE!!! 😱\n\n'
+                                f'Here is your DLV one time password: {otp}\n\nUse this to log in and change your password from settings, it will be valid until your next login or until you generate a new one.\n\nIf you '
+                                f'did not request a one time password '
+                                f'you can ignore '
+                                f'this email.', 'plain'))
+            server = smtplib.SMTP('smtp.office365.com', 587)
+            server.starttls()
+            server.login('dlvverification@outlook.com', 'password')
+            server.sendmail('dlvverification@outlook.com', email, msg.as_string())
+            server.quit()
+            return {'main': f'Successfully sent a one time password to {email}!'}
+        else:
+            return {'main': 'That email address does not have a DLV Account connected to it!'}
+    except Exception as error:
+        print(error)
+        return {'main': 'Error'}
+
+@app.get('/dlvchangepassword/{email}/{old_password}/{new_password}/')
+async def dlv_change_password(email, old_password, new_password):
+    try:
+        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
+            dlv_accounts = json.load(f)
+        if email in list(dlv_accounts.keys()):
+            if dlv_accounts[email]['password'] == old_password:
+                dlv_accounts[email]['password'] = new_password
+                open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
+                json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
+                return {'main': 'Successfully Changed Your Password!'}
+            else:
+                assert 1 == 2
+        else:
+            assert 1 == 2
+    except Exception as error:
+        print(error)
+        return {'main': 'An Error Occured'}

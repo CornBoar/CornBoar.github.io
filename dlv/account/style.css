@@ -1,0 +1,316 @@
+html {
+    background-color: black;
+}
+
+.centered {
+    margin: auto;
+    display: block;
+    height: 45px;
+    width: 500px;
+    border-radius: 15px;
+    font-family: "Poppins", sans-serif;
+    background-color: lightblue;
+}
+
+.centeredbuttons {
+    margin: auto;
+    display: block;
+    width: 300px;
+    height: 50px;
+    border-radius: 15px;
+    background-color: green;
+    font-family: "Poppins", sans-serif;
+}
+
+.centeredbuttons:hover {
+    margin: auto;
+    display: block;
+    width: 300px;
+    height: 50px;
+    border-radius: 15px;
+    background-color: blue;
+    font-family: "Poppins", sans-serif;
+}
+
+.headers {
+    text-align: center;
+    color: white;
+    font-family: "Poppins", sans-serif;
+}
+
+#backbutton_ {
+    max-width: 100px;
+    max-height: 100px;
+    top: 15px;
+    left: 35px;
+    position: absolute;
+}
+
+#backbuttonbg_ {
+    min-height: 100px;
+    border-radius: 25px;
+    top: 10px;
+    left: 8px;
+    position: absolute;
+    max-height: 100px;
+    min-width: 155px;
+}
+
+#backbuttonbg_:hover {
+    max-height: 100px;
+    min-width: 155px;
+    border-radius: 25px;
+    top: 10px;
+    left: 8px;
+    position: absolute;
+    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    max-height: 100px;
+    min-width: 155px;
+}
+
+#backbuttonS {
+    max-width: 100px;
+    max-height: 100px;
+    top: 15px;
+    left: 35px;
+    position: absolute;
+    display: none;
+    z-index: 10000000001;
+}
+
+#backbuttonbgS {
+    min-height: 100px;
+    border-radius: 25px;
+    top: 10px;
+    left: 8px;
+    position: absolute;
+    max-height: 100px;
+    min-width: 155px;
+    display: none;
+    z-index: 10000000000;
+}
+
+#backbuttonbgS:hover {
+    max-height: 100px;
+    min-width: 155px;
+    border-radius: 25px;
+    top: 10px;
+    left: 8px;
+    position: absolute;
+    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    max-height: 100px;
+    min-width: 155px;
+    display: none;
+    z-index: 10000000000;
+}
+
+#settingsbutton_ {
+    max-width: 100px;
+    max-height: 100px;
+    top: 120px;
+    left: 35px;
+    position: absolute;
+}
+
+#settingsbuttonbg_ {
+    min-height: 100px;
+    border-radius: 25px;
+    top: 120px;
+    left: 8px;
+    position: absolute;
+    max-height: 100px;
+    min-width: 155px;
+}
+
+#settingsbuttonbg_:hover {
+    max-height: 100px;
+    min-width: 155px;
+    border-radius: 25px;
+    top: 120px;
+    left: 8px;
+    position: absolute;
+    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    max-height: 100px;
+    min-width: 155px;
+}
+
+#adminbutton_ {
+    max-width: 100px;
+    max-height: 100px;
+    top: 230px;
+    left: 35px;
+    position: absolute;
+}
+
+#adminbuttonbg_ {
+    min-height: 100px;
+    border-radius: 25px;
+    top: 230px;
+    left: 8px;
+    position: absolute;
+    max-height: 100px;
+    min-width: 155px;
+    max-width: 155px;
+}
+
+#adminbuttonbg_:hover {
+    max-height: 100px;
+    min-width: 155px;
+    border-radius: 25px;
+    top: 230px;
+    left: 8px;
+    position: absolute;
+    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    max-height: 100px;
+    min-width: 155px;
+}
+
+#username_ {
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 100px;
+    position: relative;
+    text-align: center;
+    bottom: 75px;
+}
+
+#rank_ {
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#xpbar_ {
+    margin: auto;
+    width: 500px;
+    height: 50px;
+}
+
+#xplabel_ {
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+    text-align: center;
+}
+
+#levellabel_ {
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-size: 50px;
+    text-align: center;
+}
+
+.verifier::after {
+    content: "🟡";
+    margin-left: 0px;
+    position: absolute;
+}
+
+.firstVictor::after {
+    content: "🔵";
+    margin-left: 0px;
+    position: absolute;
+}
+
+.settingstext {
+    color: white;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+}
+
+#settingsheaderS {
+    font-size: 100px;
+    position: relative;
+    bottom: 75px;
+}
+
+#settingsinfoheaderS {
+    font-size: 75px;
+    position: relative;
+    bottom: 150px;
+}
+
+#settingsinfoheaderS {
+    font-size: 75px;
+    position: relative;
+    bottom: 150px;
+}
+
+#infoemailaddressS {
+    font-size: 25px;
+    position: relative;
+    bottom: 200px;
+}
+
+#infopasswordS {
+    font-size: 25px;
+    position: relative;
+    bottom: 200px;
+}
+
+#infodiscordaccountidS {
+    font-size: 25px;
+    position: relative;
+    bottom: 200px;
+}
+
+#globalvar1 {
+    user-select: none;
+}
+
+#globalvar2 {
+    user-select: none;
+}
+
+#globalvar3 {
+    user-select: none;
+}
+
+#globalvar4 {
+    user-select: none;
+}
+
+#settingsoptionsheaderS {
+    font-size: 75px;
+    position: relative;
+    bottom: 250px;
+}
+
+#changepasswordheaderS {
+    font-size: 25px;
+    position: relative;
+    bottom: 290px;
+}
+
+#changepasswordS {
+    position: relative;
+    margin: auto;
+    bottom: 295px;
+}
+
+#confirmchangepasswordS {
+    position: relative;
+    margin: auto;
+    bottom: 290px;
+}
+
+#changepasswordbuttonS {
+    position: relative;
+    margin: auto;
+    bottom: 285px;
+}
+
+#infochangeemailaddressS {
+    font-size: 25px;
+    position: relative;
+    bottom: 290px;
+}
+
+#infodisconnectdiscordaccountS {
+    font-size: 25px;
+    position: relative;
+    bottom: 290px;
+}
