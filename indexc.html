@@ -1,0 +1,17 @@
+document.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      if (localStorage.getItem("infinite-craft-data") === null) {
+        alert("At least one element has to have been crafted for this extension to work.");
+        return;
+      }
+      var elementName = prompt("Enter Element Name:");
+      if (elementName === null) {
+        return;
+      }
+      var elementEmoji = prompt("Enter Element Emoji:");
+      let firstDiscovery = confirm("First Discovery?");
+      localStorage.setItem("infinite-craft-data", localStorage.getItem("infinite-craft-data").slice(0, -2) + "," + JSON.stringify({"text":elementName,"emoji":elementEmoji,"discovered":firstDiscovery}) + "]}");
+      alert("Success! Refresh the page to see your new element!");
+      }
+    }
+  );
