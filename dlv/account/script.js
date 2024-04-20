@@ -170,49 +170,49 @@ function logIn() {
 }
 
 function backButtonHover() {
-    document.getElementById("backbuttonbg_").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&";
+    document.getElementById("backbuttonbg_").src = "https://cornboar.com/cdn/buttonhoverbg.png";
     document.getElementById("backbuttonbg_").style.maxHeight = "100px";
     document.getElementById("backbuttonbg_").style.minWidth = "155px";
 }
 
 function backButtonUnhover() {
-    document.getElementById("backbuttonbg_").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1193373975271702558/image.png?ex=65ac7b1f&is=659a061f&hm=b4b379bb474e9b074092e5acde8c98a79564ae816da852c5c9c1f1752e286846&";
+    document.getElementById("backbuttonbg_").src = "https://cornboar.com/cdn/backbuttonbg.png";
     document.getElementById("backbuttonbg_").style.maxHeight = "100px";
     document.getElementById("backbuttonbg_").style.minWidth = "155px";
 }
 
 function backButtonSHover() {
-    document.getElementById("backbuttonbgS").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&";
+    document.getElementById("backbuttonbgS").src = "https://cornboar.com/cdn/buttonhoverbg.png";
     document.getElementById("backbuttonbgS").style.maxHeight = "100px";
     document.getElementById("backbuttonbgS").style.minWidth = "155px";
 }
 
 function backButtonSUnhover() {
-    document.getElementById("backbuttonbgS").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1193373975271702558/image.png?ex=65ac7b1f&is=659a061f&hm=b4b379bb474e9b074092e5acde8c98a79564ae816da852c5c9c1f1752e286846&";
+    document.getElementById("backbuttonbgS").src = "https://cornboar.com/cdn/backbuttonbg.png";
     document.getElementById("backbuttonbgS").style.maxHeight = "100px";
     document.getElementById("backbuttonbgS").style.minWidth = "155px";
 }
 
 function settingsButtonHover() {
-    document.getElementById("settingsbuttonbg_").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&";
+    document.getElementById("settingsbuttonbg_").src = "https://cornboar.com/cdn/buttonhoverbg.png";
     document.getElementById("settingsbuttonbg_").style.maxHeight = "100px";
     document.getElementById("settingsbuttonbg_").style.minWidth = "155px";
 }
 
 function settingsButtonUnhover() {
-    document.getElementById("settingsbuttonbg_").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1174205601308475442/image.png?ex=65a758af&is=6594e3af&hm=4ee57c8ec7ba07ad8c10694ee3429166236121789af2505486e2ee55cf171271&";
+    document.getElementById("settingsbuttonbg_").src = "https://cornboar.com/cdn/settingsbuttonbg.png";
     document.getElementById("settingsbuttonbg_").style.maxHeight = "100px";
     document.getElementById("settingsbuttonbg_").style.minWidth = "155px";
 }
 
 function adminButtonHover() {
-    document.getElementById("adminbuttonbg_").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&";
+    document.getElementById("adminbuttonbg_").src = "https://cornboar.com/cdn/buttonhoverbg.png";
     document.getElementById("adminbuttonbg_").style.maxHeight = "100px";
     document.getElementById("adminbuttonbg_").style.minWidth = "155px";
 }
 
 function adminButtonUnhover() {
-    document.getElementById("adminbuttonbg_").src = "https://cdn.discordapp.com/attachments/1040743145605976174/1195236241113874472/image.png?ex=65b3417e&is=65a0cc7e&hm=91e2d4dfe03fb99fa9a6f4ecec1100b52c95d61d27b6e9ca450695d7c7fd96fa&";
+    document.getElementById("adminbuttonbg_").src = "https://cornboar.com/cdn/adminbuttonbg.jpg";
     document.getElementById("adminbuttonbg_").style.maxHeight = "100px";
     document.getElementById("adminbuttonbg_").style.minWidth = "155px";
     document.getElementById("adminbuttonbg_").style.maxWidth = "155px";
