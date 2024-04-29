@@ -1,3 +1,5 @@
+alert("Justice For Niggetron!");
+
 function hoverImg(img) {
     img.src = "https://cornboar.com/cdn/listbuttonhover.png";
     img.style.maxHeight = "300px";
