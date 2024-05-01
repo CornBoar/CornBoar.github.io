@@ -125,7 +125,7 @@ function giveUp() {
         if (window.confirm(`${parseInt(document.getElementById("globalvar3").innerHTML) - 1} Demons Completed! Show Remaining Demons?`)) {
             document.getElementById("donebutton").remove();
             document.getElementById("giveupbutton").remove();
-            document.getElementById("percentage").remove();
+            document.getElementById("percentage").outerHTML = `<h1 style="color: ${document.getElementById("globalvar4").innerHTML}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${document.getElementById("globalvar3").innerHTML}%</h1>`;
             let i = 0;
             while (i !== (100 - parseInt(document.getElementById("globalvar3").innerHTML))) {
                 let positions = JSON.parse(document.getElementById("globalvar1").innerHTML);
@@ -133,7 +133,7 @@ function giveUp() {
                 let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
                 let level = levels[[Math.floor(Math.random() * levels.length)]];
                 document.getElementById("levels").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-                <h1 class="centered2" style="bottom: 15px; color: ${colors[level]};">#${positions[level]} - ${level}</h1>
+                <h1 class="centered2" style="bottom: 15px; color: ${colors[level]};">#${positions[level]} - ${level}</h1><h1 style="color: ${colors[level]}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${i + parseInt(document.getElementById("globalvar3").innerHTML) + 1}%</h1>
                 </div>`
                 i++;
             }
