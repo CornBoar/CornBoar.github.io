@@ -1,4 +1,4 @@
-alert("Justice For Niggetron!");
+// alert("Justice For Niggetron!");
 
 function hoverImg(img) {
     img.src = "https://cornboar.com/cdn/listbuttonhover.png";
