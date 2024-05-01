@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>DLV Roulette</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <h1 class="centered">DLV Roulette</h1>
+    <div id="buttons" style="text-align: center;">
+      <button id="startbutton" disabled onclick=start() onmouseover=startButtonHover() onmouseleave=startButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Start</button>
+      <button id="resetbutton" onclick=reset() onmouseover=resetButtonHover() onmouseleave=resetButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Reset</button>
+      <!--- <button id="savebutton" onmouseover=saveButtonHover() onmouseleave=saveButtonUnhover() style="background-color: blue; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Copy Seed</button>
+      <button id="loadbutton" onmouseover=loadButtonHover() onmouseleave=loadButtonUnhover() style="background-color: purple; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Load</button> --->
+    </div>
+    <div id="levels">
+    </div>
+    <div id="globalvar1" style="user-select: none;"></div>
+    <div id="globalvar2" style="user-select: none;"></div>
+    <div id="globalvar3" style="user-select: none;"></div>
+    <div id="globalvar4" style="user-select: none;"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

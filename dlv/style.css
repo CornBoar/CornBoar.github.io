@@ -25,6 +25,14 @@ html {
     min-height: 250px;
 }
 
+#roulettebutton {
+    padding-top: 5px;
+    display: block;
+    margin: auto;
+    max-height: 250px;
+    min-height: 250px;
+}
+
 #logo {
     display: block;
     margin: auto;

@@ -45,3 +45,19 @@ function unhoverImg3(img) {
 function redirect3() {
     window.location.href = "https://cornboar.com/dlv/account/";
 }
+
+function hoverImg4(img) {
+    img.src = "https://cornboar.com/cdn/roulettebuttonhover.png";
+    img.style.maxHeight = "300px";
+    img.style.minHeight = "300px";
+}
+
+function unhoverImg4(img) {
+    img.src = "https://cornboar.com/cdn/roulettebutton.png";
+    img.style.maxHeight = "250px";
+    img.style.minHeight = "250px";
+}
+
+function redirect4() {
+    window.location.href = "https://cornboar.com/dlv/roulette/";
+}
