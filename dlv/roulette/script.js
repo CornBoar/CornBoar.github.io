@@ -93,7 +93,7 @@ function done() {
             let levels = Object.keys(positions);
             let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
             let level = levels[[Math.floor(Math.random() * levels.length)]];
-            document.getElementById("globalvar3").innerHTML = parseInt(document.getElementById("globalvar3").innerHTML) + 1;
+            document.getElementById("globalvar3").innerHTML = parseInt(document.getElementById("percentage").value) + 1;
             document.getElementById("donebutton").remove();
             document.getElementById("giveupbutton").remove();
             document.getElementById("percentage").outerHTML = `<h1 style="color: ${document.getElementById("globalvar4").innerHTML}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${document.getElementById("percentage").value}%</h1>`;
