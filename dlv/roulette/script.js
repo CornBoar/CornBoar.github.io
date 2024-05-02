@@ -67,6 +67,9 @@ function start() {
     let level1 = levels[[Math.floor(Math.random() * levels.length)]];
     document.getElementById("globalvar3").innerHTML = "1";
     document.getElementById("globalvar4").innerHTML = colors[level1];
+    let usedLevelsDict = JSON.parse(document.getElementById("globalvar5").innerHTML);
+    usedLevelsDict[level1] = positions[level1];
+    document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
     let level1html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level1]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
     <h1 class="centered2" style="bottom: 15px; color: ${colors[level1]};">#${positions[level1]} - ${level1}</h1><input id="percentage" type="number" placeholder="At Least 1%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
     <div id="buttons" style="text-align: center;">
@@ -97,6 +100,15 @@ function done() {
             document.getElementById("donebutton").remove();
             document.getElementById("giveupbutton").remove();
             document.getElementById("percentage").outerHTML = `<h1 style="color: ${document.getElementById("globalvar4").innerHTML}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${document.getElementById("percentage").value}%</h1>`;
+            let usedLevelsDict = JSON.parse(document.getElementById("globalvar5").innerHTML);
+            if (Object.keys(usedLevelsDict).length === levels.length) {
+                usedLevelsDict = {};
+            }
+            while (Object.keys(usedLevelsDict).includes(level)) {
+                level = levels[[Math.floor(Math.random() * levels.length)]];
+            }
+            usedLevelsDict[level] = positions[level];
+            document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
             document.getElementById("globalvar4").innerHTML = colors[level];
             let html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
             <h1 class="centered2" style="bottom: 15px; color: ${colors[level]};">#${positions[level]} - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(document.getElementById("globalvar3").innerHTML)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
@@ -137,6 +149,16 @@ function giveUp() {
                 let levels = Object.keys(positions);
                 let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
                 let level = levels[[Math.floor(Math.random() * levels.length)]];
+                let usedLevelsDict = JSON.parse(document.getElementById("globalvar5").innerHTML);
+                if (Object.keys(usedLevelsDict).length === levels.length) {
+                    usedLevelsDict = {};
+                }
+                while (Object.keys(usedLevelsDict).includes(level)) {
+                    level = levels[[Math.floor(Math.random() * levels.length)]];
+                }
+                usedLevelsDict[level] = positions[level];
+                document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
+                document.getElementById("globalvar4").innerHTML = colors[level];
                 document.getElementById("levels").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
                 <h1 class="centered2" style="bottom: 15px; color: ${colors[level]};">#${positions[level]} - ${level}</h1><h1 style="color: ${colors[level]}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${i + parseInt(document.getElementById("globalvar3").innerHTML) + 1}%</h1>
                 </div>`
