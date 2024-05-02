@@ -98,7 +98,7 @@ function done() {
             let level = levels[[Math.floor(Math.random() * levels.length)]];
             let thingy = document.getElementById("percentage").value;
             if (window.location.href.includes("slugmode")) {
-                thingy = document.getElementById("globalvar3").innerhtml;
+                thingy = document.getElementById("globalvar3").innerHTML;
             }
             document.getElementById("globalvar3").innerHTML = parseInt(thingy) + 1;
             document.getElementById("donebutton").remove();
