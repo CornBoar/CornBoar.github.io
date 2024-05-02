@@ -96,7 +96,7 @@ function done() {
             let levels = Object.keys(positions);
             let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
             let level = levels[[Math.floor(Math.random() * levels.length)]];
-            let thingy = documet.getElementById("percentage").value;
+            let thingy = document.getElementById("percentage").value;
             if (window.location.href.includes("slugmode")) {
                 thingy = document.getElementById("globalvar3").innerhtml;
             }
