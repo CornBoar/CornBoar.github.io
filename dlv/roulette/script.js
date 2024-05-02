@@ -96,7 +96,7 @@ function done() {
             let levels = Object.keys(positions);
             let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
             let level = levels[[Math.floor(Math.random() * levels.length)]];
-            const urlParams = new URLSearchParams(queryString);
+            const urlParams = new URLSearchParams();
             let thingy = "percentage";
             if (window.location.href.includes("slugmode")) {
                 thingy = "globalvar3";
