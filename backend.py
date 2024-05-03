@@ -253,7 +253,7 @@ async def dlv_sign_up(email, password):
                             f'code: {verification_code}. If you did not sign up for a Demon List Verifications account you can ignore this email.', 'plain'))
         server = smtplib.SMTP('smtp.office365.com', 587)
         server.starttls()
-        server.login('dlvverification@outlook.com', 'rozsad364dr1969')
+        server.login('dlvverification@outlook.com', '')
         server.sendmail('dlvverification@outlook.com', email, msg.as_string())
         server.quit()
         dlv_accounts[email] = {'email': email, 'password': password, 'verified': False, 'discord_account_id': None, 'verification_code': verification_code, 'otp': None}
