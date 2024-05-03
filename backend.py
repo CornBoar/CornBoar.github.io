@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
 import string
+import requests
 
 app = fastapi.FastAPI()
 
@@ -252,7 +253,7 @@ async def dlv_sign_up(email, password):
                             f'code: {verification_code}. If you did not sign up for a Demon List Verifications account you can ignore this email.', 'plain'))
         server = smtplib.SMTP('smtp.office365.com', 587)
         server.starttls()
-        server.login('dlvverification@outlook.com', 'password')
+        server.login('dlvverification@outlook.com', 'rozsad364dr1969')
         server.sendmail('dlvverification@outlook.com', email, msg.as_string())
         server.quit()
         dlv_accounts[email] = {'email': email, 'password': password, 'verified': False, 'discord_account_id': None, 'verification_code': verification_code, 'otp': None}
@@ -379,7 +380,7 @@ async def dlv_send_otp(email):
                                 f'this email.', 'plain'))
             server = smtplib.SMTP('smtp.office365.com', 587)
             server.starttls()
-            server.login('dlvverification@outlook.com', 'password')
+            server.login('dlvverification@outlook.com', 'rozsad364dr1969')
             server.sendmail('dlvverification@outlook.com', email, msg.as_string())
             server.quit()
             return {'main': f'Successfully sent a one time password to {email}!'}
@@ -407,3 +408,12 @@ async def dlv_change_password(email, old_password, new_password):
     except Exception as error:
         print(error)
         return {'main': 'An Error Occured'}
+
+@app.get('/dlvsaveroulette/{email}/{password}/{roulette_json}/')
+async def dlv_save_roulette(email, password, roulette_json):
+    pass
+
+@app.get('/getwebsource/{url}/')
+async def get_web_source(url):
+    url = str(url).replace('!', '/')
+    return {'main': requests.get(url).text}
