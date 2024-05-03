@@ -380,7 +380,7 @@ async def dlv_send_otp(email):
                                 f'this email.', 'plain'))
             server = smtplib.SMTP('smtp.office365.com', 587)
             server.starttls()
-            server.login('dlvverification@outlook.com', 'rozsad364dr1969')
+            server.login('dlvverification@outlook.com', '')
             server.sendmail('dlvverification@outlook.com', email, msg.as_string())
             server.quit()
             return {'main': f'Successfully sent a one time password to {email}!'}
