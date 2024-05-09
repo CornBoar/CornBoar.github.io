@@ -34,6 +34,9 @@ function showPassword() {
     document.getElementById("infopasswordS").innerHTML = `Password: ${document.getElementById("globalvar2").innerHTML}`;
 }
 
+document.getElementById("lemail").value = localStorage.getItem("dlv-email");
+document.getElementById("lpassword").value = localStorage.getItem("dlv-password");
+
 function logIn() {
     if (document.getElementById("lemail").value === document.getElementById("globalvar1").innerHTML && document.getElementById("lpassword").value === document.getElementById("globalvar2").innerHTML && document.getElementById("globalvar1").innerHTML !== "" && document.getElementById("lpassword").value === document.getElementById("globalvar2").innerHTML !== "") {
         document.getElementById("loginbutton").innerHTML = "Log In";
@@ -164,6 +167,8 @@ function logIn() {
                     document.getElementById("adminbuttonbg_").style.display = "grid";
                     document.getElementById("globalvar3").innerHTML = "true";
                 }
+                localStorage.setItem("dlv-email", document.getElementById("lemail").value);
+                localStorage.setItem("dlv-password", document.getElementById("lpassword").value);
             });
         }
     }
