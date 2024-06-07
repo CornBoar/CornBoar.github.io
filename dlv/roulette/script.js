@@ -96,12 +96,18 @@ function done() {
             let levels = Object.keys(positions);
             let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
             let level = levels[[Math.floor(Math.random() * levels.length)]];
+<<<<<<< HEAD
             const urlParams = new URLSearchParams();
             let thingy = "percentage";
             if (window.location.href.includes("slugmode")) {
                 thingy = "globalvar3";
+=======
+            let thingy = document.getElementById("percentage").value;
+            if (window.location.href.includes("slugmode")) {
+                thingy = document.getElementById("globalvar3").innerHTML;
+>>>>>>> c386f52a10f9087127dc5bc710742eb6888e1bd7
             }
-            document.getElementById("globalvar3").innerHTML = parseInt(document.getElementById(thingy).value) + 1;
+            document.getElementById("globalvar3").innerHTML = parseInt(thingy) + 1;
             document.getElementById("donebutton").remove();
             document.getElementById("giveupbutton").remove();
             document.getElementById("percentage").outerHTML = `<h1 style="color: ${document.getElementById("globalvar4").innerHTML}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${document.getElementById("percentage").value}%</h1>`;
