@@ -3,11 +3,12 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => 
     }).then((data) => {
         let positions = {};
         for (i in data["main"]) {
-            positions[data["main"][i]] = data["main"].length - (data["main"].indexOf(data["main"][i]));
+            positions[data["og_case"][data["main"][i]]] = data["main"].length - (data["main"].indexOf(data["main"][i]));
         }
         document.getElementById("globalvar1").innerHTML = JSON.stringify(positions);
         document.getElementById("globalvar2").innerHTML = JSON.stringify(data["colors"]);
         document.getElementById("startbutton").disabled = false;
+        console.log(positions);
 });
 
 function startButtonHover() {
@@ -66,12 +67,12 @@ function start() {
     let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
     let level1 = levels[[Math.floor(Math.random() * levels.length)]];
     document.getElementById("globalvar3").innerHTML = "1";
-    document.getElementById("globalvar4").innerHTML = colors[level1];
+    document.getElementById("globalvar4").innerHTML = colors[level1.toLowerCase()];
     let usedLevelsDict = JSON.parse(document.getElementById("globalvar5").innerHTML);
     usedLevelsDict[level1] = positions[level1];
     document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
-    let level1html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level1]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-    <h1 class="centered2" style="bottom: 15px; color: ${colors[level1]};">#${positions[level1]} - ${level1}</h1><input id="percentage" type="number" placeholder="At Least 1%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
+    let level1html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level1.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
+    <h1 class="centered2" style="bottom: 15px; color: ${colors[level1.toLowerCase()]};">#${positions[level1]} - ${level1}</h1><input id="percentage" type="number" placeholder="At Least 1%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
     <div id="buttons" style="text-align: center;">
     <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
     <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
@@ -96,16 +97,9 @@ function done() {
             let levels = Object.keys(positions);
             let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
             let level = levels[[Math.floor(Math.random() * levels.length)]];
-<<<<<<< HEAD
-            const urlParams = new URLSearchParams();
-            let thingy = "percentage";
-            if (window.location.href.includes("slugmode")) {
-                thingy = "globalvar3";
-=======
             let thingy = document.getElementById("percentage").value;
             if (window.location.href.includes("slugmode")) {
                 thingy = document.getElementById("globalvar3").innerHTML;
->>>>>>> c386f52a10f9087127dc5bc710742eb6888e1bd7
             }
             document.getElementById("globalvar3").innerHTML = parseInt(thingy) + 1;
             document.getElementById("donebutton").remove();
@@ -120,9 +114,9 @@ function done() {
             }
             usedLevelsDict[level] = positions[level];
             document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
-            document.getElementById("globalvar4").innerHTML = colors[level];
-            let html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-            <h1 class="centered2" style="bottom: 15px; color: ${colors[level]};">#${positions[level]} - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(document.getElementById("globalvar3").innerHTML)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
+            document.getElementById("globalvar4").innerHTML = colors[level.toLowerCase()];
+            let html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
+            <h1 class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]} - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(document.getElementById("globalvar3").innerHTML)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
             <div id="buttons" style="text-align: center;">
             <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
             <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
@@ -169,9 +163,9 @@ function giveUp() {
                 }
                 usedLevelsDict[level] = positions[level];
                 document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
-                document.getElementById("globalvar4").innerHTML = colors[level];
-                document.getElementById("levels").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-                <h1 class="centered2" style="bottom: 15px; color: ${colors[level]};">#${positions[level]} - ${level}</h1><h1 style="color: ${colors[level]}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${i + parseInt(document.getElementById("globalvar3").innerHTML) + 1}%</h1>
+                document.getElementById("globalvar4").innerHTML = colors[level.toLowerCase()];
+                document.getElementById("levels").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
+                <h1 class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]} - ${level}</h1><h1 style="color: ${colors[level.toLowerCase()]}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${i + parseInt(document.getElementById("globalvar3").innerHTML) + 1}%</h1>
                 </div>`
                 i++;
             }
