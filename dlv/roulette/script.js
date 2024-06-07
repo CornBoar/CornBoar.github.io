@@ -178,6 +178,25 @@ function giveUp() {
     }
 }
 
+function save() {
+    let email = prompt("Enter Your Account Email:");
+    let password = prompt("Enter Your Account Password:");
+    if (email === null) {
+        return;
+    }
+    if (password === null) {
+        return;
+    }
+    if (window.confirm("Are You Sure? Saving This Roulette Will Overwrite Your Previous Roulette Save.") === true) {
+        console.log(`https://user5e8e13639aafd2a.app.vtxhub.com/dlvsaveroulette/${email}/${password}/${btoa(document.documentElement.innerHTML)}`);
+        fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/dlvsaveroulette/${email}/${password}/${btoa(document.documentElement.innerHTML)}`).then((Response) => {
+            return Response.json()
+            }).then((data) => {
+                alert(data["main"]);
+        });
+    }
+}
+
 document.addEventListener("keypress", function(event) {
     if (event.keyCode == 13) {
       done();
