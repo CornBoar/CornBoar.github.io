@@ -65,16 +65,16 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
       var colors = dataColors["colors"];
       for (let key in data) {
         var formattedCompletions = "";
-        for (let i in data[key]["completions"].reverse()) {
-          formattedCompletions += `<div class="whitetext" style="color:${colors[data[key]["completions"][i]]}">${data[key]["completions"][i]}</div>`;
+        for (let i in data[key]["completions"]["main"]) {
+          formattedCompletions += `<div class="whitetext" style="color:${colors[data[key]["completions"]["main"][i].toLowerCase()]}">${dataColors["og_case"][data[key]["completions"]["main"][i]]}</div>`;
         }
         if (formattedCompletions === "") {
           formattedCompletions += `<div class="whitetext">No Completions</div>`;
         }
 
         var color = "#FFFFFF";
-        if (data[key]["completions"]) {
-          color = colors[data[key]["completions"][0]];
+        if (data[key]["completions"]["main"]) {
+          color = colors[data[key]["completions"]["main"][0]];
         }
         
         formattedList += `<div id="username${Object.keys(data).indexOf(key)}">
@@ -86,7 +86,7 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
         <h3 class="whitetext" style="color:gold">XP:</h3>
         <div class="whitetext">${data[key]["xp"]}</div>
         <h3 class="whitetext" style="color:gold">Discord Avatar:</h3>
-        <img class="avatars" src="${data[key]["avatar"]}"">
+        <img class="avatars" src="${data[key]["avatar_url"]}"">
         <h3 class="whitetext" style="color:gold">Discord User ID:</h3>
         <div>${data[key]["user_id"]}</div>
         </div>`;
@@ -112,7 +112,6 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
       document.getElementById("hideallstats").innerHTML= "Hide All User Stats";
       document.getElementById("real").style.display = "none";
       document.getElementById("userstatstext2").innerHTML = "Click Username To View Stats";
-      document.getElementById("toggle").innerHTML = "Demon List";
       for (let i in document.getElementsByTagName("*")) {
         if (document.getElementsByTagName("*")[i].id.includes("victors")) {
           document.getElementsByTagName("*")[i].style.display = "none";
