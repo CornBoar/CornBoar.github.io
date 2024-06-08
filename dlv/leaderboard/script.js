@@ -82,7 +82,7 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
         <h3 class="whitetext" style="color:gold">Completions:</h3>
         <div>${formattedCompletions}</div>
         <h3 class="whitetext" style="color:gold">Level:</h3>
-        <div class="whitetext">${Math.floor(data[key]["xp"] / 1000)}</div>
+        <div class="whitetext">${Math.floor(data[key]["xp"] / 100)}</div>
         <h3 class="whitetext" style="color:gold">XP:</h3>
         <div class="whitetext">${data[key]["xp"]}</div>
         <h3 class="whitetext" style="color:gold">Discord Avatar:</h3>
