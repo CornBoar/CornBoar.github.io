@@ -84,7 +84,7 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
         <h3 class="whitetext" style="color:gold">Level:</h3>
         <div class="whitetext">${Math.floor(data[key]["xp"] / 100)}</div>
         <h3 class="whitetext" style="color:gold">XP:</h3>
-        <div class="whitetext">${data[key]["xp"]}</div>
+        <div class="whitetext">${Math.round(10*data[key]["xp"])/10}</div>
         <h3 class="whitetext" style="color:gold">Discord Avatar:</h3>
         <img class="avatars" src="${data[key]["avatar_url"]}"">
         <h3 class="whitetext" style="color:gold">Discord User ID:</h3>
