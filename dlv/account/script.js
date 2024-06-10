@@ -82,7 +82,7 @@ function logIn() {
                         }
                         else {
                             document.getElementById("username_").innerHTML = data["discord_username"];
-                            document.getElementById("username_").style.color = Object.values(data["completions"]).reverse()[0];
+                            document.getElementById("username_").style.color = Object.values(data["completions"]["main"]);
                             let rankThingy = "th";
                             if (data["rank"] === 1) {
                                 rankThingy = "st";
@@ -112,13 +112,13 @@ function logIn() {
                             document.getElementById("levellabel_").innerHTML = `Level ${Math.floor(data["xp"] / 1000)}`;
                             document.getElementById("avatar_").src = data["avatar"];
                             var completionsDiv = "";
-                            console.log(Object.keys(data["completions"]).reverse());
-                            for (let i = 0; i < Object.keys(data["completions"]).reverse().length; i++) {
+                            console.log(Object.keys(data["completions"]["main"]));
+                            for (let i = 0; i < Object.keys(data["completions"]["main"]).length; i++) {
                                 if (i !== 0) {
-                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"][Object.keys(data["completions"]).reverse()[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"]).reverse()[i]) ? "#fff100" : data["first_victors"].includes(Object.keys(data["completions"]).reverse()[i]) ? "#0078d7" : "black"}">${Object.keys(data["completions"]).reverse()[i]}</h2>`
+                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"]["main"][Object.keys(data["completions"]["main"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"]["main"])[i]) ? "#fff100" : data["first_victors"].includes(Object.keys(data["completions"]["main"])[i]) ? "#0078d7" : "black"}">${Object.keys(data["completions"]).reverse()[i]}</h2>`
                                 }
                                 else {
-                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"][Object.keys(data["completions"]).reverse()[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"]).reverse()[i]) ? "#fff100" : data["first_victors"].includes(Object.keys(data["completions"]).reverse()[i]) ? "#0078d7" : "black"}">${Object.keys(data["completions"]).reverse()[i]}</h2>`
+                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"]["main"][Object.keys(data["completions"]["main"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"]["main"])[i]) ? "#fff100" : data["first_victors"].includes(Object.keys(data["completions"]["main"])[i]) ? "#0078d7" : "black"}">${Object.keys(data["completions"]).reverse()[i]}</h2>`
                                 }
                             }
                             if (document.getElementById("globalvar3").innerHTML !== "true") {
