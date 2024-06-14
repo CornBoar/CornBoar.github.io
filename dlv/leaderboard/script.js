@@ -57,16 +57,28 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
 })
 .then((data) => {
   let formattedList = "";
-  fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/")
-    .then((Response) => {
-      return Response.json();
-    })
-    .then((dataColors) => {
+      function getColors() {
+        for (let i in Object.values(data)) {
+          if (Object.keys(Object.values(data)[i]).includes("colors")) {
+            return Object.values(data)[i]["colors"];
+          }
+        }
+      }
+      function getOgCase() {
+        for (let i in Object.values(data)) {
+          if (Object.keys(Object.values(data)[i]).includes("og_case")) {
+            return Object.values(data)[i]["og_case"];
+          }
+        }
+      }
+      dataColors = {};
+      dataColors["colors"] = getColors();
+      dataColors["og_case"] = getOgCase();
       var colors = dataColors["colors"];
       for (let key in data) {
         var formattedCompletions = "";
         for (let i in data[key]["completions"]["main"]) {
-          formattedCompletions += `<div class="whitetext" style="color:${colors[data[key]["completions"]["main"][i].toLowerCase()]}">${dataColors["og_case"][data[key]["completions"]["main"][i]]}</div>`;
+          formattedCompletions += `<div class="whitetext" style="color:${colors[data[key]["completions"]["main"][i].toLowerCase()]}">${dataColors["og_case"][data[key]["completions"]["main"][i]]}${data[key]["completions"]["verifications"].includes(data[key]["completions"]["main"][i].toLowerCase()) ? " (Verifier)" : ""}</div>`;
         }
         if (formattedCompletions === "") {
           formattedCompletions += `<div class="whitetext">No Completions</div>`;
@@ -117,5 +129,4 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
           document.getElementsByTagName("*")[i].style.display = "none";
       }
   }
-    });
 });
