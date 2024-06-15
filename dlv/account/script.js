@@ -82,7 +82,7 @@ function logIn() {
                         }
                         else {
                             document.getElementById("username_").innerHTML = data["discord_username"];
-                            document.getElementById("username_").style.color = Object.values(data["completions"]["main"]);
+                            document.getElementById("username_").style.color = Object.values(data["completions"]);
                             let rankThingy = "th";
                             if (data["rank"] === 1) {
                                 rankThingy = "st";
@@ -112,20 +112,18 @@ function logIn() {
                             document.getElementById("levellabel_").innerHTML = `Level ${Math.floor(data["xp"] / 1000)}`;
                             document.getElementById("avatar_").src = data["avatar"];
                             var completionsDiv = "";
-                            console.log(Object.keys(data["completions"]["main"]));
-                            for (let i = 0; i < Object.keys(data["completions"]["main"]).length; i++) {
+                            for (let i = 0; i < Object.keys(data["completions"]).length; i++) {
                                 if (i !== 0) {
-                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"]["main"][Object.keys(data["completions"]["main"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"]["main"])[i]) ? "#fff100" : data["first_victors"].includes(Object.keys(data["completions"]["main"])[i]) ? "#0078d7" : "black"}">${Object.keys(data["completions"]).reverse()[i]}</h2>`
+                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"][Object.keys(data["completions"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"])[i]) ? "#0078d7" : data["first_victors"].includes(Object.keys(data["completions"])[i]) ? "#0078d7" : "black"}">${data["og_case"][Object.keys(data["completions"])[i]]}</h2>`
                                 }
                                 else {
-                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"]["main"][Object.keys(data["completions"]["main"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"]["main"])[i]) ? "#fff100" : data["first_victors"].includes(Object.keys(data["completions"]["main"])[i]) ? "#0078d7" : "black"}">${Object.keys(data["completions"]).reverse()[i]}</h2>`
+                                    completionsDiv = completionsDiv + `<h2 style="color:${data["completions"][Object.keys(data["completions"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"])[i]) ? "#0078d7" : data["first_victors"].includes(Object.keys(data["completions"])[i]) ? "#0078d7" : "black"}">${data["og_case"][Object.keys(data["completions"])[i]]}</h2>`
                                 }
                             }
                             if (document.getElementById("globalvar3").innerHTML !== "true") {
                                 document.getElementById("adminbutton_").style.display = "none";
                                 document.getElementById("adminbuttonbg_").style.display = "none";
                             }
-                            console.log(completionsDiv);
                             document.getElementById("completions_").innerHTML = completionsDiv;
                             document.getElementById("infodiscordaccountidS").innerHTML = `Discord Account ID: ${data["discord_account_id"]}`
                             document.getElementById("globalvar1").innerHTML = data["email"];
@@ -304,7 +302,6 @@ function settings() {
     let elements2 = document.querySelectorAll("[id*=S]");
     for (var i = 0; i < elements2.length; i++) {
         elements2[i].style.display = "block";
-        console.log(elements2.innerHTML);
     }
     if (document.getElementById("globalvar3").innerHTML !== "true") {
         document.getElementById("adminbutton_").style.display = "none";
