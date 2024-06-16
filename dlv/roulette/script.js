@@ -3,7 +3,7 @@ fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => 
     }).then((data) => {
         let positions = {};
         for (i in data["main"]) {
-            positions[data["og_case"][data["main"][i]]] = (data["main"].indexOf(data["main"][i]));
+            positions[data["og_case"][data["main"][i]]] = data["main"].indexOf(data["main"][i]) + 1;
         }
         document.getElementById("globalvar1").innerHTML = JSON.stringify(positions);
         document.getElementById("globalvar2").innerHTML = JSON.stringify(data["colors"]);
