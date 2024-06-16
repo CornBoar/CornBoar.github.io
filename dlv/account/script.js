@@ -93,7 +93,6 @@ function logIn() {
                             if (data["rank"] === 3) {
                                 rankThingy = "rd"; 
                             }
-                            let xpToNextLevel = data["xp"] - (1000 * Math.floor(data["xp"] / 1000));
                             document.getElementById("rank_").innerHTML = "Global Rank: " + data["rank"] + rankThingy;
                             if (data["rank"] < 11) {
                                 document.getElementById("rank_").style.color = "lightblue"
@@ -107,9 +106,15 @@ function logIn() {
                             if (data["rank"] === 3) {
                                 document.getElementById("rank_").style.color = "#CD7F32"
                             }
-                            document.getElementById("xpbar_").value = xpToNextLevel;
-                            document.getElementById("xplabel_").innerHTML = `${xpToNextLevel}/1,000 XP To Level ${Math.floor(data["xp"] / 1000) + 1}`;
-                            document.getElementById("levellabel_").innerHTML = `Level ${Math.floor(data["xp"] / 1000)}`;
+                            document.getElementById("xpbar_").value = data["xp"];
+                            if (data["xp"] > 99) {
+                                document.getElementById("xpbar_").max = (parseInt(data["xp"].toString().substring(0, data["xp"].toString().length - 2)) + 1) * 100;
+                            }
+                            else {
+                                document.getElementById("xpbar_").max = 100;
+                            }
+                            document.getElementById("xplabel_").innerHTML = `${data["xp"]}/${document.getElementById("xpbar_").max} XP To Level ${Math.floor(data["xp"] / 100) + 1}`;
+                            document.getElementById("levellabel_").innerHTML = `Level ${Math.floor(data["xp"] / 100)}`;
                             document.getElementById("avatar_").src = data["avatar"];
                             var completionsDiv = "";
                             for (let i = 0; i < Object.keys(data["completions"]).length; i++) {
