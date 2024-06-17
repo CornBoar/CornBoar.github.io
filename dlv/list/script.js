@@ -59,10 +59,10 @@ function toggleVictors(demonName) {
   }
 }
 
-fetch("https://cornboar.com/api/dlvlist.json").then((Response) => {
-        return Response.text()
+fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
+        return Response.json()
     }).then((data) => {
-        data = JSON.parse(data);
+        data = JSON.parse(atob(data["content"]));
         let formattedList = "";
         for (let i in data["main"]) {
           var formattedVictors = "";

@@ -51,12 +51,12 @@ else {
 }
 }
 
-fetch("https://cornboar.com/api/dlvusers.json")
+fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json")
 .then((Response) => {
-  return Response.text();
+  return Response.json();
 })
 .then((data) => {
-  data = JSON.parse(data);
+  data = JSON.parse(atob(data["content"]));
   let formattedList = "";
       function getColors() {
         for (let i in Object.values(data)) {
