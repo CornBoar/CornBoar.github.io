@@ -59,15 +59,15 @@ function toggleVictors(demonName) {
   }
 }
 
-fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => {
-        return Response.json()
+fetch("https://cornboar.com/api/dlvlist.json").then((Response) => {
+        return Response.text()
     }).then((data) => {
+        data = JSON.parse(data);
         let formattedList = "";
         for (let i in data["main"]) {
           var formattedVictors = "";
           for (let e in Object.values(data["victors"][data["main"][i]])) {
             e = Object.values(data["victors"][data["main"][i]])[e][1];
-            console.log(e, data["main"][i]);
             formattedVictors += `<div style="color:white" id="${data["main"][i].replace(/\s/g, "")}victors${Object.keys(data["victors"][data["main"][i]]).length}">${e}</div>`;
           }
           if (formattedVictors === "") {

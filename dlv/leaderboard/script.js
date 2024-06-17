@@ -51,11 +51,12 @@ else {
 }
 }
 
-fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvusers/")
+fetch("https://cornboar.com/api/dlvusers.json")
 .then((Response) => {
-  return Response.json();
+  return Response.text();
 })
 .then((data) => {
+  data = JSON.parse(data);
   let formattedList = "";
       function getColors() {
         for (let i in Object.values(data)) {
