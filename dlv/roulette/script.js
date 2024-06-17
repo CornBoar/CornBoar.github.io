@@ -1,6 +1,7 @@
-fetch("https://user5e8e13639aafd2a.app.vtxhub.com/dlvlist/").then((Response) => {
-    return Response.json()
+fetch("https://cornboar.com/api/dlvlist.json").then((Response) => {
+    return Response.text()
     }).then((data) => {
+        data = JSON.parse(data);
         let positions = {};
         for (i in data["main"]) {
             positions[data["og_case"][data["main"][i]]] = data["main"].indexOf(data["main"][i]) + 1;
