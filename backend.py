@@ -1,13 +1,12 @@
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 import json
-import geometrydash
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
 import string
-import requests
+import secrets
 
 app = fastapi.FastAPI()
 
@@ -17,7 +16,7 @@ app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True
 
 @app.get('/')
 async def root():
-    return 'Docs are at https://cornboar.com/api/.'
+    return 'Docs are at https://cornboar.com/apidocs/.'
 
 @app.get('/stand/{user_id}/')
 async def get_stand(user_id):
@@ -86,54 +85,15 @@ async def get_admin_status(user_id):
 async def get_dlv_list():
     with open(r'C:\Users\Dani1\DLVLIST.json', 'r+') as f:
         dlv_list = json.load(f)
-    with open(r'C:\Users\Dani1\DLVGDSTATS.json', 'r+') as f:
-        dlv_gd_stats = json.load(f)
-    with open(r'C:\Users\Dani1\DLVPOINTS.json', 'r+') as f:
-        dlv_points = json.load(f)
-    dlv_list_points = {}
-    if not all([True if i in list(dlv_gd_stats.keys()) else False for i in dlv_list['main']]):
-        for i in dlv_list['main']:
-            level = await geometrydash.search_level(i, 1)
-            level = level[0]
-            if level.author is None:
-                class author:
-                    def __init__(self):
-                        self.name = '-'
-                level.author = author()
-            dlv_gd_stats[i] = {'author': level.author.name, 'difficulty': level.difficulty, 'downloads': level.downloads, 'likes': level.likes, 'length': level.length, 'objectCount': level.objects, 'gameVersion': level.gameVersion,
-                               'song': level.songName,
-                               'levelId': str(level.id)}
-            dlv_list_points[i] = dlv_points[i.lower()]
-            open(r'C:\Users\Dani1\DLVGDSTATS.json', 'r+').truncate()
-            json.dump(dlv_gd_stats, open(r'C:\Users\Dani1\DLVGDSTATS.json', 'r+'))
-    dlv_list['gd_stats'] = dlv_gd_stats
-    dlv_list['points'] = dlv_list_points
     return dlv_list
 
 @app.get('/dlvusers/')
 async def get_dlv_users():
     with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
         dlv_users = json.load(f)
-    with open(r'C:\Users\Dani1\DLVBOTXPSAVES.json', 'r+') as f:
-        dlv_saves = json.load(f)
-    for i in dlv_users:
-        xp = dlv_saves[i]['xp']
-        dlv_users[i].update({'xp': xp})
-    sorted_dlv_users = {x[0]: x[1] for x in sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True)}
-    return sorted_dlv_users
-
-@app.get('/dlvusers/{user_id}/')
-async def get_dlv_user(user_id):
-    with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
-        dlv_users = json.load(f)
-    return dlv_users[str(user_id)]
-
-@app.get('/dlvuserstop100/')
-async def get_dlv_users_top100():
-    with open(r'C:\Users\Dani1\DLVBOTXPSAVES.json', 'r+') as f:
-        dlv_saves = json.load(f)
-    sorted_saves = list(sorted(dlv_saves.items(), key=lambda x: x[1]['xp'], reverse=True))
-    return {'main': sorted_saves[:99]}
+    sorted_users = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
+    sorted_users = {x[0]: x[1] for x in sorted_users}
+    return sorted_users
 
 @app.get('/dlvvalidatekey/{key}/')
 async def dlv_validate_key(key):
@@ -253,7 +213,7 @@ async def dlv_sign_up(email, password):
                             f'code: {verification_code}. If you did not sign up for a Demon List Verifications account you can ignore this email.', 'plain'))
         server = smtplib.SMTP('smtp.office365.com', 587)
         server.starttls()
-        server.login('dlvverification@outlook.com', '')
+        server.login('dlvverification@outlook.com', secrets.password)
         server.sendmail('dlvverification@outlook.com', email, msg.as_string())
         server.quit()
         dlv_accounts[email] = {'email': email, 'password': password, 'verified': False, 'discord_account_id': None, 'verification_code': verification_code, 'otp': None}
@@ -318,35 +278,24 @@ async def dlv_get_account(email, password):
                             dlv_users = json.load(f)
                         with open(r'C:\Users\Dani1\DLVLIST.json', 'r+') as f:
                             dlv_list = json.load(f)
-                        completions_0 = dlv_users[dlv_accounts[email]['discord_account_id']]['completions']
+                        completions_0 = dlv_users[dlv_accounts[email]['discord_account_id']]['completions']['main']
                         colors = [dlv_list['colors'][i] for i in completions_0]
                         completions = zip(completions_0, colors)
                         with open(r'C:\Users\Dani1\DLVBOTXPSAVES.json', 'r+') as f:
                             dlv_saves = json.load(f)
-                        sorted_saves = list(sorted(dlv_saves.items(), key=lambda x: x[1]['xp'], reverse=True))
+                        sorted_saves = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
                         rank = 0
                         for i in sorted_saves:
                             if i[1]['user_id'] == dlv_accounts[email]['discord_account_id']:
                                 rank = sorted_saves.index(i) + 1
                         with open(r'C:\Users\Dani1\DLVDEMONVFVS.json', 'r+') as f:
                             dlv_demon_vfvs = json.load(f)
-                        verifications = []
+                        verifications = dlv_users[dlv_accounts[email]['discord_account_id']]['completions']['verifications']
                         first_victors = []
-                        for i in dlv_list['main']:
-                            try:
-                                if dlv_demon_vfvs[i]['verifier']['user_id'] == str(dlv_accounts[email]['discord_account_id']):
-                                    verifications.append(i)
-                            except Exception as error:
-                                print(error)
-                        for e in dlv_list['main']:
-                            try:
-                                if dlv_demon_vfvs[e]['first_victor']['user_id'] == str(dlv_accounts[email]['discord_account_id']):
-                                    first_victors.append(e)
-                            except Exception as error:
-                                print(error)
                         return {'email': dlv_accounts[email]['email'], 'password': dlv_accounts[email]['password'], 'discord_account_id': dlv_accounts[email]['discord_account_id'],
                                 'discord_username': dlv_users[dlv_accounts[email]['discord_account_id']]['username'], 'completions': completions, 'verifications': verifications, 'first_victors': first_victors,
-                                'xp': dlv_saves[dlv_accounts[email]['discord_account_id']]['xp'], 'rank': rank, 'avatar': dlv_users[dlv_accounts[email]['discord_account_id']]['avatar'], 'otp': dlv_accounts[email]['otp']}
+                                'xp': dlv_users[dlv_accounts[email]['discord_account_id']]['xp'], 'rank': rank, 'avatar': dlv_users[dlv_accounts[email]['discord_account_id']]['avatar_url'], 'otp': dlv_accounts[email]['otp'],
+                                'og_case': dlv_list['og_case']}
                 else:
                     return {'main': 'Account Is Not Verified'}
             else:
@@ -380,7 +329,7 @@ async def dlv_send_otp(email):
                                 f'this email.', 'plain'))
             server = smtplib.SMTP('smtp.office365.com', 587)
             server.starttls()
-            server.login('dlvverification@outlook.com', '')
+            server.login('dlvverification@outlook.com', secrets.password)
             server.sendmail('dlvverification@outlook.com', email, msg.as_string())
             server.quit()
             return {'main': f'Successfully sent a one time password to {email}!'}
@@ -408,12 +357,3 @@ async def dlv_change_password(email, old_password, new_password):
     except Exception as error:
         print(error)
         return {'main': 'An Error Occured'}
-
-@app.get('/dlvsaveroulette/{email}/{password}/{roulette_json}/')
-async def dlv_save_roulette(email, password, roulette_json):
-    pass
-
-@app.get('/getwebsource/{url}/')
-async def get_web_source(url):
-    url = str(url).replace('!', '/')
-    return {'main': requests.get(url).text}
