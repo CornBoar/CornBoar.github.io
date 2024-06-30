@@ -9,7 +9,6 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
         document.getElementById("globalvar1").innerHTML = JSON.stringify(positions);
         document.getElementById("globalvar2").innerHTML = JSON.stringify(data["colors"]);
         document.getElementById("startbutton").disabled = false;
-        console.log(positions);
 });
 
 function startButtonHover() {
@@ -176,25 +175,6 @@ function giveUp() {
             document.getElementById("levels").innerHTML = "";
             document.getElementById("startbutton").disabled = false;
         }
-    }
-}
-
-function save() {
-    let email = prompt("Enter Your Account Email:");
-    let password = prompt("Enter Your Account Password:");
-    if (email === null) {
-        return;
-    }
-    if (password === null) {
-        return;
-    }
-    if (window.confirm("Are You Sure? Saving This Roulette Will Overwrite Your Previous Roulette Save.") === true) {
-        console.log(`https://user5e8e13639aafd2a.app.vtxhub.com/dlvsaveroulette/${email}/${password}/${btoa(document.documentElement.innerHTML)}`);
-        fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/dlvsaveroulette/${email}/${password}/${btoa(document.documentElement.innerHTML)}`).then((Response) => {
-            return Response.json()
-            }).then((data) => {
-                alert(data["main"]);
-        });
     }
 }
 

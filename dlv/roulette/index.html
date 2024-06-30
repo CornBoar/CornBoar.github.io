@@ -10,12 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
   </head>
   <body>
+    <script src="FileSaver.js"></script>
+    <script type="text/javascript">
+      function save() {
+        var blob = new Blob([btoa(document.documentElement.innerHTML + "DLVROULETTESIGNATUR" + "E")], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "DLVRouletteSave.txt");
+      }
+    </script>
     <h1 class="centered">DLV Roulette</h1>
     <div id="buttons" style="text-align: center;">
       <button id="startbutton" disabled onclick=start() onmouseover=startButtonHover() onmouseleave=startButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Start</button>
       <button id="resetbutton" onclick=reset() onmouseover=resetButtonHover() onmouseleave=resetButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Reset</button>
-      <!--- <button id="savebutton" onclick=save() onmouseover=saveButtonHover() onmouseleave=saveButtonUnhover() style="background-color: blue; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Save</button>
-      <button id="loadbutton" onmouseover=loadButtonHover() onmouseleave=loadButtonUnhover() style="background-color: purple; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Load</button> --->
+      <button id="savebutton" onclick=save() onmouseover=saveButtonHover() onmouseleave=saveButtonUnhover() style="background-color: blue; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Save</button>
+      <button id="loadbutton" onmouseover=loadButtonHover() onmouseleave=loadButtonUnhover() style="background-color: purple; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 150px; font-family: 'Poppins', sans-serif">Load</button>
     </div>
     <div id="levels">
     </div>
@@ -25,5 +32,41 @@
     <div id="globalvar4" style="user-select: none;"></div>
     <div id="globalvar5" style="user-select: none;">{}</div>
     <script src="script.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        function readFileAsString(file, callback) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const fileContent = event.target.result;
+            callback(fileContent);
+          };
+          reader.readAsText(file);
+        }
+        document.getElementById('loadbutton').addEventListener('click', function() {
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = '.txt';
+          fileInput.style.display = 'none';
+          fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+              readFileAsString(file, function(content) {
+                if (atob(content).includes("DLVROULETTESIGNATUR" + "E")) {
+                  document.open();
+                  document.write("<!DOCTYPE html><html>" + atob(content) + "</html>");
+                  document.close();
+                }
+                else {
+                  alert("Invalid Save File!");
+                }
+              });
+            }
+          });
+          document.body.appendChild(fileInput);
+          fileInput.click();
+          document.body.removeChild(fileInput);
+        });
+      });
+    </script>
   </body>
 </html>
