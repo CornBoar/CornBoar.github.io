@@ -33,6 +33,14 @@ html {
     min-height: 250px;
 }
 
+#packsbutton {
+    padding-top: 5px;
+    display: block;
+    margin: auto;
+    max-height: 250px;
+    min-height: 250px;
+}
+
 #logo {
     display: block;
     margin: auto;
@@ -44,7 +52,7 @@ html {
     height: 40px; 
     position: fixed; 
     bottom: 0%;
-    left: 50%;
+    left: 90%;
     transform: translate(-50%, 0);
 }
  
