@@ -82,6 +82,11 @@ function start() {
     </div>`
     document.getElementById("levels").innerHTML += level1html;
     document.getElementById("startbutton").disabled = true;
+    if (Math.floor(Math.random() * 999) === 69) {
+        document.getElementById("levels").innerHTML = "";
+        document.getElementById("startbutton").disabled = false;
+        alert("Unlucky Niggetron!");
+    }
 }
 
 function done() {
