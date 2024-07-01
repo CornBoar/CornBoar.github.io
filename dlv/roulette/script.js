@@ -89,39 +89,39 @@ function done() {
         alert("Unlucky Niggetron!");
     }
     if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100"].includes(document.getElementById("percentage").value) && parseInt(document.getElementById("percentage").value) >= parseInt(document.getElementById("globalvar3").innerHTML)) {
-        if (parseInt(document.getElementById("globalvar3").innerHTML) > 99) {
-            alert("You Completed The DLV Roulette!");
+        let positions = JSON.parse(document.getElementById("globalvar1").innerHTML);
+        let levels = Object.keys(positions);
+        let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
+        let level = levels[[Math.floor(Math.random() * levels.length)]];
+        let thingy = document.getElementById("percentage").value;
+        if (window.location.href.includes("slugmode")) {
+            thingy = document.getElementById("globalvar3").innerHTML;
+        }
+        document.getElementById("globalvar3").innerHTML = parseInt(thingy) + 1;
+        document.getElementById("donebutton").remove();
+        document.getElementById("giveupbutton").remove();
+        document.getElementById("percentage").outerHTML = `<h1 style="color: ${document.getElementById("globalvar4").innerHTML}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${document.getElementById("percentage").value}%</h1>`;
+        let usedLevelsDict = JSON.parse(document.getElementById("globalvar5").innerHTML);
+        if (Object.keys(usedLevelsDict).length === levels.length) {
+            usedLevelsDict = {};
+        }
+        while (Object.keys(usedLevelsDict).includes(level)) {
+            level = levels[[Math.floor(Math.random() * levels.length)]];
+        }
+        usedLevelsDict[level] = positions[level];
+        document.getElementById("globalvar4").innerHTML = colors[level.toLowerCase()];
+        let html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
+        <h1 class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]} - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(document.getElementById("globalvar3").innerHTML)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
+        <div id="buttons" style="text-align: center;">
+        <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
+        <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
+        </div>
+        </div>`
+        if (parseInt(document.getElementById("globalvar3").innerHTML) > 99 || parseInt(thingy) + 1 > 99) {
+            alert(`You Have Completed The DLV Roulette With ${Object.keys(JSON.parse(document.getElementById("globalvar5").innerHTML)).length} ${Object.keys(JSON.parse(document.getElementById("globalvar5").innerHTML)).length > 1 ? "Levels" : "Level"}!`);
         }
         else {
-            let positions = JSON.parse(document.getElementById("globalvar1").innerHTML);
-            let levels = Object.keys(positions);
-            let colors = JSON.parse(document.getElementById("globalvar2").innerHTML);
-            let level = levels[[Math.floor(Math.random() * levels.length)]];
-            let thingy = document.getElementById("percentage").value;
-            if (window.location.href.includes("slugmode")) {
-                thingy = document.getElementById("globalvar3").innerHTML;
-            }
-            document.getElementById("globalvar3").innerHTML = parseInt(thingy) + 1;
-            document.getElementById("donebutton").remove();
-            document.getElementById("giveupbutton").remove();
-            document.getElementById("percentage").outerHTML = `<h1 style="color: ${document.getElementById("globalvar4").innerHTML}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${document.getElementById("percentage").value}%</h1>`;
-            let usedLevelsDict = JSON.parse(document.getElementById("globalvar5").innerHTML);
-            if (Object.keys(usedLevelsDict).length === levels.length) {
-                usedLevelsDict = {};
-            }
-            while (Object.keys(usedLevelsDict).includes(level)) {
-                level = levels[[Math.floor(Math.random() * levels.length)]];
-            }
-            usedLevelsDict[level] = positions[level];
             document.getElementById("globalvar5").innerHTML = JSON.stringify(usedLevelsDict);
-            document.getElementById("globalvar4").innerHTML = colors[level.toLowerCase()];
-            let html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-            <h1 class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]} - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(document.getElementById("globalvar3").innerHTML)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
-            <div id="buttons" style="text-align: center;">
-            <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
-            <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
-            </div>
-            </div>`
             document.getElementById("levels").innerHTML += html;
         }
     }
