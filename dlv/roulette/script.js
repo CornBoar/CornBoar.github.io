@@ -18,7 +18,9 @@ function startButtonHover() {
 }
 
 function startButtonUnhover() {
-    document.getElementById("startbutton").style.borderColor = "green";
+    if (document.getElementById("startbutton").disabled === false) {
+        document.getElementById("startbutton").style.borderColor = "green";
+    }
 }
 
 function resetButtonHover() {
