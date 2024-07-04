@@ -2,6 +2,10 @@ html {
     height: 100%;
     width: 100%;
     background-color: black;
+    background-image: url('https://media.discordapp.net/attachments/1245200525612286076/1258568152590188625/image.png?ex=6688846e&is=668732ee&hm=2d6d623b6861323ac5b1910978b500c78896d71ea790601cfcd8675129f2d114&=&format=webp&quality=lossless');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
   }
 
 .whitetext {
