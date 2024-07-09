@@ -97,7 +97,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
         <h3 class="whitetext" style="color:gold">Level:</h3>
         <div class="whitetext">${Math.floor(data[key]["xp"] / 100)}</div>
         <h3 class="whitetext" style="color:gold">XP:</h3>
-        <div class="whitetext">${Math.round(10*data[key]["xp"])/10}</div>
+        <div class="whitetext">${Math.round(10 * data[key]["xp"]) / 10}</div>
         <h3 class="whitetext" style="color:gold">Discord Avatar:</h3>
         <img class="avatars" src="${data[key]["avatar_url"]}"">
         <h3 class="whitetext" style="color:gold">Discord User ID:</h3>
@@ -131,3 +131,19 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
       }
   }
 });
+
+function backButtonHover() {
+  document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/buttonhoverbg.png";
+  document.getElementById("backbuttonbg_").style.maxHeight = "100px";
+  document.getElementById("backbuttonbg_").style.minWidth = "155px";
+}
+
+function backButtonUnhover() {
+  document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/backbuttonbg.png";
+  document.getElementById("backbuttonbg_").style.maxHeight = "100px";
+  document.getElementById("backbuttonbg_").style.minWidth = "155px";
+}
+
+function back() {
+  window.location.replace("https://cornboar.com/dlv/");
+}

@@ -85,7 +85,7 @@ function start() {
     <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
     <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
     </div>
-    </div>`
+    </div><div>‎</div>`
     document.getElementById("levels").innerHTML += level1html;
     document.getElementById("startbutton").disabled = true;
     if (Math.floor(Math.random() * 999) === 69) {
@@ -129,7 +129,7 @@ function done() {
         <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
         <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
         </div>
-        </div>`
+        </div><div>‎</div>`
         if (parseInt(globalvar3) > 99 || parseInt(thingy) + 1 > 99) {
             alert(`You Have Completed The DLV Roulette With ${Object.keys(JSON.parse(globalvar5)).length} ${Object.keys(JSON.parse(globalvar5)).length > 1 ? "Levels" : "Level"}!`);
         }
@@ -196,3 +196,19 @@ document.addEventListener("keypress", function(event) {
       done();
     }
 });
+
+function backButtonHover() {
+  document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/buttonhoverbg.png";
+  document.getElementById("backbuttonbg_").style.maxHeight = "100px";
+  document.getElementById("backbuttonbg_").style.minWidth = "155px";
+}
+
+function backButtonUnhover() {
+  document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/backbuttonbg.png";
+  document.getElementById("backbuttonbg_").style.maxHeight = "100px";
+  document.getElementById("backbuttonbg_").style.minWidth = "155px";
+}
+
+function back() {
+  window.location.replace("https://cornboar.com/dlv/");
+}

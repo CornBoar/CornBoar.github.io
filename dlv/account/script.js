@@ -178,49 +178,49 @@ function logIn() {
 }
 
 function backButtonHover() {
-    document.getElementById("backbuttonbg_").src = "https://cornboar.com/cdn/buttonhoverbg.png";
+    document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/buttonhoverbg.png";
     document.getElementById("backbuttonbg_").style.maxHeight = "100px";
     document.getElementById("backbuttonbg_").style.minWidth = "155px";
 }
 
 function backButtonUnhover() {
-    document.getElementById("backbuttonbg_").src = "https://cornboar.com/cdn/backbuttonbg.png";
+    document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/backbuttonbg.png";
     document.getElementById("backbuttonbg_").style.maxHeight = "100px";
     document.getElementById("backbuttonbg_").style.minWidth = "155px";
 }
 
 function backButtonSHover() {
-    document.getElementById("backbuttonbgS").src = "https://cornboar.com/cdn/buttonhoverbg.png";
+    document.getElementById("backbuttonbgS").src = "https://cornboar.com/assets/buttonhoverbg.png";
     document.getElementById("backbuttonbgS").style.maxHeight = "100px";
     document.getElementById("backbuttonbgS").style.minWidth = "155px";
 }
 
 function backButtonSUnhover() {
-    document.getElementById("backbuttonbgS").src = "https://cornboar.com/cdn/backbuttonbg.png";
+    document.getElementById("backbuttonbgS").src = "https://cornboar.com/assets/backbuttonbg.png";
     document.getElementById("backbuttonbgS").style.maxHeight = "100px";
     document.getElementById("backbuttonbgS").style.minWidth = "155px";
 }
 
 function settingsButtonHover() {
-    document.getElementById("settingsbuttonbg_").src = "https://cornboar.com/cdn/buttonhoverbg.png";
+    document.getElementById("settingsbuttonbg_").src = "https://cornboar.com/assets/buttonhoverbg.png";
     document.getElementById("settingsbuttonbg_").style.maxHeight = "100px";
     document.getElementById("settingsbuttonbg_").style.minWidth = "155px";
 }
 
 function settingsButtonUnhover() {
-    document.getElementById("settingsbuttonbg_").src = "https://cornboar.com/cdn/settingsbuttonbg.png";
+    document.getElementById("settingsbuttonbg_").src = "https://cornboar.com/assets/settingsbuttonbg.png";
     document.getElementById("settingsbuttonbg_").style.maxHeight = "100px";
     document.getElementById("settingsbuttonbg_").style.minWidth = "155px";
 }
 
 function adminButtonHover() {
-    document.getElementById("adminbuttonbg_").src = "https://cornboar.com/cdn/buttonhoverbg.png";
+    document.getElementById("adminbuttonbg_").src = "https://cornboar.com/assets/buttonhoverbg.png";
     document.getElementById("adminbuttonbg_").style.maxHeight = "100px";
     document.getElementById("adminbuttonbg_").style.minWidth = "155px";
 }
 
 function adminButtonUnhover() {
-    document.getElementById("adminbuttonbg_").src = "https://cornboar.com/cdn/adminbuttonbg.jpg";
+    document.getElementById("adminbuttonbg_").src = "https://cornboar.com/assets/adminbuttonbg.jpg";
     document.getElementById("adminbuttonbg_").style.maxHeight = "100px";
     document.getElementById("adminbuttonbg_").style.minWidth = "155px";
     document.getElementById("adminbuttonbg_").style.maxWidth = "155px";
@@ -350,4 +350,20 @@ function changePassword() {
             alert("Passwords Do Not Match");
         }
     }
+}
+
+function backButtonHover2() {
+    document.getElementById("backbuttonbg2").src = "https://cornboar.com/assets/buttonhoverbg.png";
+    document.getElementById("backbuttonbg2").style.maxHeight = "100px";
+    document.getElementById("backbuttonbg2").style.minWidth = "155px";
+}
+  
+  function backButtonUnhover2() {
+    document.getElementById("backbuttonbg2").src = "https://cornboar.com/assets/backbuttonbg.png";
+    document.getElementById("backbuttonbg2").style.maxHeight = "100px";
+    document.getElementById("backbuttonbg2").style.minWidth = "155px";
+}
+  
+  function back2() {
+    window.location.replace("https://cornboar.com/dlv/");
 }

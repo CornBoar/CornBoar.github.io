@@ -63,7 +63,7 @@ html {
     top: 10px;
     left: 8px;
     position: absolute;
-    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    content: url("https://assets.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
     max-height: 100px;
     min-width: 155px;
 }
@@ -97,7 +97,7 @@ html {
     top: 10px;
     left: 8px;
     position: absolute;
-    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    content: url("https://assets.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
     max-height: 100px;
     min-width: 155px;
     display: none;
@@ -129,7 +129,7 @@ html {
     top: 120px;
     left: 8px;
     position: absolute;
-    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    content: url("https://assets.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
     max-height: 100px;
     min-width: 155px;
 }
@@ -160,7 +160,7 @@ html {
     top: 230px;
     left: 8px;
     position: absolute;
-    content: url("https://cdn.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
+    content: url("https://assets.discordapp.com/attachments/1040743145605976174/1174206095028396052/image.png?ex=6566bfa4&is=65544aa4&hm=88a26721add5c0518564afde0c2c4000e730f18279713dc87f4907b5b368f5ec&");
     max-height: 100px;
     min-width: 155px;
 }
@@ -313,4 +313,22 @@ html {
     font-size: 25px;
     position: relative;
     bottom: 290px;
+}
+
+#backbutton2 {
+    max-width: 100px;
+    max-height: 100px;
+    top: 15px;
+    left: 35px;
+    position: absolute;
+}
+
+#backbuttonbg2 {
+    min-height: 100px;
+    border-radius: 25px;
+    top: 10px;
+    left: 8px;
+    position: absolute;
+    max-height: 100px;
+    min-width: 155px;
 }
