@@ -40,7 +40,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             ${levels}
             <div id="buttons" style="text-align: center;">
             </div>
-            </div></div><div>"`
+            </div></div>"`
     }
 });
 
