@@ -140,7 +140,7 @@ window.mobileCheck = function() {
 
 if (window.mobileCheck()) {
   document.getElementById("backbutton_").style.display = "none";
-  document.getElementById("backbutton_").style.display = "none";
+  document.getElementById("backbuttonbg_").style.display = "none";
 }
 
 function backButtonHover() {
