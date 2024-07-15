@@ -10,7 +10,7 @@ function youtubeId(url){
 }
 
 const urlParams = new URLSearchParams(window.location.search);
-var level = urlParams.get("l");;
+var level = urlParams.get("l");
 
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
     return Response.json()
@@ -94,5 +94,10 @@ function backButtonUnhover() {
 }
 
 function back() {
-    window.location.replace("https://cornboar.com/dlv/list/");
+    if (urlParams.get("p") === "1") {
+        window.location.replace("https://cornboar.com/dlv/packs/");
+    }
+    else {
+        window.location.replace("https://cornboar.com/dlv/list/");
+    }
 }
