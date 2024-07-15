@@ -27,7 +27,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             levels += `<h1 style="color: ${dataColors["colors"][dataValueList[e]["levels"][i]]}; font-family: 'Poppins', sans-serif">` + dataColors["og_case"][dataValueList[e]["levels"][i]] + "</h1>";
             colorList += dataColors["colors"][dataValueList[e]["levels"][i]] + ",";
         }
-        colorList = colorList.substring(0, colorList.length - 1)
+        colorList = colorList.substring(0, colorList.length - 1);
         console.log(dataColors);
         console.log(data);
         document.getElementById("packs").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid transparent; background: linear-gradient(#000000 0 0) padding-box, linear-gradient(to right, ${colorList}) border-box; text-align: center; width: 500px; position: relative;">

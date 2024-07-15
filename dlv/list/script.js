@@ -39,24 +39,7 @@ else {
 }
 
 function toggleVictors(demonName) {
-  if (document.getElementById(demonName + "victors").style.display === "block") {
-    for (var i in document.getElementsByTagName("*")) {
-          if (document.getElementsByTagName("*")[i].id) {
-            if (document.getElementsByTagName("*")[i].id.includes(demonName)) {
-              document.getElementsByTagName("*")[i].style.display = "none";
-            }
-          }
-    }
-  }
-  else {
-    for (var i in document.getElementsByTagName("*")) {
-          if (document.getElementsByTagName("*")[i].id) {
-            if (document.getElementsByTagName("*")[i].id.includes(demonName)) {
-              document.getElementsByTagName("*")[i].style.display = "block";
-            }
-          }
-    }
-  }
+  window.location.replace(`https://cornboar.com/dlv/level/?l=${demonName.replace("blackmonkeys123", " ")}`);
 }
 
 window.mobileCheck = function() {
@@ -86,7 +69,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
           }
           let gdStats = {"publisher": data["level_stats"][data["main"][i]]["publisher"], "length": data["level_stats"][data["main"][i]]["level_length"], "objectCount": data["level_stats"][data["main"][i]]["object_count"], "songName": data["level_stats"][data["main"][i]]["song_name"], "songId": data["level_stats"][data["main"][i]]["song_id"], "songAuthor": data["level_stats"][data["main"][i]]["song_author"], "levelId": data["level_stats"][data["main"][i]]["level_id"], "copyPassword": data["level_stats"][data["main"][i]]["copy_password"]};
           let formattedGdStats = `<div style="color: white; display: block;" id="${data["main"][i].replace(/\s/g, "")}victorsgdstatslevelid1">Level ID: ${gdStats.levelId}</div><div style="color: white; display: block;" id="${data["main"][i].replace(/\s/g, "")}victorsgdstatspublisher1">Publisher: ${gdStats.publisher}</div><div style="color: white; display: block;" id="${data["main"][i].replace(/\s/g, "")}victorsgdstatslength1">Level Length: ${gdStats.length}</div><div style="color: white; display: block;" id="${data["main"][i].replace(/\s/g, "")}victorsgdstatssong1">Song: ${gdStats.songName} (${gdStats.songId}) By ${gdStats.songAuthor}</div><div style="color: white; display: block;" id="${data["main"][i].replace(/\s/g, "")}victorsgdstatsobjectcount1">Object Count: ${gdStats.objectCount}</div><div style="color: white; display: block;" id="${data["main"][i].replace(/\s/g, "")}victorsgdstatsgameversion1">Copy Password: ${gdStats.copyPassword}</div>`;
-          formattedList += `<h2 class="whitetext" id="demon${i}" onclick=toggleVictors("${data["main"][i].replace(/\s/g, "")}")>${parseInt(i) + 1}. ${data["og_case"][data["main"][i]]}</h2><h3 style="color:gold" id="${data["main"][i].replace(/\s/g, "")}victors2">VERIFIER:</h3><div style="color:white" id="${data["main"][i].replace(/\s/g, "")}victors3">${data["verifiers"][data["main"][i]][1]}</div><h3 style="color:gold" id="${data["main"][i].replace(/\s/g, "")}victors">VICTORS:</h3>${formattedVictors}<h3 style="color:gold" id="${data["main"][i].replace(/\s/g, "")}victorsgdstats">LEVEL STATS:</h3><div style="color:white" id=${data["main"][i].replace(/\s/g, "")}victorsgdstats${Object.keys(data["victors"][data["main"][i]]).length}>${formattedGdStats}</div>`;
+          formattedList += `<h2 class="whitetext" id="demon${i}" onclick=toggleVictors("${data["main"][i].replace(" ", "blackmonkeys123")}")>${parseInt(i) + 1}. ${data["og_case"][data["main"][i]]}</h2><h3 style="color:gold" id="${data["main"][i].replace(/\s/g, "")}victors2">VERIFIER:</h3><div style="color:white" id="${data["main"][i].replace(/\s/g, "")}victors3">${data["verifiers"][data["main"][i]][1]}</div><h3 style="color:gold" id="${data["main"][i].replace(/\s/g, "")}victors">VICTORS:</h3>${formattedVictors}<h3 style="color:gold" id="${data["main"][i].replace(/\s/g, "")}victorsgdstats">LEVEL STATS:</h3><div style="color:white" id=${data["main"][i].replace(/\s/g, "")}victorsgdstats${Object.keys(data["victors"][data["main"][i]]).length}>${formattedGdStats}</div>`;
         }
         document.getElementById("demonlisttext").innerHTML = "DEMON LIST:";
         document.getElementById("real").innerHTML = formattedList;
