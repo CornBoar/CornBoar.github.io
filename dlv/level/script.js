@@ -103,5 +103,5 @@ function back() {
 }
 
 if (document.getElementById("stuff").innerHTML === "") {
-    document.getElementById("stuff").innerHTML = `<h1 style="color: white; font-family: 'Poppins', sans-serif; text-align: center;">that level doesnt exist goofball<h1>`
+    document.getElementById("stuff").innerHTML = `<h1 style="color: white; font-family: 'Poppins', sans-serif; text-align: center;">loading or something went wrong 👵🏿<h1>`
 }
