@@ -13,7 +13,7 @@ const urlParams = new URLSearchParams(window.location.search);
 var level = urlParams.get("l");
 
 function packRedirect(packName) {
-    window.location.replace(`https://cornboar.com/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}`);
+    window.location.replace(`https://cornboar.com/dlv/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}`);
 }
 
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
