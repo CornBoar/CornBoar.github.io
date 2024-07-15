@@ -71,5 +71,10 @@ function backButtonUnhover() {
 }
 
 function back() {
-  window.location.replace("https://cornboar.com/dlv/");
+  if (urlParams.get("p") === null) {
+    window.location.replace("https://cornboar.com/dlv/");
+  }
+  else {
+    window.location.replace("https://cornboar.com/dlv/list/");
+  }
 }
