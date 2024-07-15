@@ -12,6 +12,10 @@ function youtubeId(url){
 const urlParams = new URLSearchParams(window.location.search);
 var level = urlParams.get("l");
 
+function packRedirect(packName) {
+    window.location.replace(`https://cornboar.com/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}`);
+}
+
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
     return Response.json()
 }).then((data) => {
@@ -37,7 +41,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
                 }
                 colorList = colorList.substring(0, colorList.length - 1);
                 console.log(colorList);
-                packs += `<h2 style="color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(to right, ${colorList}); font-family: 'Poppins', sans-serif;">${data["packs"][level][i]}</h2>`;
+                packs += `<h2 onclick=packRedirect("${data["packs"][level][i].replaceAll(" ", "blackmonkeys123")}") style="color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(to right, ${colorList}); font-family: 'Poppins', sans-serif;">${data["packs"][level][i]}</h2>`;
             }
             if (packs === "") {
                 packs = `<h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Not In Any Packs</h2>`;

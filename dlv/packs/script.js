@@ -2,6 +2,8 @@ function redirect(levelName) {
   window.location.replace(`https://cornboar.com/dlv/level?l=${levelName.replaceAll("blackmonkeys123", " ")}&p=1`);
 }
 
+const urlParams = new URLSearchParams(window.location.search);
+
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvpacks.json").then((Response) => {
     return Response.json()
 }).then((data) => {
@@ -40,7 +42,8 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             colorList += dataColors["colors"][dataValueList[e]["levels"][i]] + ",";
         }
         colorList = colorList.substring(0, colorList.length - 1);
-        document.getElementById("packs").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid transparent; background: linear-gradient(#000000 0 0) padding-box, linear-gradient(to right, ${colorList}) border-box; text-align: center; width: 500px; position: relative;">
+        console.log(dataValueList[e]["name"].replaceAll(" ", "blackmonkeys123"));
+        document.getElementById("packs").innerHTML += `<div id=${dataValueList[e]["name"].replaceAll(" ", "blackmonkeys123")} style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid transparent; background: linear-gradient(#000000 0 0) padding-box, linear-gradient(to right, ${colorList}) border-box; text-align: center; width: 500px; position: relative;">
             <h1 style="color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(to right, ${colorList}); font-family: 'Poppins', sans-serif; margin: 0; padding: 0;">${dataValueList[e]["name"]}</h1>
             <div style="color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(to right, ${colorList}); font-family: 'Poppins', sans-serif; margin: 0; padding: 0;">Worth ${Math.round(10 * dataValueList[e]["xp_value"]) / 10} XP</div>
             <div id="buttons" style="text-align: center;">
@@ -52,6 +55,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             </div>
             </div></div>"`
     }
+    document.getElementById(urlParams.get("p").replaceAll(" ", "blackmonkeys123")).scrollIntoView();
 });
 
 function backButtonHover() {
