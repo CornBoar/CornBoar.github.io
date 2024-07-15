@@ -42,7 +42,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             if (packs === "") {
                 packs = `<h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Not In Any Packs</h2>`;
             }
-            document.getElementById("stuff").innerHTML += `<h1 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif; text-align: center; font-size: 100px; bottom: 80px; position: relative;">#${data["main"].indexOf(level) + 1}. ${data["og_case"][level]}</h1>
+            document.getElementById("stuff").innerHTML = `<h1 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif; text-align: center; font-size: 100px; bottom: 80px; position: relative;">#${data["main"].indexOf(level) + 1}. ${data["og_case"][level]}</h1>
             <h3 style="font-family: 'Poppins', sans-serif; text-align: center; color: ${data["colors"][level]}; position: relative; bottom: 165px;">Verified By <a style="color: ${data["colors"][data2[data["verifiers"][level][0]]["completions"]["main"][0]]}">${data["verifiers"][level][1]}</a></h3>
             <img id="backbuttonbg_" onclick=back() src="https://cornboar.com/assets/backbuttonbg.png">
             <img id="backbutton_" onclick=back() onmouseover=backButtonHover() onmouseleave=backButtonUnhover() src="https://cornboar.com/assets/backbutton.png">
@@ -100,4 +100,8 @@ function back() {
     else {
         window.location.replace("https://cornboar.com/dlv/list/");
     }
+}
+
+if (document.getElementById("stuff").innerHTML === "") {
+    document.getElementById("stuff").innerHTML = `<h1 style="color: white; font-family: 'Poppins', sans-serif; text-align: center;">that level doesnt exist goofball<h1>`
 }
