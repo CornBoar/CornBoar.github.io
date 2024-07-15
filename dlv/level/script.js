@@ -60,7 +60,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
                     <div style="text-align: center; width: 500px; margin: 0 10px;">
                         <h1 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; border: thick solid ${data["colors"][level]}; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom: 1px;">Level Stats</h1>
                         <div id="buttons" style="text-align: center; border: thick solid ${data["colors"][level]}; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
-                            <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">DLV XP Value: ${data["xp_values"][level]}</h2>
+                            <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">DLV XP Value: ${Math.round(10 * data["xp_values"][level]) / 10}</h2>
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Level ID: ${data["level_stats"][level]["level_id"]}</h2>
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Publisher: ${data["level_stats"][level]["publisher"]}</h2>
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Level Length: ${data["level_stats"][level]["level_length"]}</h2>
