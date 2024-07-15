@@ -47,7 +47,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             <img id="backbuttonbg_" onclick=back() src="https://cornboar.com/assets/backbuttonbg.png">
             <img id="backbutton_" onclick=back() onmouseover=backButtonHover() onmouseleave=backButtonUnhover() src="https://cornboar.com/assets/backbutton.png">
             <div style="text-align: center;">
-                <iframe width="1550" height="500" style="margin: 0 auto; display: block; bottom: 175px; position: relative; border-radius: 25px;"
+                <iframe width="1550" height="500" style="margin: 0 auto; display: block; bottom: 175px; position: relative; border-radius: 25px; border: thick solid ${data["colors"][level]}"
                 src="${"https://www.youtube.com/embed/" + youtubeId(videoUrl) + "/"}}">
                 </iframe>
                 <div style="display: flex; justify-content: center; margin-top: 20px; position: relative; bottom: 165px;">
