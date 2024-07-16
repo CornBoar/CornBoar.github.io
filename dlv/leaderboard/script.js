@@ -3,16 +3,7 @@ document.getElementById("e").innerHTML = "Requesting data from my slow ass backe
 var showVictors = false;
 
 function toggleStats(userNumber) {
-if (document.getElementById(`username${userNumber}`).children[1].style.display === "none") {
-  for (let i = 1; i != document.getElementById(`username${userNumber}`).children.length; i++) {
-    document.getElementById(`username${userNumber}`).children[i].style.display = "block";
-  }
-}
-else {
-  for (let i = 1; i != document.getElementById(`username${userNumber}`).children.length; i++) {
-    document.getElementById(`username${userNumber}`).children[i].style.display = "none";
-  }
-}
+  window.location.replace(`https://cornboar.com/user/?u=${userNumber}`);
 }
 
 function showAllStats() {
@@ -91,7 +82,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
         }
         
         formattedList += `<div id="username${Object.keys(data).indexOf(key)}">
-        <h2 class="whitetext" style="color:${color}" onclick=toggleStats(${Object.keys(data).indexOf(key)})>#${Object.keys(data).indexOf(key) + 1}. ${data[key]["username"]}</h2>
+        <h2 class="whitetext" style="color:${color}" onclick=toggleStats("${data[key]["user_id"]}")>#${Object.keys(data).indexOf(key) + 1}. ${data[key]["username"]}</h2>
         <h3 class="whitetext" style="color:gold">Completions:</h3>
         <div>${formattedCompletions}</div>
         <h3 class="whitetext" style="color:gold">Level:</h3>
@@ -123,6 +114,8 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
       document.getElementById("demonlisttext").style.display = "none";
       document.getElementById("showallstats").innerHTML = "Show All User Stats";
       document.getElementById("hideallstats").innerHTML= "Hide All User Stats";
+      document.getElementById("showallstats").style.display = "none";
+      document.getElementById("hideallstats").style.display= "none";
       document.getElementById("real").style.display = "none";
       document.getElementById("userstatstext2").innerHTML = "Click Username To View Stats";
       for (let i in document.getElementsByTagName("*")) {

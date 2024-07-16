@@ -1,0 +1,22 @@
+html {
+   background-color: black;
+   zoom: 0%;
+}
+
+#backbutton_ {
+    max-width: 100px;
+    max-height: 100px;
+    top: 15px;
+    left: 35px;
+    position: absolute;
+}
+
+#backbuttonbg_ {
+    min-height: 100px;
+    border-radius: 25px;
+    top: 10px;
+    left: 8px;
+    position: absolute;
+    max-height: 100px;
+    min-width: 155px;
+}

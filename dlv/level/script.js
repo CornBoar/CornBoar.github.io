@@ -16,6 +16,10 @@ function packRedirect(packName) {
     window.location.replace(`https://cornboar.com/dlv/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}`);
 }
 
+function userRedirect(userId) {
+    window.location.replace(`https://cornboar.com/dlv/user/?u=${userId}&l=1`);
+}
+
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
     return Response.json()
 }).then((data) => {
@@ -31,7 +35,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             let videoUrl = data["videos"][level];
             let victors = "";
             for (i in data["victors"][level]) {
-                victors += `<h2 style="color: ${data["colors"][data2[data["victors"][level][i][0]]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif;">${data2[data["victors"][level][i][0]]["username"]} <img src="${data2[data["victors"][level][i][0]]["avatar_url"]}" style="max-height: 25px; min-height: 25px; max-width: 25px; min-width: 25px; position: relative; top: 5px; border-radius: 34%;"></h2>`;
+                victors += `<h2 onclick=userRedirect("${data2[data["victors"][level][i][0]]["user_id"]}") style="color: ${data["colors"][data2[data["victors"][level][i][0]]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif;">${data2[data["victors"][level][i][0]]["username"]} <img src="${data2[data["victors"][level][i][0]]["avatar_url"]}" style="max-height: 25px; min-height: 25px; max-width: 25px; min-width: 25px; position: relative; top: 5px; border-radius: 34%;"></h2>`;
             }
             let packs = "";
             for (i in data["packs"][level]) {
@@ -100,6 +104,9 @@ function backButtonUnhover() {
 function back() {
     if (urlParams.get("p") === "1") {
         window.location.replace("https://cornboar.com/dlv/packs/");
+    }
+    else if (urlParams.get("p") === "2") {
+        window.location.replace("https://cornboar.com/dlv/leaderboard/");
     }
     else {
         window.location.replace("https://cornboar.com/dlv/list/");

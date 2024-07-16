@@ -4,6 +4,11 @@ document.addEventListener("keypress", function(event) {
     }
   });
 
+var globalvar1 = "";
+var globalvar2 = "";
+var globalvar3 = "";
+var globalvar4 = "";
+
 function signUp() {
     if (document.getElementById("semail").value !== "" && document.getElementById("spassword").value !== "") {
         if (document.getElementById("spassword").value === document.getElementById("spassword2").value) {
@@ -27,18 +32,18 @@ function signUp() {
 }
 
 function showEmailAddress() {
-    document.getElementById("infoemailaddressS").innerHTML = `Email Address: ${document.getElementById("globalvar1").innerHTML}`;
+    document.getElementById("infoemailaddressS").innerHTML = `Email Address: ${globalvar1}`;
 }
 
 function showPassword() {
-    document.getElementById("infopasswordS").innerHTML = `Password: ${document.getElementById("globalvar2").innerHTML}`;
+    document.getElementById("infopasswordS").innerHTML = `Password: ${globalvar2}`;
 }
 
 document.getElementById("lemail").value = localStorage.getItem("dlv-email");
 document.getElementById("lpassword").value = localStorage.getItem("dlv-password");
 
 function logIn() {
-    if (document.getElementById("lemail").value === document.getElementById("globalvar1").innerHTML && document.getElementById("lpassword").value === document.getElementById("globalvar2").innerHTML && document.getElementById("globalvar1").innerHTML !== "" && document.getElementById("lpassword").value === document.getElementById("globalvar2").innerHTML !== "") {
+    if (document.getElementById("lemail").value === globalvar1 && document.getElementById("lpassword").value === globalvar2 && globalvar1 !== "" && document.getElementById("lpassword").value === globalvar2 !== "") {
         document.getElementById("loginbutton").innerHTML = "Log In";
         document.getElementById("lemail").style.display = "none";
         document.getElementById("lpassword").style.display = "none";
@@ -59,7 +64,7 @@ function logIn() {
                 elements[i].style.display = "block";
             }
         }
-        if (document.getElementById("globalvar3").innerHTML !== "true") {
+        if (globalvar3 !== "true") {
             document.getElementById("adminbutton_").style.display = "none";
             document.getElementById("adminbuttonbg_").style.display = "none";
         }
@@ -125,15 +130,15 @@ function logIn() {
                                     completionsDiv = completionsDiv + `<h2 style="color:${data["completions"][Object.keys(data["completions"])[i]]}; text-align: center; margin-left: auto; margin-right: auto; font-size: 50px; font-family: 'Poppins', sans-serif; display: table; line-height: 50px; border-radius: 15px; background-color: ${data["verifications"].includes(Object.keys(data["completions"])[i]) ? "#0078d7" : data["first_victors"].includes(Object.keys(data["completions"])[i]) ? "#0078d7" : "black"}">${data["og_case"][Object.keys(data["completions"])[i]]}</h2>`
                                 }
                             }
-                            if (document.getElementById("globalvar3").innerHTML !== "true") {
+                            if (globalvar3 !== "true") {
                                 document.getElementById("adminbutton_").style.display = "none";
                                 document.getElementById("adminbuttonbg_").style.display = "none";
                             }
                             document.getElementById("completions_").innerHTML = completionsDiv;
                             document.getElementById("infodiscordaccountidS").innerHTML = `Discord Account ID: ${data["discord_account_id"]}`
-                            document.getElementById("globalvar1").innerHTML = data["email"];
-                            document.getElementById("globalvar2").innerHTML = data["password"];
-                            document.getElementById("globalvar4").innerHTML = data["discord_account_id"];
+                            globalvar1 = data["email"];
+                            globalvar2 = data["password"];
+                            globalvar4 = data["discord_account_id"];
                         }
                     });
                     document.getElementById("loginbutton").innerHTML = "Log In";
@@ -156,7 +161,7 @@ function logIn() {
                             elements[i].style.display = "block";
                         }
                     }
-                    if (document.getElementById("globalvar3").innerHTML !== "true") {
+                    if (globalvar3 !== "true") {
                         document.getElementById("adminbutton_").style.display = "none";
                         document.getElementById("adminbuttonbg_").style.display = "none";
                     }
@@ -168,7 +173,7 @@ function logIn() {
                 if (data["data"]["discord_account_id"] !== "543885678258290699" || data["data"]["discord_account_id"] !== "991443322516279466") {
                     document.getElementById("adminbutton_").style.display = "grid";
                     document.getElementById("adminbuttonbg_").style.display = "grid";
-                    document.getElementById("globalvar3").innerHTML = "true";
+                    globalvar3 = "true";
                 }
                 localStorage.setItem("dlv-email", document.getElementById("lemail").value);
                 localStorage.setItem("dlv-password", document.getElementById("lpassword").value);
@@ -243,7 +248,7 @@ function back() {
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.display = "none";
         }
-        if (document.getElementById("globalvar3").innerHTML !== "true") {
+        if (globalvar3 !== "true") {
             document.getElementById("adminbutton_").style.display = "none";
             document.getElementById("adminbuttonbg_").style.display = "none";
         }
@@ -256,7 +261,7 @@ function back() {
                 elements2[i].style.display = "block";
             }
         }
-        if (document.getElementById("globalvar3").innerHTML !== "true") {
+        if (globalvar3 !== "true") {
             document.getElementById("adminbutton_").style.display = "none";
             document.getElementById("adminbuttonbg_").style.display = "none";
         }
@@ -276,7 +281,7 @@ function back() {
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.display = "none";
         }
-        if (document.getElementById("globalvar3").innerHTML !== "true") {
+        if (globalvar3 !== "true") {
             document.getElementById("adminbutton_").style.display = "none";
             document.getElementById("adminbuttonbg_").style.display = "none";
         }
@@ -300,7 +305,7 @@ function settings() {
     for (var i = 0; i < elements.length; i++) {
         elements[i].style.display = "none";
     }
-    if (document.getElementById("globalvar3").innerHTML !== "true") {
+    if (globalvar3 !== "true") {
         document.getElementById("adminbutton_").style.display = "none";
         document.getElementById("adminbuttonbg_").style.display = "none";
     }
@@ -308,7 +313,7 @@ function settings() {
     for (var i = 0; i < elements2.length; i++) {
         elements2[i].style.display = "block";
     }
-    if (document.getElementById("globalvar3").innerHTML !== "true") {
+    if (globalvar3 !== "true") {
         document.getElementById("adminbutton_").style.display = "none";
         document.getElementById("adminbuttonbg_").style.display = "none";
     }
@@ -331,7 +336,7 @@ let elements = document.querySelectorAll("[id*=_]");
 for (var i = 0; i < elements.length; i++) {
     elements[i].style.display = "none";
 }
-if (document.getElementById("globalvar3").innerHTML !== "true") {
+if (globalvar3 !== "true") {
     document.getElementById("adminbutton_").style.display = "none";
     document.getElementById("adminbuttonbg_").style.display = "none";
 }
@@ -340,7 +345,7 @@ function changePassword() {
     if (document.getElementById("changepasswordS").value !== "") {
         if (document.getElementById("changepasswordS").value === document.getElementById("confirmchangepasswordS").value) {
             alert("Loading...")
-            fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/dlvchangepassword/${document.getElementById("globalvar1").innerHTML}/${document.getElementById("globalvar2").innerHTML}/${document.getElementById("changepasswordS").value}/`).then((Response) => {
+            fetch(`https://user5e8e13639aafd2a.app.vtxhub.com/dlvchangepassword/${globalvar1}/${globalvar2}/${document.getElementById("changepasswordS").value}/`).then((Response) => {
                     return Response.json()
                 }).then((data) => {
                     alert(data["main"]);

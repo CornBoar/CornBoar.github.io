@@ -11,7 +11,7 @@ function signUp() {
             return Response.json()
         }).then((data) => {
             alert(data["main"]);
-            document.getElementById("verifybutton").innerHTML = "Verify"
+            document.getElementById("verifybutton").innerHTML = "Verify";
         });
     }
 }

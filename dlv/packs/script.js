@@ -74,7 +74,10 @@ function back() {
   if (urlParams.get("p") === null) {
     window.location.replace("https://cornboar.com/dlv/");
   }
-  else {
+  else if (urlParams.get("l") === null) {
     window.location.replace("https://cornboar.com/dlv/list/");
+  }
+  else {
+    window.location.replace("https://cornboar.com/dlv/leaderboard/");
   }
 }
