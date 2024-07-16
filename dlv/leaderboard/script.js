@@ -3,7 +3,7 @@ document.getElementById("e").innerHTML = "Requesting data from my slow ass backe
 var showVictors = false;
 
 function toggleStats(userNumber) {
-  window.location.replace(`https://cornboar.com/user/?u=${userNumber}`);
+  window.location.replace(`https://cornboar.com/dlv/user/?u=${userNumber}`);
 }
 
 function showAllStats() {
