@@ -51,7 +51,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
         onmouseover="hover('${data["main"][i].replaceAll(" ", "blackmonkeys123")}')" 
         onmouseleave="unhover('${data["main"][i].replaceAll(" ", "blackmonkeys123")}', '${data["colors"][data["main"][i]]}')" 
         onclick="levelRedirect('${data["main"][i].replaceAll(" ", "blackmonkeys123")}')" 
-        style="font-size: 25px; width: 500px; height: 50px; position: relative; bottom: 4px; background-color: black; border: thick solid ${data["colors"][data["main"][i]]}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${data["colors"][data["main"][i]]};">
+        style="font-size: 25px; width: 300px; height: 50px; position: relative; bottom: 4px; background-color: black; border: thick solid ${data["colors"][data["main"][i]]}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${data["colors"][data["main"][i]]};">
         View Info
       </button>
       </div>
