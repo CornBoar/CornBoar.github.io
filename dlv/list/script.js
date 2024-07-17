@@ -13,17 +13,6 @@ if (window.mobileCheck()) {
   document.getElementById("backbuttonbg_").style.display = "none";
 }
 
-function youtubeId(url){
-  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  var match = url.match(regExp);
-  if (match && match[2].length == 11) {
-  return match[2];
-  }
-  else {
-      console.log("uh oh");
-  }
-}
-
 function hover(elementId) {
   document.getElementById(elementId).style.borderColor = "yellow";
   document.getElementById(elementId).style.color = "yellow";
@@ -34,10 +23,6 @@ function unhover(elementId, ogColor) {
   document.getElementById(elementId).style.color = ogColor;
 }
 
-function handleError(elementId, videoId) {
-  document.getElementById(elementId).src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-}
-
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
   return Response.json();
 }).then((data) => {
@@ -46,7 +31,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
   for (i in data["main"]) {
       list += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${data["colors"][data["main"][i]]}; text-align: center; width: 600px; position: relative;">
       <h1 style="margin: 0; padding: 0; color: ${data["colors"][data["main"][i]]}; font-family: 'Poppins', sans-serif; font-size: 50px;">#${data["main"].indexOf(data["main"][i]) + 1}. ${data["og_case"][data["main"][i]]}</h1>
-      <img id="${data["main"][i].replaceAll(" ", "blackmonkeys123")}button" onerror=handleError("${data["main"][i].replaceAll(" ", "blackmonkeys123")}button", "${youtubeId(data["videos"][data["main"][i]])}") src="https://img.youtube.com/vi/${youtubeId(data["videos"][data["main"][i]])}/maxresdefault.jpg" style="position: relative; bottom: 5px; max-height: 180px; min-height: 180px; max-width: 320px; min-width: 320px; border: thick solid ${data["colors"][data["main"][i]]}; border-radius: 25px;">
+      <img id="${data["main"][i].replaceAll(" ", "blackmonkeys123")}button" src="${data["thumbnails"][data["main"][i]]["url"]}" style="position: relative; bottom: 5px; max-height: 180px; min-height: 180px; max-width: 320px; min-width: 320px; border: thick solid ${data["colors"][data["main"][i]]}; border-radius: 25px;">
       <button id="${data["main"][i].replaceAll(" ", "blackmonkeys123")}" 
         onmouseover="hover('${data["main"][i].replaceAll(" ", "blackmonkeys123")}')" 
         onmouseleave="unhover('${data["main"][i].replaceAll(" ", "blackmonkeys123")}', '${data["colors"][data["main"][i]]}')" 
