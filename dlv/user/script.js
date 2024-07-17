@@ -78,7 +78,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
     </div>
     <div style="left: 50%; transform: translateX(-50%); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; border: thick solid ${hardestColor}; border-top-width: 1px; text-align: center; width: 800px; position: relative; bottom: 175px;">
         <h3 style="color: ${hardestColor}; text-align: center; font-family: 'Poppins', sans-serif; font-size: 50px;  margin-bottom: 0; padding-bottom: 0;">${stupidValue}/100 XP To Level ${Math.floor(data[userId]["xp"] / 100) + 1}</h3>
-        <progress min="0" value="52.6" max="100" style="accent-color: ${hardestColor}; margin: auto; display: block; position: relative; width: 750px; height: 100px; margin-bottom: 0; padding-bottom: 0; bottom: 25px; position: relative;"></progress>
+        <progress min="0" value="${stupidValue}" max="100" style="accent-color: ${hardestColor}; margin: auto; display: block; position: relative; width: 750px; height: 100px; margin-bottom: 0; padding-bottom: 0; bottom: 25px; position: relative;"></progress>
         <h3 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 35px; margin-bottom: 0; padding-bottom: 0; bottom: 75px;">(${Math.round(10 * data[userId]["xp"]) / 10} Total XP)</h3>
     </div>
     <div style="display: flex; justify-content: center; margin-top: 20px; position: relative; bottom: 165px;">
