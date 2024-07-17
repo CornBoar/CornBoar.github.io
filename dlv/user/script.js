@@ -37,6 +37,10 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             }
             colors = getColors();
             ogCase = getOgCase();
+            let hardestColor = colors[data[userId]["completions"]["main"][0]];
+            if (data[userId]["completions"]["main"].length === 0) {
+                hardestColor = "#FFFFFF";
+            }
             let completions = "";
             for (i in data[userId]["completions"]["main"]) {
                 completions += `<h2 onclick=levelRedirect("${data[userId]["completions"]["main"][i].replaceAll(" ", "blackmonkeys123")}") style="color: ${colors[data[userId]["completions"]["main"][i]]}; font-family: 'Poppins', sans-serif;">#${data3["main"].indexOf(data[userId]["completions"]["main"][i]) + 1}. ${ogCase[data[userId]["completions"]["main"][i]]}${data[userId]["completions"]["verifications"].includes(data[userId]["completions"]["main"][i]) ? " (Verifier)" : ""}</h2>`;
@@ -52,38 +56,41 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
                 packs += `<h2 onclick=packRedirect("${data[userId]["completions"]["packs"][i].replaceAll(" ", "blackmonkeys123")}") style="color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(to right, ${colorList}); font-family: 'Poppins', sans-serif;">${data[userId]["completions"]["packs"][i]}</h2>`;
             }
             if (packs === "") {
-                packs = `<h2 style="color: ${colors[data[userId]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif;">No Packs Completed</h2>`;
+                packs = `<h2 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif;">No Packs Completed</h2>`;
             }
             let stupidValue = (Math.round(data[userId]["xp"] * 10) / 10) - (Math.floor(data[userId]["xp"] / 100) * 100);
             if (stupidValue.toString().includes(".")) {
                 let stupidValueList = stupidValue.toString().split(".");
                 stupidValue = stupidValueList[0] + "." + Array.from(stupidValueList[1])[0];
             }
-            document.getElementById("stuff").innerHTML = `<h1 style="color: ${colors[data[userId]["completions"]["main"][0]]}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 100px; bottom: 80px;">#${Object.keys(data).indexOf(userId) + 1}. ${data[userId]["username"]}</h1>
-    <div style="color: ${colors[data[userId]["completions"]["main"][0]]}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 25px; bottom: 270px; left: 2040px; display: table;">(Discord User ID: ${userId})</div>
+            if (completions === "") {
+                completions = `<h2 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif;">No Completions</h2>`;
+            }
+            document.getElementById("stuff").innerHTML = `<h1 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 100px; bottom: 80px;">#${Object.keys(data).indexOf(userId) + 1}. ${data[userId]["username"]}</h1>
+    <div style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 25px; bottom: 270px; left: 2040px; display: table;">(Discord User ID: ${userId})</div>
     <img src="${data[userId]["avatar_url"]}" style="margin: auto; display: block; position: relative; bottom: 200px; border-radius: 34%; max-width: 300px; min-width: 300px; max-height: 300px; min-height: 300px;">
     <img id="backbuttonbg_" onclick="back()" src="https://cornboar.com/assets/backbuttonbg.png">
     <img id="backbutton_" onclick="back()" onmouseover="backButtonHover()" onmouseleave="backButtonUnhover()" src="https://cornboar.com/assets/backbutton.png">
-    <div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid ${colors[data[userId]["completions"]["main"][0]]}; text-align: center; width: 800px; position: relative; bottom: 175px;">
-        <h1 style="color: ${colors[data[userId]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; font-size: 75px;">Level ${Math.floor(data[userId]["xp"] / 100)}</h1>
+    <div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid ${hardestColor}; text-align: center; width: 800px; position: relative; bottom: 175px;">
+        <h1 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; font-size: 75px;">Level ${Math.floor(data[userId]["xp"] / 100)}</h1>
         <div id="buttons" style="text-align: center;">
         </div>
     </div>
-    <div style="left: 50%; transform: translateX(-50%); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; border: thick solid ${colors[data[userId]["completions"]["main"][0]]}; border-top-width: 1px; text-align: center; width: 800px; position: relative; bottom: 175px;">
-        <h3 style="color: ${colors[data[userId]["completions"]["main"][0]]}; text-align: center; font-family: 'Poppins', sans-serif; font-size: 50px;  margin-bottom: 0; padding-bottom: 0;">${stupidValue}/100 XP To Level ${Math.floor(data[userId]["xp"] / 100) + 1}</h3>
-        <progress min="0" value="52.6" max="100" style="accent-color: ${colors[data[userId]["completions"]["main"][0]]}; margin: auto; display: block; position: relative; width: 750px; height: 100px; margin-bottom: 0; padding-bottom: 0; bottom: 25px; position: relative;"></progress>
-        <h3 style="color: ${colors[data[userId]["completions"]["main"][0]]}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 35px; margin-bottom: 0; padding-bottom: 0; bottom: 75px;">(${Math.round(10 * data[userId]["xp"]) / 10} Total XP)</h3>
+    <div style="left: 50%; transform: translateX(-50%); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; border: thick solid ${hardestColor}; border-top-width: 1px; text-align: center; width: 800px; position: relative; bottom: 175px;">
+        <h3 style="color: ${hardestColor}; text-align: center; font-family: 'Poppins', sans-serif; font-size: 50px;  margin-bottom: 0; padding-bottom: 0;">${stupidValue}/100 XP To Level ${Math.floor(data[userId]["xp"] / 100) + 1}</h3>
+        <progress min="0" value="52.6" max="100" style="accent-color: ${hardestColor}; margin: auto; display: block; position: relative; width: 750px; height: 100px; margin-bottom: 0; padding-bottom: 0; bottom: 25px; position: relative;"></progress>
+        <h3 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 35px; margin-bottom: 0; padding-bottom: 0; bottom: 75px;">(${Math.round(10 * data[userId]["xp"]) / 10} Total XP)</h3>
     </div>
     <div style="display: flex; justify-content: center; margin-top: 20px; position: relative; bottom: 165px;">
         <div style="text-align: center; width: 500px; margin: 0 10px;">
-            <h1 style="color: ${colors[data[userId]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; border: thick solid ${colors[data[userId]["completions"]["main"][0]]}; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom: 1px;">Completions</h1>
-            <div id="buttons" style="text-align: center; border: thick solid ${colors[data[userId]["completions"]["main"][0]]}; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
+            <h1 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; border: thick solid ${hardestColor}; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom: 1px;">Completions</h1>
+            <div id="buttons" style="text-align: center; border: thick solid ${hardestColor}; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
                 ${completions}
             </div>
         </div>
         <div style="text-align: center; width: 500px; margin: 0 10px;">
-            <h1 style="color: ${colors[data[userId]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; border: thick solid ${colors[data[userId]["completions"]["main"][0]]}; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom: 1px;">Completed Packs</h1>
-            <div id="buttons" style="text-align: center; border: thick solid ${colors[data[userId]["completions"]["main"][0]]}; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
+            <h1 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; border: thick solid ${hardestColor}; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom: 1px;">Completed Packs</h1>
+            <div id="buttons" style="text-align: center; border: thick solid ${hardestColor}; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
                 ${packs}
             </div>
         </div>
