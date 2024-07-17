@@ -26,10 +26,12 @@ function youtubeId(url){
 
 function hover(elementId) {
   document.getElementById(elementId).style.borderColor = "yellow";
+  document.getElementById(elementId).style.color = "yellow";
 }
 
 function unhover(elementId, ogColor) {
   document.getElementById(elementId).style.borderColor = ogColor;
+  document.getElementById(elementId).style.color = ogColor;
 }
 
 function handleError(elementId, videoId) {
