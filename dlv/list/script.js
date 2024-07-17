@@ -1,44 +1,4 @@
-document.getElementById("e").innerHTML = "Requesting data from my slow ass backend API...";
-
-var showVictors = false;
-
-function showAllStats() {
-if (document.getElementById("showallstats").innerHTML.includes("Demon Stats")) {
-  for (let i in document.getElementsByTagName("*")) {
-    if (document.getElementsByTagName("*")[i].id.includes("victors")) {
-      document.getElementsByTagName("*")[i].style.display = "block";
-      showVictors = true;
-    }
-  }
-}
-else {
-  for (let e = 0; e != parseInt(document.getElementById("usercount")).innerHTML; e++) {
-    for (let i = 1; i != document.getElementById(`username${e}`).children.length; i++) {
-      document.getElementById(`username${e}`).children[i].style.display = "block";
-    }
-  }
-}
-}
-
-function hideAllStats() {
-if (document.getElementById("hideallstats").innerHTML.includes("Demon Stats")) {
-  for (let i in document.getElementsByTagName("*")) {
-    if (document.getElementsByTagName("*")[i].id.includes("victors")) {
-      document.getElementsByTagName("*")[i].style.display = "none";
-      showVictors = false;
-    }
-  }
-}
-else {
-  for (let e = 0; e != parseInt(document.getElementById("usercount")).innerHTML; e++) {
-    for (let i = 1; i != document.getElementById(`username${e}`).children.length; i++) {
-      document.getElementById(`username${e}`).children[i].style.display = "none";
-    }
-  }
-}
-}
-
-function toggleVictors(demonName) {
+function levelRedirect(demonName) {
   window.location.replace(`https://cornboar.com/dlv/level/?l=${demonName.replaceAll("blackmonkeys123", " ")}`);
 }
 
@@ -53,40 +13,46 @@ if (window.mobileCheck()) {
   document.getElementById("backbuttonbg_").style.display = "none";
 }
 
+function youtubeId(url){
+  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  if (match && match[2].length == 11) {
+  return match[2];
+  }
+  else {
+      console.log("uh oh");
+  }
+}
+
+function hover(elementId) {
+  document.getElementById(elementId).style.borderColor = "yellow";
+}
+
+function unhover(elementId, ogColor) {
+  console.log("e");
+  document.getElementById(elementId).style.borderColor = ogColor;
+}
+
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
-        return Response.json()
-    }).then((data) => {
-        data = JSON.parse(atob(data["content"]));
-        let formattedList = "";
-        for (let i in data["main"]) {
-          var formattedVictors = "";
-          for (let e in Object.values(data["victors"][data["main"][i]])) {
-            e = Object.values(data["victors"][data["main"][i]])[e][1];
-            formattedVictors += `<div style="color:white" id="${data["main"][i].replaceAll(/\s/g, "")}victors${Object.keys(data["victors"][data["main"][i]]).length}">${e}</div>`;
-          }
-          if (formattedVictors === "") {
-            formattedVictors = `<div style="color:white" id="${data["main"][i].replaceAll(/\s/g, "")}victors${Object.keys(data["victors"][data["main"][i]]).length}">No Victors</div>`;
-          }
-          let gdStats = {"publisher": data["level_stats"][data["main"][i]]["publisher"], "length": data["level_stats"][data["main"][i]]["level_length"], "objectCount": data["level_stats"][data["main"][i]]["object_count"], "songName": data["level_stats"][data["main"][i]]["song_name"], "songId": data["level_stats"][data["main"][i]]["song_id"], "songAuthor": data["level_stats"][data["main"][i]]["song_author"], "levelId": data["level_stats"][data["main"][i]]["level_id"], "copyPassword": data["level_stats"][data["main"][i]]["copy_password"]};
-          let formattedGdStats = `<div style="color: white; display: block;" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstatslevelid1">Level ID: ${gdStats.levelId}</div><div style="color: white; display: block;" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstatspublisher1">Publisher: ${gdStats.publisher}</div><div style="color: white; display: block;" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstatslength1">Level Length: ${gdStats.length}</div><div style="color: white; display: block;" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstatssong1">Song: ${gdStats.songName} (${gdStats.songId}) By ${gdStats.songAuthor}</div><div style="color: white; display: block;" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstatsobjectcount1">Object Count: ${gdStats.objectCount}</div><div style="color: white; display: block;" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstatsgameversion1">Copy Password: ${gdStats.copyPassword}</div>`;
-          formattedList += `<h2 class="whitetext" id="demon${i}" onclick=toggleVictors("${data["main"][i].replaceAll(" ", "blackmonkeys123")}")>${parseInt(i) + 1}. ${data["og_case"][data["main"][i]]}</h2><h3 style="color:gold" id="${data["main"][i].replaceAll(/\s/g, "")}victors2">VERIFIER:</h3><div style="color:white" id="${data["main"][i].replaceAll(/\s/g, "")}victors3">${data["verifiers"][data["main"][i]][1]}</div><h3 style="color:gold" id="${data["main"][i].replaceAll(/\s/g, "")}victors">VICTORS:</h3>${formattedVictors}<h3 style="color:gold" id="${data["main"][i].replaceAll(/\s/g, "")}victorsgdstats">LEVEL STATS:</h3><div style="color:white" id=${data["main"][i].replaceAll(/\s/g, "")}victorsgdstats${Object.keys(data["victors"][data["main"][i]]).length}>${formattedGdStats}</div>`;
-        }
-        document.getElementById("demonlisttext").innerHTML = "DEMON LIST:";
-        document.getElementById("real").innerHTML = formattedList;
-        for (let i in data["main"]) {
-          document.getElementById(`demon${i}`).style.color = data["colors"][data["main"][i]];
-        }
-        for (let i in document.getElementsByTagName("*")) {
-          if (document.getElementsByTagName("*")[i].id) {
-            if (document.getElementsByTagName("*")[i].id.includes("victors")) {
-              document.getElementsByTagName("*")[i].style.display = "none";
-            }
-          }
-        }
-        document.getElementById("e").style.display = "none";
-        document.getElementById("userstatstext2").style.display = "block";
-        document.getElementById("hideallstats").style.display = "block";
-        document.getElementById("showallstats").style.display = "block";
+  return Response.json();
+}).then((data) => {
+  data = JSON.parse(atob(data["content"]));
+  let list = "";
+  for (i in data["main"]) {
+      list += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${data["colors"][data["main"][i]]}; text-align: center; width: 750px; position: relative;">
+      <h1 style="margin: 0; padding: 0; color: ${data["colors"][data["main"][i]]}; font-family: 'Poppins', sans-serif; font-size: 50px;">#${data["main"].indexOf(data["main"][i]) + 1}. ${data["og_case"][data["main"][i]]}</h1>
+      <img src="https://img.youtube.com/vi/${youtubeId(data["videos"][data["main"][i]])}/maxresdefault.jpg" style="position: relative; bottom: 5px; max-height: 180px; min-height: 180px; max-width: 320px; min-width: 320px; border: thick solid ${data["colors"][data["main"][i]]}; border-radius: 25px;">
+      <button id="${data["main"][i].replaceAll(" ", "blackmonkeys123")}" 
+        onmouseover="hover('${data["main"][i].replaceAll(" ", "blackmonkeys123")}')" 
+        onmouseleave="unhover('${data["main"][i].replaceAll(" ", "blackmonkeys123")}', '${data["colors"][data["main"][i]]}')" 
+        onclick="levelRedirect('${data["main"][i].replaceAll(" ", "blackmonkeys123")}')" 
+        style="font-size: 25px; width: 500px; height: 50px; position: relative; bottom: 4px; background-color: black; border: thick solid ${data["colors"][data["main"][i]]}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${data["colors"][data["main"][i]]};">
+        View Info
+      </button>
+      </div>
+      <div>‎</div>`;
+  }
+  document.getElementById("demonlist").innerHTML = list;
 });
 
 function backButtonHover() {
