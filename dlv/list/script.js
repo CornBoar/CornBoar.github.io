@@ -57,12 +57,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
       </div>
       <div>‎</div>`;
   }
-  try {
-    document.getElementById("demonlist").innerHTML = list;
-  }
-  catch(error) {
-    console.log("e");
-  }
+  document.getElementById("demonlist").innerHTML = list;
 });
 
 function backButtonHover() {
