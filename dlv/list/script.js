@@ -29,6 +29,9 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
   data = JSON.parse(atob(data["content"]));
   let list = "";
   for (i in data["main"]) {
+      if (!Object.keys(data["thumbnails"][data["main"][i]]).includes("url")) {
+        continue;
+      }
       list += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${data["colors"][data["main"][i]]}; text-align: center; width: 600px; position: relative;">
       <h1 style="margin: 0; padding: 0; color: ${data["colors"][data["main"][i]]}; font-family: 'Poppins', sans-serif; font-size: 50px;">#${data["main"].indexOf(data["main"][i]) + 1}. ${data["og_case"][data["main"][i]]}</h1>
       <img id="${data["main"][i].replaceAll(" ", "blackmonkeys123")}button" src="${data["thumbnails"][data["main"][i]]["url"]}" style="position: relative; bottom: 5px; max-height: 180px; min-height: 180px; max-width: 320px; min-width: 320px; border: thick solid ${data["colors"][data["main"][i]]}; border-radius: 25px;">
