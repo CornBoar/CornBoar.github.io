@@ -47,7 +47,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
       }
       leaderboard += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${color}; text-align: center; width: 600px; position: relative; padding: 20px;">
       <h1 style="margin: 0; padding: 0; color: ${color}; font-family: 'Poppins', sans-serif; font-size: 50px;">#${Object.keys(data).indexOf(Object.values(data)[i]["user_id"]) + 1}. ${Object.values(data)[i]["username"]}</h1>
-      <h1 style="margin: 0; padding: 0; color: ${color}; font-family: 'Poppins', sans-serif; font-size: 20px; position: relative; bottom: 10px;">Level ${Math.floor(Object.values(data)[i]["xp"] / 100)}, ${Math.round(10 * Object.values(data)[i]["xp"]) / 10} XP</h1>
+      <h1 style="margin: 0; padding: 0; color: ${color}; font-family: 'Poppins', sans-serif; font-size: 20px; position: relative; bottom: 10px;">Level ${Math.floor(Object.values(data)[i]["xp"] / 100)} | ${Math.round(10 * Object.values(data)[i]["xp"]) / 10} XP</h1>
       <img onerror=handleError(this) src="${Object.values(data)[i]["avatar_url"]}" style="display: block; margin: 10px auto; max-height: 256px; min-height: 256px; max-width: 256px; min-width: 256px; border: thick solid ${color}; border-radius: 50%; position: relative; bottom: 5px;">
       <button id="${Object.values(data)[i]["user_id"]}" 
         onmouseover="hover('${Object.values(data)[i]["user_id"]}')" 
