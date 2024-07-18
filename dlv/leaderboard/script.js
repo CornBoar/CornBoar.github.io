@@ -1,129 +1,6 @@
-document.getElementById("e").innerHTML = "Requesting data from my slow ass backend API...";
-
-var showVictors = false;
-
-function toggleStats(userNumber) {
-  window.location.replace(`https://cornboar.com/dlv/user/?u=${userNumber}`);
+function userRedirect(userId) {
+  window.location.replace(`https://cornboar.com/dlv/user/?u=${userId}`);
 }
-
-function showAllStats() {
-if (document.getElementById("showallstats").innerHTML.includes("Demon Stats")) {
-  for (let i in document.getElementsByTagName("*")) {
-    if (document.getElementsByTagName("*")[i].id.includes("victors")) {
-      document.getElementsByTagName("*")[i].style.display = "block";
-      showVictors = true;
-    }
-  }
-}
-else {
-  for (let e = 0; e != parseInt(document.getElementById("usercount")).innerHTML; e++) {
-    for (let i = 1; i != document.getElementById(`username${e}`).children.length; i++) {
-      document.getElementById(`username${e}`).children[i].style.display = "block";
-    }
-  }
-}
-}
-
-function hideAllStats() {
-if (document.getElementById("hideallstats").innerHTML.includes("Demon Stats")) {
-  for (let i in document.getElementsByTagName("*")) {
-    if (document.getElementsByTagName("*")[i].id.includes("victors")) {
-      document.getElementsByTagName("*")[i].style.display = "none";
-      showVictors = false;
-    }
-  }
-}
-else {
-  for (let e = 0; e != parseInt(document.getElementById("usercount")).innerHTML; e++) {
-    for (let i = 1; i != document.getElementById(`username${e}`).children.length; i++) {
-      document.getElementById(`username${e}`).children[i].style.display = "none";
-    }
-  }
-}
-}
-
-fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json")
-.then((Response) => {
-  return Response.json();
-})
-.then((data) => {
-  data = JSON.parse(atob(data["content"]));
-  let formattedList = "";
-      function getColors() {
-        for (let i in Object.values(data)) {
-          if (Object.keys(Object.values(data)[i]).includes("colors")) {
-            return Object.values(data)[i]["colors"];
-          }
-        }
-      }
-      function getOgCase() {
-        for (let i in Object.values(data)) {
-          if (Object.keys(Object.values(data)[i]).includes("og_case")) {
-            return Object.values(data)[i]["og_case"];
-          }
-        }
-      }
-      dataColors = {};
-      dataColors["colors"] = getColors();
-      dataColors["og_case"] = getOgCase();
-      var colors = dataColors["colors"];
-      for (let key in data) {
-        var formattedCompletions = "";
-        for (let i in data[key]["completions"]["main"]) {
-          formattedCompletions += `<div class="whitetext" style="color:${colors[data[key]["completions"]["main"][i].toLowerCase()]}">${dataColors["og_case"][data[key]["completions"]["main"][i]]}${data[key]["completions"]["verifications"].includes(data[key]["completions"]["main"][i].toLowerCase()) ? " (Verifier)" : ""}</div>`;
-        }
-        if (formattedCompletions === "") {
-          formattedCompletions += `<div class="whitetext">No Completions</div>`;
-        }
-
-        var color = "#FFFFFF";
-        if (data[key]["completions"]["main"]) {
-          color = colors[data[key]["completions"]["main"][0]];
-        }
-        
-        formattedList += `<div id="username${Object.keys(data).indexOf(key)}">
-        <h2 class="whitetext" style="color:${color}" onclick=toggleStats("${data[key]["user_id"]}")>#${Object.keys(data).indexOf(key) + 1}. ${data[key]["username"]}</h2>
-        <h3 class="whitetext" style="color:gold">Completions:</h3>
-        <div>${formattedCompletions}</div>
-        <h3 class="whitetext" style="color:gold">Level:</h3>
-        <div class="whitetext">${Math.floor(data[key]["xp"] / 100)}</div>
-        <h3 class="whitetext" style="color:gold">XP:</h3>
-        <div class="whitetext">${Math.round(10 * data[key]["xp"]) / 10}</div>
-        <h3 class="whitetext" style="color:gold">Discord Avatar:</h3>
-        <img class="avatars" src="${data[key]["avatar_url"]}"">
-        <h3 class="whitetext" style="color:gold">Discord User ID:</h3>
-        <div>${data[key]["user_id"]}</div>
-        </div>`;
-      }
-
-      let maxUsers = Object.keys(data).length;
-      document.getElementById("usercount").innerHTML = maxUsers;
-      document.getElementById("userstatstext").innerHTML = "LEADERBOARD:";
-      document.getElementById("userstats").innerHTML = formattedList;
-      for (let i = 0; i != maxUsers; i++) {
-          for (let e = 1; e != document.getElementById(`username${i}`).children.length; e++) {
-              document.getElementById(`username${i}`).children[e].style.display = "none";
-          }
-      }
-      document.getElementById("e").style.display = "none";
-      document.getElementById("showallstats").style.display = "block";
-      document.getElementById("hideallstats").style.display = "block";
-      document.getElementById("userstatstext2").style.display = "block";
-      document.getElementById("userstatstext").style.display = "block"; 
-      document.getElementById("userstats").style.display = "block";
-      document.getElementById("demonlisttext").style.display = "none";
-      document.getElementById("showallstats").innerHTML = "Show All User Stats";
-      document.getElementById("hideallstats").innerHTML= "Hide All User Stats";
-      document.getElementById("showallstats").style.display = "none";
-      document.getElementById("hideallstats").style.display= "none";
-      document.getElementById("real").style.display = "none";
-      document.getElementById("userstatstext2").innerHTML = "Click Username To View Stats";
-      for (let i in document.getElementsByTagName("*")) {
-        if (document.getElementsByTagName("*")[i].id.includes("victors")) {
-          document.getElementsByTagName("*")[i].style.display = "none";
-      }
-  }
-});
 
 window.mobileCheck = function() {
   let check = false;
@@ -135,6 +12,55 @@ if (window.mobileCheck()) {
   document.getElementById("backbutton_").style.display = "none";
   document.getElementById("backbuttonbg_").style.display = "none";
 }
+
+function hover(elementId) {
+  document.getElementById(elementId).style.borderColor = "yellow";
+  document.getElementById(elementId).style.color = "yellow";
+}
+
+function unhover(elementId, ogColor) {
+  document.getElementById(elementId).style.borderColor = ogColor;
+  document.getElementById(elementId).style.color = ogColor;
+}
+
+function handleError(imgElement) {
+  imgElement.src = "https://cornboar.com/assets/defaultavatar.png";
+}
+
+fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json").then((Response) => {
+  return Response.json();
+}).then((data) => {
+  data = JSON.parse(atob(data["content"]));
+  function getColors() {
+    for (let i in Object.values(data)) {
+      if (Object.keys(Object.values(data)[i]).includes("colors")) {
+        return Object.values(data)[i]["colors"];
+      }
+    }
+  }
+  const colors = getColors();
+  let leaderboard = "";
+  for (i in Object.values(data)) {
+      let color = colors[Object.values(data)[i]["completions"]["main"][0]];
+      if (color === undefined) {
+        color = "#FFFFFF";
+      }
+      leaderboard += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${color}; text-align: center; width: 600px; position: relative; padding: 20px;">
+      <h1 style="margin: 0; padding: 0; color: ${color}; font-family: 'Poppins', sans-serif; font-size: 50px;">#${Object.keys(data).indexOf(Object.values(data)[i]["user_id"]) + 1}. ${Object.values(data)[i]["username"]}</h1>
+      <h1 style="margin: 0; padding: 0; color: ${color}; font-family: 'Poppins', sans-serif; font-size: 20px; position: relative; bottom: 10px;">Level ${Math.floor(Object.values(data)[i]["xp"] / 100)}, ${Math.round(10 * Object.values(data)[i]["xp"]) / 10} XP</h1>
+      <img onerror=handleError(this) src="${Object.values(data)[i]["avatar_url"]}" style="display: block; margin: 10px auto; max-height: 256px; min-height: 256px; max-width: 256px; min-width: 256px; border: thick solid ${color}; border-radius: 50%; position: relative; bottom: 5px;">
+      <button id="${Object.values(data)[i]["user_id"]}" 
+        onmouseover="hover('${Object.values(data)[i]["user_id"]}')" 
+        onmouseleave="unhover('${Object.values(data)[i]["user_id"]}', '${color}')" 
+        onclick="userRedirect('${Object.values(data)[i]["user_id"]}')" 
+        style="display: block; margin: 10px auto; font-size: 25px; width: 300px; height: 50px; background-color: black; border: thick solid ${color}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${color}; position: relative; top: 8px;">
+        View Stats
+      </button>
+      </div>
+      <div>‎</div>`;
+  }
+  document.getElementById("leaderboard").innerHTML = leaderboard;
+});
 
 function backButtonHover() {
   document.getElementById("backbuttonbg_").src = "https://cornboar.com/assets/buttonhoverbg.png";

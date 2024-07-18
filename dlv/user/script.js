@@ -9,6 +9,10 @@ function levelRedirect(levelName) {
     window.location.replace(`https://cornboar.com/dlv/level/?l=${levelName.replaceAll("blackmonkeys123", " ")}&p=2`);
 }
 
+function handleError(imgElement) {
+    imgElement.src = "https://cornboar.com/assets/defaultavatar.png";
+}
+
 fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json").then((Response) => {
     return Response.json()
 }).then((data) => {
@@ -68,7 +72,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             }
             document.getElementById("stuff").innerHTML = `<h1 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 100px; bottom: 80px;">#${Object.keys(data).indexOf(userId) + 1}. ${data[userId]["username"]}</h1>
     <div style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 25px; bottom: 270px; left: 2040px; display: table;">(Discord User ID: ${userId})</div>
-    <img src="${data[userId]["avatar_url"]}" style="margin: auto; display: block; position: relative; bottom: 200px; border-radius: 34%; max-width: 300px; min-width: 300px; max-height: 300px; min-height: 300px;">
+    <img src="${data[userId]["avatar_url"]}" onerror=handleError(this) style="margin: auto; display: block; position: relative; bottom: 188px; border-radius: 34%; max-width: 300px; min-width: 300px; max-height: 300px; min-height: 300px;">
     <img id="backbuttonbg_" onclick="back()" src="https://cornboar.com/assets/backbuttonbg.png">
     <img id="backbutton_" onclick="back()" onmouseover="backButtonHover()" onmouseleave="backButtonUnhover()" src="https://cornboar.com/assets/backbutton.png">
     <div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid ${hardestColor}; text-align: center; width: 800px; position: relative; bottom: 175px;">
