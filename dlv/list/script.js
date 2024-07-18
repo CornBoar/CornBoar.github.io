@@ -29,7 +29,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
   data = JSON.parse(atob(data["content"]));
   let list = "";
   for (i in data["main"]) {
-      if (!Object.keys(data["thumbnails"][data["main"][i]]).includes("url")) {
+      if (data["thumbnails"][data["main"][i]] == null) {
         continue;
       }
       list += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${data["colors"][data["main"][i]]}; text-align: center; width: 600px; position: relative;">
