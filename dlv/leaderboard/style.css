@@ -2,7 +2,8 @@ html {
     height: 100%;
     width: 100%;
     background-color: black;
-  }
+    zoom: 0%;
+}
 
 .whitetext {
     color: white;
