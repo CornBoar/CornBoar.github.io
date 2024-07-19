@@ -137,7 +137,7 @@ async def on_message(message):
     updated += 1
     if message.content == '!hello':
         await message.channel.send('hallo i am the dlv bot')
-    if message.content.__contains__('nigga') or message.content.__contains__('nigger'):
+    if message.content.lower().__contains__('nigga') or message.content.lower().__contains__('nigger'):
         await message.delete()
     if str(message.channel.id) == '1255647172016472236' and str(message.content) != 'fodso: i like hotdog':
         await message.delete()
