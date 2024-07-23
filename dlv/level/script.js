@@ -35,7 +35,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
             let videoUrl = data["videos"][level];
             let victors = "";
             for (i in data["victors"][level]) {
-                victors += `<h2 onclick=userRedirect("${data2[data["victors"][level][i][0]]["user_id"]}") style="color: ${data["colors"][data2[data["victors"][level][i][0]]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif;">${data2[data["victors"][level][i][0]]["username"]} <img src="${data2[data["victors"][level][i][0]]["avatar_url"]}" style="max-height: 25px; min-height: 25px; max-width: 25px; min-width: 25px; position: relative; top: 5px; border-radius: 34%;"></h2>`;
+                victors += `<h2 onclick=userRedirect("${data2[data["victors"][level][i][0]]["user_id"]}") style="color: ${data["colors"][data2[data["victors"][level][i][0]]["completions"]["main"][0]]}; font-family: 'Poppins', sans-serif;">${data2[data["victors"][level][i][0]]["username"]} <img src="${data2[data["victors"][level][i][0]]["avatar_url"]}" style="border: medium solid ${data["colors"][data2[data["victors"][level][i][0]]["completions"]["main"][0]]}; border-radius: 25px; max-height: 25px; min-height: 25px; max-width: 25px; min-width: 25px; position: relative; top: 7px; border-radius: 34%;"></h2>`;
             }
             let packs = "";
             for (i in data["packs"][level]) {
@@ -69,6 +69,7 @@ fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlv
                         <h1 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; border: thick solid ${data["colors"][level]}; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom: 1px;">Level Stats</h1>
                         <div id="buttons" style="text-align: center; border: thick solid ${data["colors"][level]}; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">DLV XP Value: ${Math.round(10 * data["xp_values"][level]) / 10}</h2>
+                            <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">AREDL Position: ${data["aredl_positions"][level]}</h2>
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Level ID: ${data["level_stats"][level]["level_id"]}</h2>
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Publisher: ${data["level_stats"][level]["publisher"]}</h2>
                             <h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Level Length: ${data["level_stats"][level]["level_length"]}</h2>
