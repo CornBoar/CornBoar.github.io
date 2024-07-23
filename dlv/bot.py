@@ -48,6 +48,9 @@ for i in list(aredl_data_full.keys()):
 
 gd = gd.Client()
 
+with open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'r') as f:
+    dlv_login_keys = json.load(f)
+
 try:
     with open(r'C:\Users\Dani1\DLVLIST.json', 'r') as f:
         dlv_list = json.load(f)
@@ -101,6 +104,7 @@ def save():
     json.dump(dlv_packs, open(r'C:\Users\Dani1\DLVPACKS.json', 'w'))
     json.dump(dlv_aredl_videos, open(r'C:\Users\Dani1\Documents\DLVAREDLVIDEOS.json', 'w'))
     json.dump(dlv_left_members, open(r'C:\Users\Dani1\DLVLEFTMEMBERS.json', 'w'))
+    json.dump(dlv_login_keys, open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'w'))
 
 for i in list(aredl_data_full.values()):
     if list(aredl_data_full.keys()) == list(dlv_aredl_videos.keys()):
@@ -127,7 +131,7 @@ def hex_to_rgb(hex_code):
 client = discord.Client(intents=discord.Intents.all())
 tree = app_commands.CommandTree(client=client)
 
-admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092']
+admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092', '1154977628743274578', '543885678258290699']
 
 updated = 0
 
@@ -221,6 +225,7 @@ async def on_message(message):
         }
         requests.put(url, headers=headers, data=json.dumps(data))
         for i in dlv_list['main']:
+            dlv_list['aredl_positions'][i] = aredl_data_full[dlv_list['og_case'][i]]['position']
             dlv_list['videos'][i] = dlv_aredl_videos[dlv_list['og_case'][i]]
             try:
                 dlv_list['level_stats'][i]['object_count'] = str('{:,}'.format(int(dlv_list['level_stats'][i]['object_count'])))
@@ -348,8 +353,15 @@ async def on_message(message):
             if add_top_player_role:
                 await top_player.add_roles(client.get_guild(1245200525037932565).get_role(1251257182121361530))
             for i in list(dlv_users.values()):
-                level = str(i['xp'] // 100).split('.')[0]
+                user_xp = i['xp']
+                user_rebirths = 0
+                while user_xp > 9999:
+                    user_xp = user_xp - 10000
+                    user_rebirths += 1
+                level = str(user_xp // 100).split('.')[0]
                 update_level_role = True
+                update_rebirth_role = True
+                roman_numerals_dict = {0: '0', 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V'}
                 try:
                     users = client.get_guild(1245200525037932565).get_member(int(i['user_id'])).roles
                 except:
@@ -360,9 +372,18 @@ async def on_message(message):
                     if str(e.name) == f'Level {level}':
                         update_level_role = False
                         break
+                    if str(e.name).__contains__('Rebirth') and not str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
+                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).remove_roles(client.get_guild(1245200525037932565).get_role(e.id))
+                    if str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
+                        update_rebirth_role = False
+                        break
                 if update_level_role:
                     for x in client.get_guild(1245200525037932565).roles:
                         if str(x.name) == f'Level {level}':
+                            await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
+                if update_rebirth_role:
+                    for x in client.get_guild(1245200525037932565).roles:
+                        if str(x.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
                             await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
             dlv_list['main'] = list(dict.fromkeys(dlv_list['main']))
             for i in list(dlv_users.values()):
@@ -372,10 +393,19 @@ async def on_message(message):
             save()
         for i in message.guild.members:
             if str(i.id) not in list(dlv_users.keys()):
-                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0}
+                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
             save()
         print('Updated Stuff')
         updated = 0
+
+@tree.command(name='generateloginkey', description='Generate a key to log in on the website.')
+async def generate_login_key(interaction: discord.Interaction):
+    key = ''
+    for i in range(10):
+        key += random.choice(string.ascii_letters + '12345678910')
+    dlv_login_keys[str(interaction.user.id)] = f'{str(interaction.user.id)}E{key}'
+    save()
+    await interaction.response.send_message(embed=discord.Embed(title=f'Your Login Key Is: {str(interaction.user.id)}E{key}', description='It will be valid until you generate a new one.', colour=discord.Colour.blurple()), ephemeral=True)
 
 @tree.command(name='forceupdate', description='Updates all data. Can only be used by admins.')
 async def force_update(interaction: discord.Interaction):
@@ -466,6 +496,7 @@ async def force_update(interaction: discord.Interaction):
         }
         requests.put(url, headers=headers, data=json.dumps(data))
         for i in dlv_list['main']:
+            dlv_list['aredl_positions'][i] = aredl_data_full[dlv_list['og_case'][i]]['position']
             dlv_list['videos'][i] = dlv_aredl_videos[dlv_list['og_case'][i]]
             try:
                 dlv_list['level_stats'][i]['object_count'] = str('{:,}'.format(int(dlv_list['level_stats'][i]['object_count'])))
@@ -593,8 +624,15 @@ async def force_update(interaction: discord.Interaction):
             if add_top_player_role:
                 await top_player.add_roles(client.get_guild(1245200525037932565).get_role(1251257182121361530))
             for i in list(dlv_users.values()):
-                level = str(i['xp'] // 100).split('.')[0]
+                user_xp = i['xp']
+                user_rebirths = 0
+                while user_xp > 9999:
+                    user_xp = user_xp - 10000
+                    user_rebirths += 1
+                level = str(user_xp // 100).split('.')[0]
                 update_level_role = True
+                update_rebirth_role = True
+                roman_numerals_dict = {0: '0', 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V'}
                 try:
                     users = client.get_guild(1245200525037932565).get_member(int(i['user_id'])).roles
                 except:
@@ -605,9 +643,18 @@ async def force_update(interaction: discord.Interaction):
                     if str(e.name) == f'Level {level}':
                         update_level_role = False
                         break
+                    if str(e.name).__contains__('Rebirth') and not str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
+                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).remove_roles(client.get_guild(1245200525037932565).get_role(e.id))
+                    if str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
+                        update_rebirth_role = False
+                        break
                 if update_level_role:
                     for x in client.get_guild(1245200525037932565).roles:
                         if str(x.name) == f'Level {level}':
+                            await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
+                if update_rebirth_role:
+                    for x in client.get_guild(1245200525037932565).roles:
+                        if str(x.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
                             await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
             for i in dlv_list['main']:
                 dlv_list['videos'][i] = dlv_aredl_videos[dlv_list['og_case'][i]]
@@ -623,7 +670,7 @@ async def force_update(interaction: discord.Interaction):
             save()
         for i in client.get_guild(1245200525037932565).members:
             if str(i.id) not in list(dlv_users.keys()):
-                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0}
+                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
             save()
         print('Updated Stuff')
         await interaction.response.send_message(embed=discord.Embed(title='Success!', color=discord.Colour.green()), ephemeral=True)
