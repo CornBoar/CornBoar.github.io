@@ -48,6 +48,9 @@ for i in list(aredl_data_full.keys()):
 
 gd = gd.Client()
 
+with open(r'C:\Users\Dani1\DLVWARNSAVES.json', 'r') as f:
+    dlv_warn_saves = json.load(f)
+
 with open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'r') as f:
     dlv_login_keys = json.load(f)
 
@@ -105,6 +108,7 @@ def save():
     json.dump(dlv_aredl_videos, open(r'C:\Users\Dani1\Documents\DLVAREDLVIDEOS.json', 'w'))
     json.dump(dlv_left_members, open(r'C:\Users\Dani1\DLVLEFTMEMBERS.json', 'w'))
     json.dump(dlv_login_keys, open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'w'))
+    json.dump(dlv_warn_saves, open(r'C:\Users\Dani1\DLVWARNSAVES.json', 'w'))
 
 for i in list(aredl_data_full.values()):
     if list(aredl_data_full.keys()) == list(dlv_aredl_videos.keys()):
@@ -252,6 +256,8 @@ async def on_message(message):
             dlv_list['xp_values'][i] = xp_amount
             victors = []
             for e in list(dlv_users.values()):
+                if e['user_id'] not in dlv_warn_saves:
+                    dlv_warn_saves[e['user_id']] = []
                 if i in e['completions']['main']:
                     victors.append([e['user_id'], e['username']])
             victors_dict[i] = victors
@@ -523,6 +529,8 @@ async def force_update(interaction: discord.Interaction):
             dlv_list['xp_values'][i] = xp_amount
             victors = []
             for e in list(dlv_users.values()):
+                if e['user_id'] not in dlv_warn_saves:
+                    dlv_warn_saves[e['user_id']] = []
                 if i in e['completions']['main']:
                     victors.append([e['user_id'], e['username']])
             victors_dict[i] = victors
@@ -674,6 +682,51 @@ async def force_update(interaction: discord.Interaction):
             save()
         print('Updated Stuff')
         await interaction.response.send_message(embed=discord.Embed(title='Success!', color=discord.Colour.green()), ephemeral=True)
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='warn', description='Warn a user. Can only be used by admins')
+async def warn(interaction: discord.Interaction, user: discord.Member, reason: str):
+    if str(interaction.user.id) in admin_ids:
+        if str(user.id) not in list(dlv_warn_saves.keys()):
+            dlv_warn_saves[str(user.id)] = []
+        dlv_warn_saves[str(user.id)].append({'id': len(dlv_warn_saves[str(user.id)]) + 1, 'reason': reason, 'user_id': str(user.id), 'username': str(user.name), 'mod_id': str(interaction.user.id), 'mod_username': str(interaction.user.name),
+                                             'date': str(datetime.datetime.now()) + ' PST'})
+        save()
+        await user.send(embed=discord.Embed(title='You Have Been Warned In Demon List Verifications', description=f'Reason: {reason}', colour=discord.Colour.red()))
+        await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Warned {str(user.name)}', colour=discord.Colour.blurple()))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='warnlist', description="View a user's warnings. Can only be used by admins.")
+async def warn_list(interaction: discord.Interaction, user: discord.Member):
+    if str(interaction.user.id) in admin_ids:
+        if str(user.id) not in list(dlv_warn_saves.keys()) or dlv_warn_saves[str(user.id)] == []:
+            await interaction.response.send_message(embed=discord.Embed(title=f'{user.name} Has No Warnings (User ID: {str(interaction.user.id)})', colour=discord.Colour.blurple()))
+            return
+        warnings = ''
+        for i in dlv_warn_saves[str(user.id)]:
+            warnings += f'Warning ID: {i["id"]}\nWarning Reason: {i["reason"]}\nWarned By: {i["mod_username"]} ({i["mod_id"]})\nWarn Date: {i["date"]}\n\n'
+        if warnings == '':
+            warnings = 'No Warnings'
+        await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Warnings (User ID: {str(interaction.user.id)})", description=f'{warnings}', colour=discord.Colour.blurple()))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='warnremove', description='Remove a warning from a user. Can only be used by admins.')
+async def warn_remove(interaction: discord.Interaction, warning_id: int):
+    if str(interaction.user.id) in admin_ids:
+        user_name = ''
+        for i in list(dlv_warn_saves.keys()):
+            for e in dlv_warn_saves[i]:
+                if e['id'] == warning_id:
+                    user_name = e['username']
+                    dlv_warn_saves[i].remove(e)
+                    break
+        if user_name == '':
+            await interaction.response.send_message(embed=discord.Embed(title=f'Invalid Warning ID!', colour=discord.Colour.red()), ephemeral=True)
+        save()
+        await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Removed Warning {warning_id} From {user_name}!', colour=discord.Colour.green()))
     else:
         await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
 
