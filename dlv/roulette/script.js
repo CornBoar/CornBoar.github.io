@@ -1,7 +1,6 @@
-fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
+fetch("https://api.cornboar.com/dlvlist").then((Response) => {
     return Response.json()
     }).then((data) => {
-        data = JSON.parse(atob(data["content"]));
         let positions = {};
         for (i in data["main"]) {
             positions[data["og_case"][data["main"][i]]] = data["main"].indexOf(data["main"][i]) + 1;

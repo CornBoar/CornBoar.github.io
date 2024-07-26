@@ -27,10 +27,9 @@ function handleError(imgElement) {
   imgElement.src = "https://cornboar.com/assets/defaultavatar.png";
 }
 
-fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json").then((Response) => {
+fetch("https://api.cornboar.com/dlvusers/").then((Response) => {
   return Response.json();
 }).then((data) => {
-  data = JSON.parse(atob(data["content"]));
   function getColors() {
     for (let i in Object.values(data)) {
       if (Object.keys(Object.values(data)[i]).includes("colors")) {

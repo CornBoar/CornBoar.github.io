@@ -20,18 +20,15 @@ function userRedirect(userId) {
     window.location.replace(`https://cornboar.com/dlv/user/?u=${userId}&l=1`);
 }
 
-fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
+fetch("https://api.cornboar.com/dlvlist").then((Response) => {
     return Response.json()
 }).then((data) => {
-    fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json").then((Response) => {
+    fetch("https://api.cornboar.com/dlvusers").then((Response) => {
         return Response.json()
     }).then((data2) => {
-        fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvpacks.json").then((Response) => {
+        fetch("https://api.cornboar.com/dlvpacks").then((Response) => {
             return Response.json()
         }).then((data3) => {
-            data = JSON.parse(atob(data["content"]));
-            data2 = JSON.parse(atob(data2["content"]));
-            data3 = JSON.parse(atob(data3["content"]));
             let videoUrl = data["videos"][level];
             let victors = "";
             for (i in data["victors"][level]) {

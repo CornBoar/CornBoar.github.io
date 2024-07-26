@@ -23,10 +23,9 @@ function unhover(elementId, ogColor) {
   document.getElementById(elementId).style.color = ogColor;
 }
 
-fetch("https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json").then((Response) => {
+fetch("https://api.cornboar.com/dlvlist").then((Response) => {
   return Response.json();
 }).then((data) => {
-  data = JSON.parse(atob(data["content"]));
   let list = "";
   for (i in data["main"]) {
       if (data["thumbnails"][data["main"][i]] == null) {
