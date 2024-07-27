@@ -106,6 +106,9 @@ function back() {
     else if (urlParams.get("p") === "2") {
         window.location.replace("https://cornboar.com/dlv/leaderboard/");
     }
+    else if (urlParams.get("p") === "3") {
+        window.location.replace("https://cornboar.com/dlv/account/");
+    }
     else {
         window.location.replace("https://cornboar.com/dlv/list/");
     }

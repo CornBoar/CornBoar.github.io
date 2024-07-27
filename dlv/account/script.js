@@ -12,10 +12,10 @@ if (userId != null) {
         }
     });
     function packRedirect(packName) {
-        window.location.replace(`https://cornboar.com/dlv/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}&l=1`);
+        window.location.replace(`https://cornboar.com/dlv/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}&l=2`);
     }
     function levelRedirect(levelName) {
-        window.location.replace(`https://cornboar.com/dlv/level/?l=${levelName.replaceAll("blackmonkeys123", " ")}&p=2`);
+        window.location.replace(`https://cornboar.com/dlv/level/?l=${levelName.replaceAll("blackmonkeys123", " ")}&p=3`);
     }
     function handleError(imgElement) {
         imgElement.src = "https://cornboar.com/assets/defaultavatar.png";
