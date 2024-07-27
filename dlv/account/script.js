@@ -1,5 +1,17 @@
 const urlParams = new URLSearchParams(window.location.search);
 var userId = urlParams.get("u");
+
+fetch(`https://api.cornboar.com/dlvvalidateloginkey/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
+    return Response.json()
+}).then((data) => {
+    if (data["main"] !== "Success!" || data["user_id"] !== userId) {
+        console.log("e");
+    }
+    else {
+        window.location.replace(`https://cornboar.com/dlv/account/?u=${data["user_id"]}`);
+    }
+});
+
 if (userId != null) {
     fetch(`https://api.cornboar.com/dlvvalidateloginkey/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
         return Response.json()
@@ -7,9 +19,6 @@ if (userId != null) {
         if (data["main"] !== "Success!" || data["user_id"] !== userId) {
             localStorage.removeItem("DLVAUTHDONOTSHARE");
             window.location.replace("https://cornboar.com/dlv/account/");
-        }
-        else {
-            window.location.replace(`https://cornboar.com/dlv/account/?u=${data["user_id"]}`);
         }
     });
     function packRedirect(packName) {
