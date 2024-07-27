@@ -4,7 +4,7 @@ var userId = urlParams.get("u");
 fetch(`https://api.cornboar.com/dlvvalidateloginkey/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
     return Response.json()
 }).then((data) => {
-    if (data["main"] !== "Success!" || data["user_id"] !== userId) {
+    if (data["main"] !== "Success!") {
         console.log("e");
     }
     else {
