@@ -1,71 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=1024">
-    <title>DLV List Viewer</title>
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-  </head>
-
-  <body>
-    <img id="backbuttonbg2" onclick=back2() src="https://cornboar.com/assets/backbuttonbg.png">
-    <img id="backbutton2" onclick=back2() onmouseover=backButtonHover2() onmouseleave=backButtonUnhover2() src="https://cornboar.com/assets/backbutton.png">
-    <h1 id="suheader" class="headers">Sign Up:</h1>
-    <input id="semail" type="text" class="centered" placeholder="Email">
-    <input id="spassword" type="password" class="centered" placeholder="Password">
-    <input id="spassword2" type="password" class="centered" placeholder="Confirm Password">
-    <button id="signupbutton" class="centeredbuttons" onclick=signUp()>Sign Up</button>
-    <h1 id="liheader" class="headers">Log In:</h1>
-    <input id="lemail" type="text" class="centered" placeholder="Email">
-    <input id="lpassword" type="password" class="centered" placeholder="Password">
-    <button id="loginbutton" class="centeredbuttons" onclick=logIn()>Log In</button>
-    <button id="fpbutton" class="centeredbuttons" onclick=forgotPassword()>Forgot Password</button>
-    <h1 id="username_" class="whitetext">Loading...</h1>
-    <img id="backbuttonbg_" onclick=back() src="https://cornboar.com/assets/backbuttonbg.png">
-    <img id="backbutton_" onclick=back() onmouseover=backButtonHover() onmouseleave=backButtonUnhover() src="https://cornboar.com/assets/backbutton.png">
-    <img id="backbuttonbgS" onclick=back() src="https://cornboar.com/assets/backbuttonbg.png">
-    <img id="backbuttonS" onclick=back() onmouseover=backButtonSHover() onmouseleave=backButtonSUnhover() src="https://cornboar.com/assets/backbutton.png">
-    <img id="settingsbuttonbg_" onclick=settings() src="https://cornboar.com/assets/settingsbuttonbg.png">
-    <img id="settingsbutton_" onclick=settings() onmouseover=settingsButtonHover() onmouseleave=settingsButtonUnhover() src="https://cornboar.com/assets/settingsbutton.png">
-    <img id="adminbuttonbg_" onclick=adminRedirect() src="https://cornboar.com/assets/adminbuttonbg.jpg">
-    <img id="adminbutton_" onclick=adminRedirect() onmouseover=adminButtonHover() onmouseleave=adminButtonUnhover() src="https://cornboar.com/assets/settingsbutton.png">
-    <h1 id="settingsheaderS" class="settingstext" style="display: none;" onclick=test()>Settings:</h1>
-    <h1 id="settingsinfoheaderS" class="settingstext" style="display: none;">Info:</h1>
-    <h1 id="infoemailaddressS" class="settingstext" style="display: none;">Email Address: <button onclick=showEmailAddress()>Click To Show</button></h1>
-    <h1 id="infopasswordS" class="settingstext" style="display: none;">Password: <button onclick=showPassword()>Click To Show</button></h1>
-    <h1 id="infodiscordaccountidS" class="settingstext" style="display: none;">Discord Account ID: Loading...</h1>
-    <h1 id="settingsoptionsheaderS" class="settingstext" style="display: none;">Options:</h1>
-    <h1 id="changepasswordheaderS" class="settingstext" style="display: none;">Change Password:</h1>
-    <input id="changepasswordS" style="display: none;" placeholder="Enter New Password:"></input>
-    <input id="confirmchangepasswordS" style="display: none;" placeholder="Confirm New Password:"></input>
-    <button id="changepasswordbuttonS" style="display: none;" onclick=changePassword()>Change Password</button>
-    <h1 id="infochangeemailaddressS" class="settingstext" style="display: none;">Contact c.br on Discord to change your account's email address.</h1>
-    <h1 id="infodisconnectdiscordaccountS" class="settingstext" style="display: none;">Connecting a new Discord Account through the bot in the Discord Server will allow you to disconnect your old one.</h1>
-    <script src="script.js"></script>
-    <div id="rank_" style="display: none;">Global Rank: Loading...</div>
-    <img id="avatar_" style="display: none; position: absolute; border-radius: 100px; min-height: 300px; min-width: 300px; max-height: 300px; max-width: 300px; top: 150px; right: 50%; left: 50%; transform: translate(-50%);">
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div>‎</div>
-    <div id="levellabel_" style="display: none;">Level 0</div>
-    <div id="xplabel_" style="display: none;">0/100 XP To Next Level</div>
-    <progress id="xpbar_" value="0" max="100" style="display: none;"></progress>
-    <h2 id="completionsheader_" style="color:gold; display: none; text-align: center; font-size: 75px; font-family: 'Poppins', sans-serif; line-height: 0px;">Completions:</h2>
-    <h6 id="info1_" style="color:#0078d7; display: none; text-align: center; font-size: 35px; font-family: 'Poppins', sans-serif; line-height: 0px;">🔵 = Verifier</h6>
-    <div style="display: none;" id="completions_">
-      <h1 style="color:white;text-align: center;font-size: 50px;font-family: 'Poppins', sans-serif; line-height: 0px;" id="completionsinner">Loading...</h1>
-    </div>
-    <div id="globalvar1"></div>
-    <div id="globalvar2"></div>
-    <div id="globalvar3"></div>
-    <div id="globalvar4"></div>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>DLV List Viewer</title>
+  <link href="style.css" rel="stylesheet" type="text/css"/>
+  <meta name="viewport" content="width=2560, height=1289, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="stuff">
+    <h1 style="color: white; font-family: 'Poppins', sans-serif; text-align: center;">Go to the Discord Server and run the /generateloginkey command</h1>
+    <img style="display: block; margin-right: auto; margin-left: auto; width: 40%; border-radius: 25px; border: thick solid white;" src="https://cornboar.com/assets/logintutorialimage.png">
+    <h1 style="color: white; font-family: 'Poppins', sans-serif; text-align: center;">Copy the login key (Sorry mobile users 😭) and paste it in the box below</h1>
+    <input style="margin: auto; display: block; width: 500px; height: 50px; border-radius: 25px; position: relative; bottom: 10px; text-align: center; font-family: 'Poppins', sans-serif; font-size: larger;" placeholder="Login Key" id="loginkey">
+    <button  style="font-size: 25px; width: 300px; height: 50px; position: relative; bottom: 8px; background-color: black; border: thick solid white; font-family: 'Poppins', sans-serif; border-radius: 25px; color: white; display: block; margin: auto;" id="loginbutton" onmouseover=hover(this) onmouseleave=unhover(this) onclick=submitLoginKey()>Submit</button>
+    <h1 id="error" style="color: red; font-family: 'Poppins', sans-serif; text-align: center; display: none; position: relative; bottom: 5px;">Invalid Login Key!</h1>
+    <img id="backbuttonbg_" onclick="back()" src="https://cornboar.com/assets/backbuttonbg.png">
+    <img id="backbutton_" onclick="back()" onmouseover="backButtonHover()" onmouseleave="backButtonUnhover()" src="https://cornboar.com/assets/backbutton.png">
+  </div>
+  <script src="script.js"></script>
+</body>
 </html>
