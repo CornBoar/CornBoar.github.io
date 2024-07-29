@@ -258,11 +258,10 @@ async def get_admin_status(login_key, demon, proof_link, additional_notes):
                         break
                 dlv_records[record_id] = {'record_id': record_id, 'user_id': check_login_key['user_id'], 'username': dlv_users[check_login_key['user_id']]['username'],
                                           'demon': demon.lower(), 'proof_link': proof_link, 'additional_notes': additional_notes, 'status': 'pending', 'reject_reason': None}
-                open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r+').truncate()
-                json.dump(dlv_records, open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r+'))
+                json.dump(dlv_records, open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'w'))
                 webhook = DiscordWebhook(url=secrets.WEBHOOK_URL)
                 webhook.add_embed(DiscordEmbed(title=f'Record Submitted By {dlv_users[check_login_key["user_id"]]["username"]} ({check_login_key["user_id"]}) For {aredl_data_full[demon]["name"]} ({aredl_data_full[demon]["level_id"]})',
-                                               description=f'Proof Link: {proof_link}\nAdditional Notes: {additional_notes}\nRecord ID: {record_id}', color='000000'))
+                                               description=f'Proof Link: {proof_link}\nAdditional Notes: {additional_notes}\nRecord ID: {record_id}'))
                 webhook.execute()
                 return {'main': 'Success!'}
             else:
