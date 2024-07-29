@@ -1,12 +1,24 @@
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 import json
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import random
 import string
+import requests
 import secrets
+from discord_webhook import DiscordWebhook, DiscordEmbed
+
+aredl_data_full = requests.get('https://api.aredl.net/api/aredl/levels/').json()
+new_aredl_data_full = {}
+for i in aredl_data_full:
+    try:
+        if not i['legacy'] is True:
+            new_aredl_data_full[i['name'].lower()] = i
+    except:
+        new_aredl_data_full[i['name'].lower()] = i
+aredl_data_full = new_aredl_data_full
+aredl_all_demons = []
+for i in list(aredl_data_full.keys()):
+    aredl_all_demons.append(i.lower())
 
 app = fastapi.FastAPI()
 
@@ -94,6 +106,14 @@ async def get_dlv_users():
     sorted_users = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
     sorted_users = {x[0]: x[1] for x in sorted_users}
     return sorted_users
+
+@app.get('/dlvpacks/')
+async def get_dlv_users():
+    with open(r'C:\Users\Dani1\DLVPACKS.json', 'r+') as f:
+        dlv_packs = json.load(f)
+    sorted_packs = list(sorted(dlv_packs.items(), key=lambda x: x[1]['xp_value'], reverse=True))
+    sorted_packs = {x[0]: x[1] for x in sorted_packs}
+    return sorted_packs
 
 @app.get('/dlvvalidatekey/{key}/')
 async def dlv_validate_key(key):
@@ -195,165 +215,59 @@ async def dlv_remove_completion(key, user_id, xp_amount):
     else:
         return {'main': 'invalid key'}
 
-@app.get('/dlvsignup/{email}/{password}/')
-async def dlv_sign_up(email, password):
+@app.get('/dlvvalidateloginkey/{login_key}/')
+async def dlv_validate_login_key(login_key):
     try:
-        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
-            dlv_accounts = json.load(f)
-        if email in list(dlv_accounts.keys()):
-            return {'main': 'Email Already In Use'}
-        verification_code = ''
-        for _ in range(5):
-            verification_code += random.choice(string.ascii_letters + '0123456789')
-        msg = MIMEMultipart()
-        msg['From'] = 'dlvverification@outlook.com'
-        msg['To'] = email
-        msg['Subject'] = 'Verify Demon List Verifications Account'
-        msg.attach(MIMEText(f'Your email was used to sign up for a Demon List Verifications account. Go to https://cornboar.com/dlv/verify/ and enter your email, password, and this verification '
-                            f'code: {verification_code}. If you did not sign up for a Demon List Verifications account you can ignore this email.', 'plain'))
-        server = smtplib.SMTP('smtp.office365.com', 587)
-        server.starttls()
-        server.login('dlvverification@outlook.com', secrets.password)
-        server.sendmail('dlvverification@outlook.com', email, msg.as_string())
-        server.quit()
-        dlv_accounts[email] = {'email': email, 'password': password, 'verified': False, 'discord_account_id': None, 'verification_code': verification_code, 'otp': None}
-        open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
-        json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
-        return {'main': 'Account Successfully Created, Check Your Email For Verification Instructions.'}
-    except Exception as error:
-        print(error)
-        return {'main': 'Error'}
-
-@app.get('/dlvverifyaccount/{email}/{password}/{verification_code}/')
-async def dlv_verify_account(email, password, verification_code):
-    try:
-        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
-            dlv_accounts = json.load(f)
-        if dlv_accounts[email]['verified']:
-            return {'email': 'This Account Is Already Verified'}
-        if verification_code == dlv_accounts[email]['verification_code'] and password == dlv_accounts[email]['password']:
-            dlv_accounts[email]['verification_code'] = None
-            dlv_accounts[email]['verified'] = True
-            open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
-            json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
-            return {'main': 'Successfully Verified Your DLV Account! You Can Log In Now.'}
+        with open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'r') as f:
+            dlv_login_keys = json.load(f)
+        if not len(login_key) > 9:
+            return {'main': f'Invalid Login Key!'}
+        if not login_key.__contains__('E'):
+            return {'main': 'Invalid Login Key!'}
+        if login_key.split('E')[0] not in list(dlv_login_keys.keys()):
+            print(login_key.split('E')[0])
+            return {'main': 'Invalid Login Key!'}
+        if login_key != dlv_login_keys[login_key.split('E')[0]]:
+            return {'main': 'Invalid Login Key!'}
         else:
-            return {'main': 'Invalid Verification Code/Password'}
-    except Exception as error:
-        print(error)
-        return {'main': 'Error'}
-
-@app.get('/dlvlogin/{email}/{password}/')
-async def dlv_login(email, password):
-    try:
-        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
-            dlv_accounts = json.load(f)
-        if email not in list(dlv_accounts.keys()):
-            return {'main': 'Email Is Not Registered'}
-        if not dlv_accounts[email]['verified']:
-            return {'main': 'This Account has Not Been Verified Yet'}
-        if dlv_accounts[email]['password'] == password or dlv_accounts[email]['otp'] == password:
-            dlv_accounts[email]['otp'] = None
-            open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
-            json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
-            return {'main': 'Success', 'data': dlv_accounts[email]}
-        else:
-            return {'main': 'Incorrect Password'}
-    except Exception as error:
-        print(error)
-        return {'main': 'Error'}
-
-@app.get('/dlvgetaccount/{email}/{password}/')
-async def dlv_get_account(email, password):
-    try:
-        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
-            dlv_accounts = json.load(f)
-        if email in list(dlv_accounts.keys()):
-            if password == dlv_accounts[email]['password'] or password == dlv_accounts[email]['otp']:
-                if dlv_accounts[email]['verified']:
-                    if not dlv_accounts[email]['discord_account_id']:
-                        return {'email': dlv_accounts[email]['email'], 'password': dlv_accounts[email]['password'], 'discord_account_id': dlv_accounts[email]['discord_account_id'], 'otp': dlv_accounts[email]['otp']}
-                    else:
-                        with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
-                            dlv_users = json.load(f)
-                        with open(r'C:\Users\Dani1\DLVLIST.json', 'r+') as f:
-                            dlv_list = json.load(f)
-                        completions_0 = dlv_users[dlv_accounts[email]['discord_account_id']]['completions']['main']
-                        colors = [dlv_list['colors'][i] for i in completions_0]
-                        completions = zip(completions_0, colors)
-                        with open(r'C:\Users\Dani1\DLVBOTXPSAVES.json', 'r+') as f:
-                            dlv_saves = json.load(f)
-                        sorted_saves = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
-                        rank = 0
-                        for i in sorted_saves:
-                            if i[1]['user_id'] == dlv_accounts[email]['discord_account_id']:
-                                rank = sorted_saves.index(i) + 1
-                        with open(r'C:\Users\Dani1\DLVDEMONVFVS.json', 'r+') as f:
-                            dlv_demon_vfvs = json.load(f)
-                        verifications = dlv_users[dlv_accounts[email]['discord_account_id']]['completions']['verifications']
-                        first_victors = []
-                        return {'email': dlv_accounts[email]['email'], 'password': dlv_accounts[email]['password'], 'discord_account_id': dlv_accounts[email]['discord_account_id'],
-                                'discord_username': dlv_users[dlv_accounts[email]['discord_account_id']]['username'], 'completions': completions, 'verifications': verifications, 'first_victors': first_victors,
-                                'xp': dlv_users[dlv_accounts[email]['discord_account_id']]['xp'], 'rank': rank, 'avatar': dlv_users[dlv_accounts[email]['discord_account_id']]['avatar_url'], 'otp': dlv_accounts[email]['otp'],
-                                'og_case': dlv_list['og_case']}
-                else:
-                    return {'main': 'Account Is Not Verified'}
-            else:
-                return {'main': 'Invalid Password'}
-        else:
-            return {'main': 'Invalid Email'}
-    except Exception as error:
-        print(error)
-        return {'main': 'error'}
-
-@app.get('/dlvsendotp/{email}/')
-async def dlv_send_otp(email):
-    try:
-        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
-            dlv_accounts = json.load(f)
-        if email in list(dlv_accounts.keys()):
-            otp = ''
-            for _ in range(5):
-                otp += random.choice(string.ascii_letters + '0123456789')
-            msg = MIMEMultipart()
-            msg['From'] = 'dlvverification@outlook.com'
-            msg['To'] = email
-            msg['Subject'] = 'Verify Demon List Verifications Account'
-            dlv_accounts[email]['otp'] = otp
-            open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
-            json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
-            msg.attach(MIMEText(f'DO NOT SHARE THIS WITH ANYONE!!! 😱\n\n'
-                                f'Here is your DLV one time password: {otp}\n\nUse this to log in and change your password from settings, it will be valid until your next login or until you generate a new one.\n\nIf you '
-                                f'did not request a one time password '
-                                f'you can ignore '
-                                f'this email.', 'plain'))
-            server = smtplib.SMTP('smtp.office365.com', 587)
-            server.starttls()
-            server.login('dlvverification@outlook.com', secrets.password)
-            server.sendmail('dlvverification@outlook.com', email, msg.as_string())
-            server.quit()
-            return {'main': f'Successfully sent a one time password to {email}!'}
-        else:
-            return {'main': 'That email address does not have a DLV Account connected to it!'}
-    except Exception as error:
-        print(error)
-        return {'main': 'Error'}
-
-@app.get('/dlvchangepassword/{email}/{old_password}/{new_password}/')
-async def dlv_change_password(email, old_password, new_password):
-    try:
-        with open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+') as f:
-            dlv_accounts = json.load(f)
-        if email in list(dlv_accounts.keys()):
-            if dlv_accounts[email]['password'] == old_password:
-                dlv_accounts[email]['password'] = new_password
-                open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+').truncate()
-                json.dump(dlv_accounts, open(r'C:\Users\Dani1\Documents\DLVACCOUNTS.json', 'r+'))
-                return {'main': 'Successfully Changed Your Password!'}
-            else:
-                assert 1 == 2
-        else:
-            assert 1 == 2
+            return {'main': 'Success!', 'user_id': login_key.split('E')[0]}
     except Exception as error:
         print(error)
         return {'main': 'An Error Occured'}
+
+@app.get('/dlvsubmitrecord/{login_key}/{demon}/{proof_link}/{additional_notes}/')
+async def get_admin_status(login_key, demon, proof_link, additional_notes):
+    with open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r+') as f:
+        dlv_records = json.load(f)
+    with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
+        dlv_users = json.load(f)
+    check_login_key = await dlv_validate_login_key(login_key)
+    if check_login_key['main'] == 'Success!':
+        if demon.lower() in aredl_all_demons:
+            deny = False
+            for i in list(dlv_records.values()):
+                if i['user_id'] == check_login_key['user_id'] and i['demon'] == demon.lower() and i['status'] != 'rejected':
+                    deny = True
+                    break
+            if not demon.lower() in dlv_users[check_login_key['user_id']]['completions']['main'] and not deny:
+                record_id = ''
+                while True:
+                    for i in range(10):
+                        record_id += random.choice(string.ascii_letters + '12345678910')
+                    if record_id not in list(dlv_records.keys()):
+                        break
+                dlv_records[record_id] = {'record_id': record_id, 'user_id': check_login_key['user_id'], 'username': dlv_users[check_login_key['user_id']]['username'],
+                                          'demon': demon.lower(), 'proof_link': proof_link, 'additional_notes': additional_notes, 'status': 'pending', 'reject_reason': None}
+                open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r+').truncate()
+                json.dump(dlv_records, open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r+'))
+                webhook = DiscordWebhook(url=secrets.WEBHOOK_URL)
+                webhook.add_embed(DiscordEmbed(title=f'Record Submitted By {dlv_users[check_login_key["user_id"]]["username"]} ({check_login_key["user_id"]}) For {aredl_data_full[demon]["name"]} ({aredl_data_full[demon]["level_id"]})',
+                                               description=f'Proof Link: {proof_link}\nAdditional Notes: {additional_notes}\nRecord ID: {record_id}', color='000000'))
+                webhook.execute()
+                return {'main': 'Success!'}
+            else:
+                return {'main': 'You Have Already Completed/Submitted This Demon!'}
+        else:
+            return {'main': 'Invalid Demon Name!'}
+    else:
+        return {'main': 'Invalid Login Key!'}
