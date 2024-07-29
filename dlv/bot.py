@@ -1023,6 +1023,8 @@ async def website_status(interaction: discord.Interaction):
 
 @tree.command(name='recordaccept', description='Accept a record. Can only be used by admins.')
 async def record_accept(interaction: discord.Interaction, record_id: str, color_hex_code: str=None):
+    with open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r') as f:
+        dlv_records = json.load(f)
     if str(interaction.user.id) in admin_ids:
             if record_id in list(dlv_records.keys()):
                 if dlv_records[record_id]['status'] == 'pending':
@@ -1109,6 +1111,8 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
 
 @tree.command(name='recordreject', description='Reject a record. Can only be used by admins.')
 async def record_accept(interaction: discord.Interaction, record_id: str, reason: str):
+    with open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r') as f:
+        dlv_records = json.load(f)
     if str(interaction.user.id) in admin_ids:
         if record_id in list(dlv_records.keys()):
             if (str(interaction.user.id)) != dlv_records[record_id]['user_id']:
