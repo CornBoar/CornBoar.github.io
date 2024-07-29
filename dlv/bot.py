@@ -15,6 +15,10 @@ import secrets
 import datetime
 from urllib.parse import urlparse, parse_qs
 from contextlib import suppress
+import google.generativeai as genai
+
+genai.configure(api_key=secrets.API_KEY)
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 def get_yt_id(url, ignore_playlist=True):
     query = urlparse(url)
@@ -135,7 +139,7 @@ def hex_to_rgb(hex_code):
 client = discord.Client(intents=discord.Intents.all())
 tree = app_commands.CommandTree(client=client)
 
-admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092', '1154977628743274578', '543885678258290699']
+admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092', '1154977628743274578', '543885678258290699', '1136397420360646797']
 
 updated = 0
 
@@ -143,14 +147,17 @@ updated = 0
 async def on_message(message):
     global updated
     updated += 1
-    if message.content == '!hello':
-        await message.channel.send('hallo i am the dlv bot')
-    if message.content.lower().__contains__('nigga') or message.content.lower().__contains__('nigger'):
-        await message.delete()
-    if str(message.channel.id) == '1255647172016472236' and str(message.content) != 'fodso: i like hotdog':
-        await message.delete()
-    if str(message.channel.id) == '1249167048672546818' and str(message.author.id) != '1130983552230621245':
-        await message.delete()
+    try:
+        if message.content == '!hello':
+            await message.channel.send('hallo i am the dlv bot')
+        if message.content.lower().__contains__('nigga') or message.content.lower().__contains__('nigger'):
+            await message.delete()
+        if str(message.channel.id) == '1255647172016472236' and str(message.content) != 'fodso: i like hotdog':
+            await message.delete()
+        if str(message.channel.id) == '1249167048672546818' and str(message.author.id) != '1130983552230621245':
+            await message.delete()
+    except:
+        pass
     if updated == 10:
         dlv_packs[list(dlv_packs.values())[0]['name']]['list'] = dlv_list['main']
         for i in list(dlv_packs.values()):
@@ -310,6 +317,7 @@ async def on_message(message):
                     await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051315841138760))
                 else:
                     await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051454429466674))
+            save()
             completions_dict = {}
             for e in i['completions']['main']:
                 if e in dlv_list['main']:
@@ -401,8 +409,15 @@ async def on_message(message):
             if str(i.id) not in list(dlv_users.keys()):
                 dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
             save()
+        for i in client.get_guild(1245200525037932565).members:
+            if str(i.id) not in list(dlv_users.keys()):
+                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
         print('Updated Stuff')
         updated = 0
+
+@tree.command(name='aitalk', description='Talk to an A.I.')
+async def ai_talk(interaction: discord.Interaction, prompt: str):
+    await interaction.response.send_message(embed=discord.Embed(title=f'Prompt: {prompt}', description=model.generate_content(prompt).text, colour=discord.Colour.blurple()))
 
 @tree.command(name='generateloginkey', description='Generate a key to log in on the website.')
 async def generate_login_key(interaction: discord.Interaction):
@@ -685,7 +700,7 @@ async def force_update(interaction: discord.Interaction):
     else:
         await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
 
-@tree.command(name='warn', description='Warn a user. Can only be used by admins')
+@tree.command(name='warn', description='Warn a user. Can only be used by admins.')
 async def warn(interaction: discord.Interaction, user: discord.Member, reason: str):
     if str(interaction.user.id) in admin_ids:
         if str(user.id) not in list(dlv_warn_saves.keys()):
@@ -697,6 +712,11 @@ async def warn(interaction: discord.Interaction, user: discord.Member, reason: s
         await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Warned {str(user.name)}', colour=discord.Colour.blurple()))
     else:
         await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='trollwarn', description='Fake warn a user.')
+async def warn(interaction: discord.Interaction, user: discord.Member, reason: str):
+    await user.send(embed=discord.Embed(title='You Have Been Warned In Demon List Verifications (Fake Warn)', description=f'Reason: {reason}', colour=discord.Colour.red()))
+    await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Warned {str(user.name)}', description=f'Reason: {reason}\n\n(Troll Warning)', colour=discord.Colour.blurple()))
 
 @tree.command(name='warnlist', description="View a user's warnings. Can only be used by admins.")
 async def warn_list(interaction: discord.Interaction, user: discord.Member):
@@ -761,6 +781,11 @@ async def on_member_leave(member: discord.Member):
     dlv_left_members[str(member.id)] = dlv_users[str(member.id)]
     del dlv_users[str(member.id)]
     save()
+
+@client.event
+async def on_member_join(member: discord.Member):
+    save()
+    await on_message('')
 
 @client.event
 async def on_member_join(member: discord.Member):
@@ -1015,6 +1040,7 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
                                 xp_amount = xp_amount * 1.25
                             dlv_users[dlv_records[record_id]['user_id']]['xp'] += xp_amount
                             save()
+                            await on_message('')
                             await client.get_channel(1249167101235695727).send(f'<@{dlv_records[record_id]["user_id"]}>',
                                                                                embed=discord.Embed(title=f"{dlv_records[record_id]['username']}'s {dlv_list['og_case'][dlv_records[record_id]['demon']]} Record Has Been Accepted!",
                                                                                                    colour=discord.Colour.green()))
@@ -1061,6 +1087,7 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
                                 dlv_list['og_case'][str(level.name).lower()] = str(level.name)
                                 dlv_records[record_id]['status'] = 'accepted'
                                 save()
+                                await on_message('')
                                 try:
                                     await on_message(client.get_channel(1248710289038246010).get_partial_message(1248722284458545244))
                                 except:
@@ -1088,6 +1115,7 @@ async def record_accept(interaction: discord.Interaction, record_id: str, reason
                 dlv_records[record_id]['status'] = 'rejected'
                 dlv_records[record_id]['reject_reason'] = reason
                 save()
+                await on_message('')
                 await client.get_channel(1249167101235695727).send(f'<@{dlv_records[record_id]["user_id"]}>', embed=discord.Embed(
                                                                                        title=f"{dlv_records[record_id]['username']}'s {dlv_records[record_id]['demon'].title()} Record Has Been Rejected.", description=f'Reason: {reason}',
                                                                                        colour=discord.Colour.red()))
@@ -1255,6 +1283,20 @@ async def add_completion_command(interaction: discord.Interaction, user: discord
                 dlv_users[str(user.id)]['completions']['main'].append(demon.lower())
                 dlv_users[str(user.id)]['completions']['first_victors'].append(demon.lower())
                 req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[demon.lower()]}').json()
+                completions_dict = {}
+                for e in dlv_users[str(user.id)]['completions']['main']:
+                    if e in dlv_list['main']:
+                        completions_dict[e] = dlv_list['main'].index(e)
+                sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
+                final_completions = [y[0] for y in sorted_completions]
+                dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['main'] = final_completions
+                completions_dict = {}
+                for e in dlv_users[str(user.id)]['completions']['verifications']:
+                    if e in dlv_list['main']:
+                        completions_dict[e] = dlv_list['main'].index(e)
+                sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
+                final_completions = [y[0] for y in sorted_completions]
+                dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['verifications'] = final_completions
                 xp_amount = float(req['points'])
                 if 75 < int(req['position']) < 151:
                     xp_amount = xp_amount * 1.1
@@ -1262,6 +1304,7 @@ async def add_completion_command(interaction: discord.Interaction, user: discord
                     xp_amount = xp_amount * 1.25
                 dlv_users[str(user.id)]['xp'] += xp_amount
                 save()
+                await on_message('')
                 eeee = "'"
                 await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Added {dlv_list["og_case"][demon.lower()]} To {str(user.name) + eeee}s Completions!', colour=discord.Colour.green()))
             else:
@@ -1293,6 +1336,7 @@ async def remove_completion_command(interaction: discord.Interaction, user: disc
                     xp_amount = xp_amount * 1.25
                 dlv_users[str(user.id)]['xp'] -= xp_amount
                 save()
+                await on_message('')
                 eeee = "'"
                 await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Removed {dlv_list["og_case"][demon.lower()]} From {str(user.name) + eeee}s Completions!', colour=discord.Colour.green()))
             else:
