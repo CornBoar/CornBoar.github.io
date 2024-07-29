@@ -232,7 +232,7 @@ else {
     fetch(`https://api.cornboar.com/dlvvalidateloginkey/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
         return Response.json()
     }).then((data) => {
-        if (data["main"] !== "Success!") {
+        if (data["main"] === "Success!") {
             console.log("e");
         }
         else {
