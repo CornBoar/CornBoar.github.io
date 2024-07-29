@@ -1,5 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 var userId = urlParams.get("u");
+var aredlLevels = [];
+var aredlIds = [];
 
 if (userId != null) {
     fetch(`https://api.cornboar.com/dlvvalidateloginkey/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
@@ -9,6 +11,14 @@ if (userId != null) {
             console.log("ee");
             localStorage.removeItem("DLVAUTHDONOTSHARE");
             window.location.replace("https://cornboar.com/dlv/account/");
+        }
+    });
+    fetch(`https://api.aredl.net/api/aredl/levels/`).then((Response) => {
+        return Response.json()
+    }).then((data) => {
+        for (i in data) {
+            aredlLevels.push(data[i]["name"]);
+            aredlIds.push(data[i]["level_id"]);
         }
     });
     function packRedirect(packName) {
@@ -74,13 +84,33 @@ if (userId != null) {
                 if (completions === "") {
                     completions = `<h2 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif;">No Completions</h2>`;
                 }
-                document.getElementById("stuff").innerHTML = `<h1 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 100px; bottom: 80px;">#${Object.keys(data).indexOf(userId) + 1}. ${data[userId]["username"]}</h1>
+                let demonOptions = "";
+                for (i in aredlLevels) {
+                    demonOptions += `<option value="${aredlLevels[i]}">${aredlIds[i]}</option>`
+                }
+                document.getElementById("stuff").innerHTML = ` <div id="modal" class="modal">
+                    <div id="modal-content" style="text-align: center;">
+                        <h1 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 50px; bottom: 35px;" id="submitarecord">Submit A Record</h1>
+                        <input style="border: thick solid ${hardestColor}; margin: auto; display: block; width: 500px; height: 50px; border-radius: 25px; position: relative; bottom: 50px; text-align: center; font-family: 'Poppins', sans-serif; font-size: larger;" placeholder="Demon" list="demons" id="demonselect">
+                        <datalist id="demons">
+                            ${demonOptions}
+                        </datalist>
+                        <input style="border: thick solid ${hardestColor}; margin: auto; display: block; width: 500px; height: 50px; border-radius: 25px; position: relative; bottom: 25px; text-align: center; font-family: 'Poppins', sans-serif; font-size: larger;" placeholder="Proof Link" id="prooflink">
+                        <input style="border: thick solid ${hardestColor}; margin: auto; display: block; width: 500px; height: 50px; border-radius: 25px; position: relative; bottom: 0px; text-align: center; font-family: 'Poppins', sans-serif; font-size: larger;" placeholder="Additional Notes (Optional)" id="additionalnotes">
+                        <button style="font-size: 25px; position: relative; top: 15px; width: 300px; height: 50px; background-color: black; border: thick solid ${hardestColor}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${hardestColor};" onmouseover=hover(this) onmouseleave=unhover2(this) onclick=submitRecord()>Submit</button>
+                        <button style="font-size: 25px; position: relative; top: 15px; width: 300px; height: 50px; background-color: black; border: thick solid ${hardestColor}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${hardestColor};" onmouseover=hover(this) onmouseleave=unhover2(this) onclick=cancelRecord()>Cancel</button>
+                    </div>
+                </div>
+                <h1 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 100px; bottom: 80px;" id="username">#${Object.keys(data).indexOf(userId) + 1}. ${data[userId]["username"]}</h1>
         <div style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 25px; bottom: 270px; left: 2040px; display: table;">(Discord User ID: ${userId})</div>
         <img src="${data[userId]["avatar_url"]}" onerror=handleError(this) style="border: thick solid ${hardestColor}; border-radius: 25px; margin: auto; display: block; position: relative; bottom: 188px; border-radius: 34%; max-width: 300px; min-width: 300px; max-height: 300px; min-height: 300px; ">
         <img id="backbuttonbg_" onclick="back()" src="https://cornboar.com/assets/backbuttonbg.png">
         <img id="backbutton_" onclick="back()" onmouseover="backButtonHover()" onmouseleave="backButtonUnhover()" src="https://cornboar.com/assets/backbutton.png">
         <img id="backbuttonbg_2" onclick="back2()" src="https://cornboar.com/assets/backbuttonbg.png">
         <img id="backbutton_2" onclick="back2()" onmouseover="backButtonHover2()" onmouseleave="backButtonUnhover2()" src="https://cornboar.com/assets/logout3.png">
+        <div style="text-align: center;">
+            <button style="font-size: 25px; position: relative; bottom: 182px; width: 300px; height: 50px; background-color: black; border: thick solid ${hardestColor}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${hardestColor};" onmouseover=hover(this) onmouseleave=unhover2(this) onclick=submitRecordModal()>Submit A Record</button>
+        </div>
         <div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid ${hardestColor}; text-align: center; width: 800px; position: relative; bottom: 175px;">
             <h1 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; font-size: 75px;">Level ${Math.floor(data[userId]["xp"] / 100)}</h1>
             <div id="buttons" style="text-align: center;">
@@ -142,6 +172,58 @@ if (userId != null) {
         window.location.replace("https://cornboar.com/dlv/account/");
     }
 
+    window.onclick = function(event) {
+    if (event.target == document.getElementById("modal")) {
+        modal.style.display = "none";
+    }
+    }
+
+    function cancelRecord() {
+        modal.style.display = "none";
+    }
+
+    async function undoError() {
+        await new Promise(r => setTimeout(r, 2000));
+        document.getElementById("submitarecord").innerHTML = "Submit A Record";
+        document.getElementById("submitarecord").style.color = document.getElementById("username").style.color;
+    }
+
+    function submitRecord() {
+        if (!aredlLevels.includes(document.getElementById("demonselect").value)) {
+            document.getElementById("submitarecord").innerHTML = "Invalid Demon Selection!";
+            document.getElementById("submitarecord").style.color = "red";
+            undoError();
+        }
+        else if (document.getElementById("prooflink").value === "") {
+            document.getElementById("submitarecord").innerHTML = "Invalid Proof Link!";
+            document.getElementById("submitarecord").style.color = "red";
+            undoError();
+        }
+        else {
+            let demon = document.getElementById("demonselect").value;
+            let proofLink = document.getElementById("prooflink").value;
+            let additionalNotes = document.getElementById("additionalnotes").value;
+            if (demon.slice(-1) === " ") {
+                demon = demon.substring(0, demon.length - 1);
+            }
+            if (additionalNotes === "") {
+                additionalNotes = "None";
+            }
+            fetch(`https://api.cornboar.com/dlvsubmitrecord/${localStorage.getItem("DLVAUTHDONOTSHARE")}/${demon.toLowerCase()}/${proofLink}/${additionalNotes}/`).then((Response) => {
+                return Response.json()
+            }).then((data) => {
+                if (data["main"] !== "Success!") {
+                    alert(`Your Record For ${demon} Has Been Submitted!`);
+                    modal.style.display = "none";
+                }
+                else {
+                    alert(data["main"]);
+                    modal.style.display = "none";
+                }
+            });
+        }
+    }
+
     if (document.getElementById("stuff").innerHTML === "") {
         document.getElementById("stuff").innerHTML = `<h1 style="color: white; font-family: 'Poppins', sans-serif; text-align: center;">loading or something went wrong 👵🏿<h1>`;
     }    
@@ -170,7 +252,7 @@ function backButtonUnhover() {
     document.getElementById("backbuttonbg_").style.maxHeight = "100px";
     document.getElementById("backbuttonbg_").style.minWidth = "155px";
 }
-  
+
 function back() {
     window.location.replace("https://cornboar.com/dlv/");
 }
@@ -187,6 +269,16 @@ function hover(element) {
 function unhover(element) {
     element.style.borderColor = "white";
     element.style.color = "white";
+}
+
+function unhover2(element) {
+    element.style.borderColor = document.getElementById("username").style.color;
+    element.style.color = document.getElementById("username").style.color;
+}
+
+function submitRecordModal() {
+    document.getElementById("modal-content").style.borderColor = document.getElementById("username").style.color;
+    document.getElementById("modal").style.display = "block";
 }
 
 async function hideError() {
