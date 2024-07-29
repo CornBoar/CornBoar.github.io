@@ -212,7 +212,7 @@ if (userId != null) {
             fetch(`https://api.cornboar.com/dlvsubmitrecord/${localStorage.getItem("DLVAUTHDONOTSHARE")}/${demon.toLowerCase()}/${proofLink}/${additionalNotes}/`).then((Response) => {
                 return Response.json()
             }).then((data) => {
-                if (data["main"] === "Success!") {
+                if (data["main"] !== "Success!") {
                     alert(`Your Record For ${demon} Has Been Submitted!`);
                     modal.style.display = "none";
                 }
