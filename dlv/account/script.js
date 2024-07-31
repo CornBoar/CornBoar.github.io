@@ -202,6 +202,7 @@ if (userId != null) {
         else {
             let demon = document.getElementById("demonselect").value;
             let proofLink = document.getElementById("prooflink").value;
+            proofLink = proofLink.replaceAll("/", "SLASH%");
             let additionalNotes = document.getElementById("additionalnotes").value;
             if (demon.slice(-1) === " ") {
                 demon = demon.substring(0, demon.length - 1);
