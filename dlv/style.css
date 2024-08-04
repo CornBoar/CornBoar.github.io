@@ -9,6 +9,7 @@ html {
     min-height: 250px;
     max-width: 600px;
     min-width: 600px;
+    border-radius: 25px;
 }
 
 #leaderboardbutton {
@@ -19,6 +20,7 @@ html {
     min-height: 250px;
     max-width: 600px;
     min-width: 600px;
+    border-radius: 25px;
 }
 
 #accountbutton {
@@ -29,6 +31,7 @@ html {
     min-height: 250px;
     max-width: 600px;
     min-width: 600px;
+    border-radius: 25px;
 }
 
 #roulettebutton {
@@ -39,6 +42,7 @@ html {
     min-height: 250px;
     max-width: 600px;
     min-width: 600px;
+    border-radius: 25px;
 }
 
 #packsbutton {
@@ -49,6 +53,7 @@ html {
     min-height: 250px;
     max-width: 600px;
     min-width: 600px;
+    border-radius: 25px;
 }
 
 #logo {

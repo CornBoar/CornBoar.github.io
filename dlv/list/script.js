@@ -23,7 +23,7 @@ function unhover(elementId, ogColor) {
   document.getElementById(elementId).style.color = ogColor;
 }
 
-fetch("https://api.cornboar.com/dlvlist").then((Response) => {
+fetch("https://api.cornboar.com/dlvlist/").then((Response) => {
   return Response.json();
 }).then((data) => {
   let list = "";

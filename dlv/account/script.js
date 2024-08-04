@@ -88,7 +88,7 @@ if (userId != null) {
                 for (i in aredlLevels) {
                     demonOptions += `<option value="${aredlLevels[i]}">${aredlIds[i]}</option>`
                 }
-                document.getElementById("stuff").innerHTML = ` <div id="modal" class="modal">
+                document.getElementById("stuff").innerHTML = `<div id="modal" class="modal">
                     <div id="modal-content" style="text-align: center;">
                         <h1 style="color: ${hardestColor}; text-align: center; position: relative; font-family: 'Poppins', sans-serif; font-size: 50px; bottom: 35px;" id="submitarecord">Submit A Record</h1>
                         <input style="border: thick solid ${hardestColor}; margin: auto; display: block; width: 500px; height: 50px; border-radius: 25px; position: relative; bottom: 50px; text-align: center; font-family: 'Poppins', sans-serif; font-size: larger;" placeholder="Demon" list="demons" id="demonselect">

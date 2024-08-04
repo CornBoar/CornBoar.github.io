@@ -52,7 +52,7 @@ html {
     transform: translate(-50%, -50%);
   }
   
-  #modal-content {
+#modal-content {
     background-color: black;
     margin: 15% auto;
     padding: 20px;
@@ -62,4 +62,4 @@ html {
     border-radius: 25px;
     top: 50%;
     transform: translate(0%, -25%);
-  }
+}
