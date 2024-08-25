@@ -84,7 +84,7 @@ function start() {
     usedLevelsDict[level1] = positions[level1];
     globalvar5 = JSON.stringify(usedLevelsDict);
     let level1html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level1.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-    <h1 onclick=redirect("${level1.toLowerCase().replaceAll(" ", "blackmonkeys123")}") class="centered2" style="bottom: 15px; color: ${colors[level1.toLowerCase()]};">#${positions[level1]} - ${level1}</h1><input id="percentage" type="number" placeholder="At Least 1%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
+    <h1 onclick=redirect("${level1.toLowerCase().replaceAll(" ", "blackmonkeys123")}") class="centered2" style="bottom: 15px; color: ${colors[level1.toLowerCase()]};">#${positions[level1]}. - ${level1}</h1><input id="percentage" type="number" placeholder="At Least 1%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
     <div id="buttons" style="text-align: center;">
     <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
     <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
@@ -128,7 +128,7 @@ function done() {
         usedLevelsDict[level] = positions[level];
         globalvar4 = colors[level.toLowerCase()];
         let html = `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-        <h1 onclick=redirect("${level.toLowerCase().replaceAll(" ", "blackmonkeys123")}") class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]} - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(globalvar3)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
+        <h1 onclick=redirect("${level.toLowerCase().replaceAll(" ", "blackmonkeys123")}") class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]}. - ${level}</h1><input id="percentage" type="number" placeholder="At Least ${parseInt(globalvar3)}%" min="1" max="100" style="width: 100px; border-radius: 15px; height: 35px;position: relative; bottom: 50px;">
         <div id="buttons" style="text-align: center;">
         <button id="donebutton" onclick=done() onmouseover=doneButtonHover() onmouseleave=doneButtonUnhover() style="background-color: lime; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Done</button>
         <button id="giveupbutton" onclick=giveUp() onmouseover=giveUpButtonHover() onmouseleave=giveUpButtonUnhover() style="background-color: red; border-radius: 25px; width: 100px; height: 50px; position: relative; bottom: 35px; font-family: 'Poppins', sans-serif">Give Up</button>
@@ -182,7 +182,8 @@ function giveUp() {
                 globalvar5 = JSON.stringify(usedLevelsDict);
                 globalvar4 = colors[level.toLowerCase()];
                 document.getElementById("levels").innerHTML += `<div style="left: 50%; transform: translateX(-50%); border-radius: 25px; border: thick solid ${colors[level.toLowerCase()]}; text-align: center; width: 500px; bottom: 135px; position: relative;">
-                <h1 onclick=redirect("${level.toLowerCase().replaceAll(" ", "blackmonkeys123")}") class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]} - ${level}</h1><h1 style="color: ${colors[level.toLowerCase()]}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${i + parseInt(globalvar3) + 1}%</h1>
+                <h1 onclick=redirect("${level.toLowerCase().replaceAll(" ", "blackmonkeys123")}") class="centered2" style="bottom: 15px; color: ${colors[level.toLowerCase()]};">#${positions[level]}.
+                - ${level}</h1><h1 style="color: ${colors[level.toLowerCase()]}; position: relative; bottom: 50px; font-family: 'Poppins', sans-serif; font-size: 50px; margin: 0px; border: 0px; padding: 0px;">${i + parseInt(globalvar3) + 1}%</h1>
                 </div><div style="color: black; user-select: none;">.</div>`
                 i++;
             }
