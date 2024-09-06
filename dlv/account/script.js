@@ -110,6 +110,7 @@ if (userId != null) {
         <img id="backbutton_2" onclick="back2()" onmouseover="backButtonHover2()" onmouseleave="backButtonUnhover2()" src="https://cornboar.com/assets/logout3.png">
         <div style="text-align: center;">
             <button style="font-size: 25px; position: relative; bottom: 182px; width: 300px; height: 50px; background-color: black; border: thick solid ${hardestColor}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${hardestColor};" onmouseover=hover(this) onmouseleave=unhover2(this) onclick=submitRecordModal()>Submit A Record</button>
+            <button style="font-size: 25px; position: relative; bottom: 182px; width: 300px; height: 50px; background-color: black; border: thick solid ${hardestColor}; font-family: 'Poppins', sans-serif; border-radius: 25px; color: ${hardestColor};" onmouseover=hover(this) onmouseleave=unhover2(this) onclick=fish()>Fish</button>
         </div>
         <div style="left: 50%; transform: translateX(-50%); border-top-right-radius: 25px; border-top-left-radius: 25px; border: thick solid ${hardestColor}; text-align: center; width: 800px; position: relative; bottom: 175px;">
             <h1 style="color: ${hardestColor}; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; font-size: 75px;">Level ${Math.floor(data[userId]["xp"] / 100)}</h1>
@@ -282,6 +283,14 @@ function unhover2(element) {
 function submitRecordModal() {
     document.getElementById("modal-content").style.borderColor = document.getElementById("username").style.color;
     document.getElementById("modal").style.display = "block";
+}
+
+function fish() {
+    fetch(`https://api.cornboar.com/dlvfish/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
+        return Response.json()
+    }).then((data) => {
+        alert(data["main"]);
+    });
 }
 
 async function hideError() {

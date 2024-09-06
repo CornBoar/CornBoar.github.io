@@ -20,7 +20,6 @@ function redirect(levelName) {
     window.open(`https://cornboar.com/dlv/level?l=${levelName.replaceAll("blackmonkeys123", " ")}`, '_blank').focus();
 }
 
-
 function startButtonHover() {
     if (document.getElementById("startbutton").disabled === false) {
         document.getElementById("startbutton").style.borderColor = "yellow";
