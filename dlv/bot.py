@@ -16,6 +16,9 @@ import datetime
 from urllib.parse import urlparse, parse_qs
 from contextlib import suppress
 import google.generativeai as genai
+import time
+import threading
+import randomword
 
 genai.configure(api_key=secrets.API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
@@ -51,6 +54,9 @@ for i in list(aredl_data_full.keys()):
     aredl_all_demons.append(i.lower())
 
 gd = gd.Client()
+
+with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
+    dlv_fish_saves = json.load(f)
 
 with open(r'C:\Users\Dani1\DLVWARNSAVES.json', 'r') as f:
     dlv_warn_saves = json.load(f)
@@ -114,6 +120,17 @@ def save():
     json.dump(dlv_login_keys, open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'w'))
     json.dump(dlv_warn_saves, open(r'C:\Users\Dani1\DLVWARNSAVES.json', 'w'))
 
+def timer_countdown():
+    while True:
+        time.sleep(60)
+        for i in list(dlv_fish_saves.values()):
+            if i['timer'] != 0:
+                i['timer'] -= 1
+                json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+
+t = threading.Thread(target=timer_countdown)
+t.start()
+
 for i in list(aredl_data_full.values()):
     if list(aredl_data_full.keys()) == list(dlv_aredl_videos.keys()):
         break
@@ -139,12 +156,13 @@ def hex_to_rgb(hex_code):
 client = discord.Client(intents=discord.Intents.all())
 tree = app_commands.CommandTree(client=client)
 
-admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092', '1154977628743274578', '543885678258290699', '1136397420360646797']
+admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092', '1154977628743274578', '543885678258290699', '1136397420360646797', '1219221392608985092']
 
 updated = 0
 
 @client.event
 async def on_message(message):
+    dlv = message.guild
     global updated
     updated += 1
     try:
@@ -159,6 +177,10 @@ async def on_message(message):
     except:
         pass
     if updated == 10:
+        for i in dlv.members:
+            if str(i.id) not in list(dlv_users.keys()):
+                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
+            save()
         dlv_packs[list(dlv_packs.values())[0]['name']]['list'] = dlv_list['main']
         for i in list(dlv_packs.values()):
             if not i['levels'] == []:
@@ -180,6 +202,10 @@ async def on_message(message):
                         xp_total += y[1]
                 dlv_packs[i['name']]['xp_value'] = xp_total / 2
                 save()
+        for i in dlv.members:
+            if str(i.id) not in list(dlv_users.keys()):
+                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
+            save()
         content = json.dumps(dlv_list)
         encoded_content = base64.b64encode(content.encode()).decode()
         url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json'
@@ -234,6 +260,7 @@ async def on_message(message):
             'sha': file_sha,
             'branch': 'main'
         }
+        dlv_list['main'] = list(dict.fromkeys(dlv_list['main']))
         requests.put(url, headers=headers, data=json.dumps(data))
         for i in dlv_list['main']:
             dlv_list['aredl_positions'][i] = aredl_data_full[dlv_list['og_case'][i]]['position']
@@ -274,7 +301,7 @@ async def on_message(message):
             dlv_packs[i['name']]['victors'] = []
         for i in list(dlv_users.values()):
             try:
-                i['avatar_url'] = str(client.get_guild(1245200525037932565).get_member(int(i['user_id'])).avatar.url)
+                i['avatar_url'] = str(dlv.get_member(int(i['user_id'])).avatar.url)
             except:
                 pass
             if 'monthly_demons' not in list(i['completions'].keys()):
@@ -305,18 +332,21 @@ async def on_message(message):
         sorted_list = list(sorted(list_dict.items(), key=lambda x: x[1], reverse=False))
         final_list = [y[0] for y in sorted_list]
         dlv_list['main'] = final_list
+        for i in list(dlv_users.values()):
+            if i['user_id'] not in list(dlv_fish_saves.values()):
+                dlv_fish_saves[i['user_id']] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
         save()
         for i in list(dlv_users.values()):
             if i['xp'] < 100:
                 if i['xp'] < 25:
                     if i['xp'] != 0:
-                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051046588055555))
+                        await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051046588055555))
                 elif i['xp'] < 50:
-                    await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051133288382475))
+                    await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051133288382475))
                 elif i['xp'] < 75:
-                    await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051315841138760))
+                    await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051315841138760))
                 else:
-                    await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051454429466674))
+                    await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051454429466674))
             save()
             completions_dict = {}
             for e in i['completions']['main']:
@@ -358,14 +388,14 @@ async def on_message(message):
             dlv_packs[list(dlv_packs.keys())[0]]['og_case'] = dlv_list['og_case']
             sorted_users = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
             sorted_users = {x[0]: x[1] for x in sorted_users}
-            top_player = client.get_guild(1245200525037932565).get_member(int(list(sorted_users.values())[0]['user_id']))
+            top_player = dlv.get_member(int(list(sorted_users.values())[0]['user_id']))
             add_top_player_role = True
             for i in top_player.roles:
                 if i.id == 1251257182121361530:
                     add_top_player_role = False
                     break
             if add_top_player_role:
-                await top_player.add_roles(client.get_guild(1245200525037932565).get_role(1251257182121361530))
+                await top_player.add_roles(dlv.get_role(1251257182121361530))
             for i in list(dlv_users.values()):
                 user_xp = i['xp']
                 user_rebirths = 0
@@ -377,41 +407,37 @@ async def on_message(message):
                 update_rebirth_role = True
                 roman_numerals_dict = {0: '0', 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V'}
                 try:
-                    users = client.get_guild(1245200525037932565).get_member(int(i['user_id'])).roles
+                    users = dlv.get_member(int(i['user_id'])).roles
                 except:
                     users = []
                 for e in users:
                     if str(e.name).__contains__('Level') and not str(e.name) == f'Level {level}':
-                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).remove_roles(client.get_guild(1245200525037932565).get_role(e.id))
+                        await dlv.get_member(int(i['user_id'])).remove_roles(dlv.get_role(e.id))
                     if str(e.name) == f'Level {level}':
                         update_level_role = False
                         break
                     if str(e.name).__contains__('Rebirth') and not str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
-                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).remove_roles(client.get_guild(1245200525037932565).get_role(e.id))
+                        await dlv.get_member(int(i['user_id'])).remove_roles(dlv.get_role(e.id))
                     if str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
                         update_rebirth_role = False
                         break
                 if update_level_role:
-                    for x in client.get_guild(1245200525037932565).roles:
+                    for x in dlv.roles:
                         if str(x.name) == f'Level {level}':
-                            await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
+                            await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(x.id))
                 if update_rebirth_role:
-                    for x in client.get_guild(1245200525037932565).roles:
+                    for x in dlv.roles:
                         if str(x.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
-                            await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
-            dlv_list['main'] = list(dict.fromkeys(dlv_list['main']))
+                            await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(x.id))
             for i in list(dlv_users.values()):
                 dlv_users[i['user_id']]['completions']['main'] = list(dict.fromkeys(i['completions']['main']))
                 dlv_users[i['user_id']]['completions']['verifications'] = list(dict.fromkeys(i['completions']['verifications']))
                 dlv_users[i['user_id']]['completions']['first_victors'] = list(dict.fromkeys(i['completions']['first_victors']))
             save()
-        for i in message.guild.members:
+        for i in dlv.members:
             if str(i.id) not in list(dlv_users.keys()):
                 dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
             save()
-        for i in client.get_guild(1245200525037932565).members:
-            if str(i.id) not in list(dlv_users.keys()):
-                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
         print('Updated Stuff')
         updated = 0
 
@@ -431,7 +457,13 @@ async def generate_login_key(interaction: discord.Interaction):
 @tree.command(name='forceupdate', description='Updates all data. Can only be used by admins.')
 async def force_update(interaction: discord.Interaction):
     if str(interaction.user.id) in admin_ids:
-        dlv_members = client.get_guild(1245200525037932565).members
+        print('e')
+        dlv = interaction.guild
+        for i in dlv.members:
+            if str(i.id) not in list(dlv_users.keys()):
+                dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
+            save()
+        dlv_members = dlv.members
         id_list = []
         for i in dlv_members:
             id_list.append(str(i.id))
@@ -440,6 +472,7 @@ async def force_update(interaction: discord.Interaction):
                 dlv_left_members[i] = dlv_users[i]
                 del dlv_users[i]
                 save()
+        dlv_list['main'] = list(dict.fromkeys(dlv_list['main']))
         dlv_packs[list(dlv_packs.values())[0]['name']]['list'] = dlv_list['main']
         for i in list(dlv_packs.values()):
             if not i['levels'] == []:
@@ -461,61 +494,6 @@ async def force_update(interaction: discord.Interaction):
                         xp_total += y[1]
                 dlv_packs[i['name']]['xp_value'] = xp_total / 2
                 save()
-        content = json.dumps(dlv_list)
-        encoded_content = base64.b64encode(content.encode()).decode()
-        url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json'
-        headers = {
-            'Authorization': f'token {secrets.GITHUB_TOKEN}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-        response = requests.get(url, headers=headers)
-        response_data = response.json()
-        file_sha = response_data['sha']
-        data = {
-            'message': 'Database Update',
-            'content': encoded_content,
-            'sha': file_sha,
-            'branch': 'main'
-        }
-        requests.put(url, headers=headers, data=json.dumps(data))
-        sorted_users = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
-        sorted_users = {x[0]: x[1] for x in sorted_users}
-        content = json.dumps(sorted_users)
-        encoded_content = base64.b64encode(content.encode()).decode()
-        url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json'
-        headers = {
-            'Authorization': f'token {secrets.GITHUB_TOKEN}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-        response = requests.get(url, headers=headers)
-        response_data = response.json()
-        file_sha = response_data['sha']
-        data = {
-            'message': 'Database Update',
-            'content': encoded_content,
-            'sha': file_sha,
-            'branch': 'main'
-        }
-        requests.put(url, headers=headers, data=json.dumps(data))
-        sorted_packs = list(sorted(dlv_packs.items(), key=lambda x: x[1]['xp_value'], reverse=True))
-        sorted_packs = {x[0]: x[1] for x in sorted_packs}
-        content = json.dumps(sorted_packs)
-        encoded_content = base64.b64encode(content.encode()).decode()
-        url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvpacks.json'
-        headers = {
-            'Authorization': f'token {secrets.GITHUB_TOKEN}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-        response = requests.get(url, headers=headers)
-        response_data = response.json()
-        file_sha = response_data['sha']
-        data = {
-            'message': 'Database Update',
-            'content': encoded_content,
-            'sha': file_sha,
-            'branch': 'main'
-        }
-        requests.put(url, headers=headers, data=json.dumps(data))
         for i in dlv_list['main']:
             dlv_list['aredl_positions'][i] = aredl_data_full[dlv_list['og_case'][i]]['position']
             dlv_list['videos'][i] = dlv_aredl_videos[dlv_list['og_case'][i]]
@@ -555,7 +533,7 @@ async def force_update(interaction: discord.Interaction):
             dlv_packs[i['name']]['victors'] = []
         for i in list(dlv_users.values()):
             try:
-                i['avatar_url'] = str(client.get_guild(1245200525037932565).get_member(int(i['user_id'])).avatar.url)
+                i['avatar_url'] = str(dlv.get_member(int(i['user_id'])).avatar.url)
             except:
                 pass
             if 'monthly_demons' not in list(i['completions'].keys()):
@@ -586,18 +564,21 @@ async def force_update(interaction: discord.Interaction):
         sorted_list = list(sorted(list_dict.items(), key=lambda x: x[1], reverse=False))
         final_list = [y[0] for y in sorted_list]
         dlv_list['main'] = final_list
+        for i in list(dlv_users.values()):
+            if i['user_id'] not in list(dlv_fish_saves.keys()):
+                dlv_fish_saves[i['user_id']] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
         save()
         for i in list(dlv_users.values()):
             if i['xp'] < 100:
                 if i['xp'] < 25:
                     if i['xp'] != 0:
-                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051046588055555))
+                        await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051046588055555))
                 elif i['xp'] < 50:
-                    await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051133288382475))
+                    await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051133288382475))
                 elif i['xp'] < 75:
-                    await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051315841138760))
+                    await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051315841138760))
                 else:
-                    await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(1261051454429466674))
+                    await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(1261051454429466674))
             completions_dict = {}
             for e in i['completions']['main']:
                 if e in dlv_list['main']:
@@ -638,14 +619,14 @@ async def force_update(interaction: discord.Interaction):
             dlv_packs[list(dlv_packs.keys())[0]]['og_case'] = dlv_list['og_case']
             sorted_users = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
             sorted_users = {x[0]: x[1] for x in sorted_users}
-            top_player = client.get_guild(1245200525037932565).get_member(int(list(sorted_users.values())[0]['user_id']))
+            top_player = dlv.get_member(int(list(sorted_users.values())[0]['user_id']))
             add_top_player_role = True
             for i in top_player.roles:
                 if i.id == 1251257182121361530:
                     add_top_player_role = False
                     break
             if add_top_player_role:
-                await top_player.add_roles(client.get_guild(1245200525037932565).get_role(1251257182121361530))
+                await top_player.add_roles(dlv.get_role(1251257182121361530))
             for i in list(dlv_users.values()):
                 user_xp = i['xp']
                 user_rebirths = 0
@@ -657,28 +638,28 @@ async def force_update(interaction: discord.Interaction):
                 update_rebirth_role = True
                 roman_numerals_dict = {0: '0', 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V'}
                 try:
-                    users = client.get_guild(1245200525037932565).get_member(int(i['user_id'])).roles
+                    users = dlv.get_member(int(i['user_id'])).roles
                 except:
                     users = []
                 for e in users:
                     if str(e.name).__contains__('Level') and not str(e.name) == f'Level {level}':
-                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).remove_roles(client.get_guild(1245200525037932565).get_role(e.id))
+                        await dlv.get_member(int(i['user_id'])).remove_roles(dlv.get_role(e.id))
                     if str(e.name) == f'Level {level}':
                         update_level_role = False
                         break
                     if str(e.name).__contains__('Rebirth') and not str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
-                        await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).remove_roles(client.get_guild(1245200525037932565).get_role(e.id))
+                        await dlv.get_member(int(i['user_id'])).remove_roles(dlv.get_role(e.id))
                     if str(e.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
                         update_rebirth_role = False
                         break
                 if update_level_role:
-                    for x in client.get_guild(1245200525037932565).roles:
+                    for x in dlv.roles:
                         if str(x.name) == f'Level {level}':
-                            await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
+                            await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(x.id))
                 if update_rebirth_role:
-                    for x in client.get_guild(1245200525037932565).roles:
+                    for x in dlv.roles:
                         if str(x.name) == f'Rebirth {roman_numerals_dict[user_rebirths]}':
-                            await client.get_guild(1245200525037932565).get_member(int(i['user_id'])).add_roles(client.get_guild(1245200525037932565).get_role(x.id))
+                            await dlv.get_member(int(i['user_id'])).add_roles(dlv.get_role(x.id))
             for i in dlv_list['main']:
                 dlv_list['videos'][i] = dlv_aredl_videos[dlv_list['og_case'][i]]
                 try:
@@ -691,7 +672,7 @@ async def force_update(interaction: discord.Interaction):
                 dlv_users[i['user_id']]['completions']['verifications'] = list(dict.fromkeys(i['completions']['verifications']))
                 dlv_users[i['user_id']]['completions']['first_victors'] = list(dict.fromkeys(i['completions']['first_victors']))
             save()
-        for i in client.get_guild(1245200525037932565).members:
+        for i in dlv.members:
             if str(i.id) not in list(dlv_users.keys()):
                 dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
             save()
@@ -699,6 +680,70 @@ async def force_update(interaction: discord.Interaction):
         await interaction.response.send_message(embed=discord.Embed(title='Success!', color=discord.Colour.green()), ephemeral=True)
     else:
         await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='fish', description='DLV Fisy')
+async def fish(interaction: discord.Interaction):
+    with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
+        dlv_fish_saves = json.load(f)
+    if dlv_fish_saves[str(interaction.user.id)]['timer'] == 0:
+        random_demon = random.choice(dlv_list['main'])
+        xp_amount = dlv_list['xp_values'][random_demon]
+        dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
+        dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount
+        dlv_fish_saves[str(interaction.user.id)]['timer'] = 60
+        json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Fished {dlv_list["og_case"][random_demon]}! | +{round(int(xp_amount), 1)} XP', colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon][1:7]))))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Are On Cooldown! You Can Fish Again In '
+                                                                          f'{dlv_fish_saves[str(interaction.user.id)]["timer"]} {"Minutes" if dlv_fish_saves[str(interaction.user.id)]["timer"] != 1 else "Minute"}', colour=discord.Colour.red()))
+
+@tree.command(name='fishstats', description="View a user's fishing statistics.")
+async def fish_stats(interaction: discord.Interaction, user: discord.Member=None):
+    with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
+        dlv_fish_saves = json.load(f)
+    if user is None:
+        user = interaction.user
+    if str(user.id) in list(dlv_fish_saves.keys()):
+        best_fish = ''
+        for i in dlv_list['main']:
+            if i in dlv_fish_saves[str(user.id)]['history']:
+                best_fish = dlv_list['og_case'][i]
+                break
+        if best_fish == '':
+            best_fish = 'No Fishes Yet'
+            color = discord.Colour.blurple()
+        else:
+            color = discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][best_fish.lower()][1:7]))
+        fish_history = ''
+        for i in dlv_fish_saves[str(user.id)]['history']:
+            fish_history += dlv_list['og_case'][i] + '\n'
+        if fish_history == '':
+            fish_history = 'No Fishes Yet\n'
+        timer = 'timer'
+        minute = 'Minute'
+        minutes = 'Minutes'
+        this_user = 'This User'
+        you = 'You'
+        await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Fish Stats", description=f'**FISH XP:**\n{dlv_fish_saves[str(user.id)]["xp"]}\n\n**BEST FISH:**\n{best_fish}\n\n**FISH HISTORY:**\n{fish_history}'
+        f'\n{"This User Is Able To Fish Right Now!" if dlv_fish_saves[str(user.id)]["timer"] == 0 else f"{you if user == interaction.user else this_user} Can Fish Again In {dlv_fish_saves[str(user.id)][timer]} {minute if dlv_fish_saves[str(user.id)][timer] == 1 else minutes}."}', colour=color))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Fish Stats", description=f'**FISH XP:**\n0\n\n**BEST FISH:**\nNo Fishes Yet\n\n**FISH HISTORY:**\nNo Fishes Yet'
+        f'\n\nThis User Is Able To Fish Right Now!', colour=discord.Colour.blurple()))
+
+@tree.command(name='fishleaderboard', description='View the fishing leaderboard.')
+async def fish_leaderboard(interaction: discord.Interaction):
+    lb = ''
+    sorted_users = list(sorted(dlv_fish_saves.items(), key=lambda x: x[1]['xp'], reverse=True))
+    sorted_users = {x[0]: x[1] for x in sorted_users}
+    user_number = 1
+    for i in list(sorted_users.values()):
+        lb += f'**#{str(user_number)}**. {i["username"]}: Fish XP: {str(round(i["xp"], 1))}\n'
+        user_number += 1
+    await interaction.response.send_message(embed=discord.Embed(title='**FISH LEADERBOARD**', description=lb, colour=discord.Colour.blurple()))
+
+@tree.command(name='dreverything', description='Dr Slug 😊')
+async def dr_everything(interaction: discord.Interaction):
+    await interaction.response.send_message(embed=discord.Embed(title=f'Dr {randomword.RandomWord().get()["word"].title()}', colour=discord.Colour.blurple()))
 
 @tree.command(name='warn', description='Warn a user. Can only be used by admins.')
 async def warn(interaction: discord.Interaction, user: discord.Member, reason: str):
@@ -1275,46 +1320,43 @@ async def victors_command(interaction: discord.Interaction, demon: str):
 @app_commands.autocomplete(demon=completion_commands_autocompletion)
 async def add_completion_command(interaction: discord.Interaction, user: discord.Member, demon: str):
     if str(interaction.user.id) in admin_ids:
-        if str(interaction.user.id) in ['543885678258290699', '991443322516279466', '863876735031836702']:
-            if str(interaction.user.id) != str(user.id):
-                if demon.lower() not in dlv_list['main']:
-                    await interaction.response.send_message(embed=discord.Embed(title='Invalid Level Name!', colour=discord.Colour.red()), ephemeral=True)
-                    return
-                if demon.lower() in dlv_users[str(user.id)]['completions']['main']:
-                    await interaction.response.send_message(embed=discord.Embed(title='That User Has Already Completed That Demon!', colour=discord.Colour.red()), ephemeral=True)
-                    return
-                dlv_list['victors'][str(user.id)] = str(user.name)
-                dlv_users[str(user.id)]['completions']['main'].append(demon.lower())
-                dlv_users[str(user.id)]['completions']['first_victors'].append(demon.lower())
-                req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[demon.lower()]}').json()
-                completions_dict = {}
-                for e in dlv_users[str(user.id)]['completions']['main']:
-                    if e in dlv_list['main']:
-                        completions_dict[e] = dlv_list['main'].index(e)
-                sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
-                final_completions = [y[0] for y in sorted_completions]
-                dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['main'] = final_completions
-                completions_dict = {}
-                for e in dlv_users[str(user.id)]['completions']['verifications']:
-                    if e in dlv_list['main']:
-                        completions_dict[e] = dlv_list['main'].index(e)
-                sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
-                final_completions = [y[0] for y in sorted_completions]
-                dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['verifications'] = final_completions
-                xp_amount = float(req['points'])
-                if 75 < int(req['position']) < 151:
-                    xp_amount = xp_amount * 1.1
-                if int(req['position']) < 76:
-                    xp_amount = xp_amount * 1.25
-                dlv_users[str(user.id)]['xp'] += xp_amount
-                save()
-                await on_message('')
-                eeee = "'"
-                await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Added {dlv_list["og_case"][demon.lower()]} To {str(user.name) + eeee}s Completions!', colour=discord.Colour.green()))
-            else:
-                await interaction.response.send_message(embed=discord.Embed(title='You Cannot Edit Your Own Completions!', colour=discord.Colour.red()), ephemeral=True)
+        if str(interaction.user.id) != str(user.id):
+            if demon.lower() not in dlv_list['main']:
+                await interaction.response.send_message(embed=discord.Embed(title='Invalid Level Name!', colour=discord.Colour.red()), ephemeral=True)
+                return
+            if demon.lower() in dlv_users[str(user.id)]['completions']['main']:
+                await interaction.response.send_message(embed=discord.Embed(title='That User Has Already Completed That Demon!', colour=discord.Colour.red()), ephemeral=True)
+                return
+            dlv_list['victors'][str(user.id)] = str(user.name)
+            dlv_users[str(user.id)]['completions']['main'].append(demon.lower())
+            dlv_users[str(user.id)]['completions']['first_victors'].append(demon.lower())
+            req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[demon.lower()]}').json()
+            completions_dict = {}
+            for e in dlv_users[str(user.id)]['completions']['main']:
+                if e in dlv_list['main']:
+                    completions_dict[e] = dlv_list['main'].index(e)
+            sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
+            final_completions = [y[0] for y in sorted_completions]
+            dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['main'] = final_completions
+            completions_dict = {}
+            for e in dlv_users[str(user.id)]['completions']['verifications']:
+                if e in dlv_list['main']:
+                    completions_dict[e] = dlv_list['main'].index(e)
+            sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
+            final_completions = [y[0] for y in sorted_completions]
+            dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['verifications'] = final_completions
+            xp_amount = float(req['points'])
+            if 75 < int(req['position']) < 151:
+                xp_amount = xp_amount * 1.1
+            if int(req['position']) < 76:
+                xp_amount = xp_amount * 1.25
+            dlv_users[str(user.id)]['xp'] += xp_amount
+            save()
+            await on_message('')
+            eeee = "'"
+            await interaction.response.send_message(embed=discord.Embed(title=f'Successfully Added {dlv_list["og_case"][demon.lower()]} To {str(user.name) + eeee}s Completions!', colour=discord.Colour.green()))
         else:
-            await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', colour=discord.Colour.red()), ephemeral=True)
+            await interaction.response.send_message(embed=discord.Embed(title='You Cannot Edit Your Own Completions!', colour=discord.Colour.red()), ephemeral=True)
     else:
         await interaction.response.send_message(embed=discord.Embed(title='You Are Not An Admin!', color=discord.Colour.red()), ephemeral=True)
 
