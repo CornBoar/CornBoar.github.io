@@ -1,3 +1,5 @@
+import re
+import datetime
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 import json
@@ -25,6 +27,8 @@ app = fastapi.FastAPI()
 origins = ['*']
 
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
+
+admin_ids = ['991443322516279466', '863876735031836702', '895007949678845972', '704221400256348245', '1219221392608985092', '1154977628743274578', '543885678258290699', '1136397420360646797']
 
 @app.get('/')
 async def root():
@@ -236,7 +240,7 @@ async def dlv_validate_login_key(login_key):
         return {'main': 'An Error Occured'}
 
 @app.get('/dlvsubmitrecord/{login_key}/{demon}/{proof_link}/{additional_notes}/')
-async def get_admin_status(login_key, demon, proof_link, additional_notes):
+async def dlv_submit_record(login_key, demon, proof_link, additional_notes):
     with open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'r+') as f:
         dlv_records = json.load(f)
     with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
@@ -256,6 +260,9 @@ async def get_admin_status(login_key, demon, proof_link, additional_notes):
                         record_id += random.choice(string.ascii_letters + '12345678910')
                     if record_id not in list(dlv_records.keys()):
                         break
+                proof_link = proof_link.replace('SLASH$', '/')
+                proof_link = proof_link.replace('QUESTION$', '?')
+                proof_link = proof_link.replace('AMP$', '&')
                 dlv_records[record_id] = {'record_id': record_id, 'user_id': check_login_key['user_id'], 'username': dlv_users[check_login_key['user_id']]['username'],
                                           'demon': demon.lower(), 'proof_link': proof_link, 'additional_notes': additional_notes, 'status': 'pending', 'reject_reason': None}
                 json.dump(dlv_records, open(r'C:\Users\Dani1\DLVRECORDSAVES.json', 'w'))
@@ -270,3 +277,132 @@ async def get_admin_status(login_key, demon, proof_link, additional_notes):
             return {'main': 'Invalid Demon Name!'}
     else:
         return {'main': 'Invalid Login Key!'}
+
+@app.get('/dlvcheckadmin/{login_key}/')
+async def dlv_check_admin_status(login_key):
+    check_key = await dlv_validate_login_key(login_key)
+    if check_key['main'] == 'Success!':
+        if check_key['user_id'] in admin_ids:
+            return {'main': 'Success!', 'user_id': check_key['user_id']}
+        else:
+            return {'main': 'That user is not an admin!'}
+    else:
+        return {'main': 'Invalid Login Key!'}
+
+@app.get('/dlvfish/{login_key}/')
+async def dlv_fish(login_key):
+    with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
+        dlv_fish_saves = json.load(f)
+    with open(r'C:\Users\Dani1\DLVUSERS.json', 'r+') as f:
+        dlv_users = json.load(f)
+    with open(r'C:\Users\Dani1\DLVLIST.json', 'r+') as f:
+        dlv_list = json.load(f)
+    check_key = await dlv_validate_login_key(login_key)
+    if check_key['main'] == 'Success!':
+        hour_mins = datetime.datetime.now().hour * 60
+        total_minutes = hour_mins + datetime.datetime.now().minute
+        for i in list(dlv_users.values()):
+            if check_key['user_id'] not in list(dlv_fish_saves.keys()):
+                dlv_fish_saves[check_key['user_id']] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
+        json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+        if dlv_fish_saves[check_key['user_id']]['timer'] == 0:
+            random_demon = random.choice(dlv_list['main'])
+            xp_amount = dlv_list['xp_values'][random_demon]
+            dlv_fish_saves[check_key['user_id']]['history'].append(random_demon)
+            dlv_fish_saves[check_key['user_id']]['xp'] += xp_amount
+            dlv_fish_saves[check_key['user_id']]['timer'] = f'{datetime.datetime.now().date()}${total_minutes}'
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            return {'main': f'You Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | +{round(int(xp_amount), 1)} XP'}
+        elif dlv_fish_saves[check_key['user_id']]['timer'].split('$')[0] != str(datetime.datetime.now().date()):
+            random_demon = random.choice(dlv_list['main'])
+            xp_amount = dlv_list['xp_values'][random_demon]
+            dlv_fish_saves[check_key['user_id']]['history'].append(random_demon)
+            dlv_fish_saves[check_key['user_id']]['xp'] += xp_amount
+            dlv_fish_saves[check_key['user_id']]['timer'] = f'{datetime.datetime.now().date()}${total_minutes}'
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            return {'main', f'You Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | +{round(int(xp_amount), 1)} XP'}
+        elif total_minutes >= int(dlv_fish_saves[check_key['user_id']]['timer'].split('$')[1]) + 60:
+            random_demon = random.choice(dlv_list['main'])
+            xp_amount = dlv_list['xp_values'][random_demon]
+            dlv_fish_saves[check_key['user_id']]['history'].append(random_demon)
+            dlv_fish_saves[check_key['user_id']]['xp'] += xp_amount
+            dlv_fish_saves[check_key['user_id']]['timer'] = f'{datetime.datetime.now().date()}${total_minutes}'
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            return {'main': f'You Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | +{round(int(xp_amount), 1)} XP'}
+        else:
+            fish_time = int(dlv_fish_saves[check_key['user_id']]['timer'].split('$')[1]) + 60
+            time_until_next_fish = fish_time - total_minutes
+            return {'main': f'You Are On Cooldown! You Can Fish Again In {time_until_next_fish} {"Minutes" if time_until_next_fish != 1 else "Minute"}'}
+    else:
+        return {'main': 'Invalid Login Key!'}
+
+@app.get('/ybastands/')
+async def yba_stands():
+    stands = requests.get('https://api.trello.com/1/lists/5d856142f16a1c10cb589941/cards?attachments=1').json() + requests.get('https://api.trello.com/1/lists/5e7248a6c55f0531c342cc74/cards?attachments=1').json() + \
+             requests.get('https://api.trello.com/1/lists/5e71cf3b98bf584fd52f1487/cards?attachments=1').json()
+    stands_dict = {}
+    arrow_stand_chances = {'Star Platinum': 1.5, "Magician's Red": 4.5, 'Hermit Purple': 3, 'Hierophant Green': 4, 'Silver Chariot': 3, 'Anubis': 2, 'Cream': 4, 'The World': 1.5, 'Crazy Diamond': 2.5, 'The Hand': 4, 'Red Hot Chili Pepper': 2,
+                           'Killer Queen': 2.5, 'Gold Experience': 2.5, 'Sticky Fingers': 11, 'Sex Pistols': 10, 'Aerosmith': 8, 'Purple Haze': 4, 'Mr. President': 10.5, 'Beach Boy': 10.5, 'White Album': 7.5, 'King Crimson': 2.5, 'Stone Free': 1,
+                           'Whitesnake': 1}
+    ribcage_stand_chances = {'Tusk Act 1': 20, 'Dirty Deeds Done Dirt Cheap': 20, 'Scary Monsters': 20, 'The World Alternate Universe': 20, 'Soft & Wet': 20}
+    for i in stands:
+        stand_name = i['name'].title()
+        if i['name'].__contains__('] '):
+            stand_name = i['name'].split('] ')[1]
+        if stand_name.__contains__('Trello'):
+            stand_name = 'Scary Monsters'
+        if stand_name.__contains__("'S"):
+            stand_name = stand_name.replace("'S", "'s")
+        obtainment_type = 'Other'
+        if stand_name in list(arrow_stand_chances.keys()):
+            obtainment_type = 'Arrow'
+            obtainment_chance = arrow_stand_chances[stand_name]
+        elif stand_name in list(ribcage_stand_chances.keys()):
+            obtainment_type = 'Ribcage'
+            obtainment_chance = ribcage_stand_chances[stand_name]
+        else:
+            obtainment_chance = 100
+        stands_dict[stand_name] = {'image_url': i['cover']['scaled'][-1]['url'], 'skins': [], 'obtainment_chance': obtainment_chance, 'obtainment_type': obtainment_type}
+    skins = requests.get('https://api.trello.com/1/lists/62be6966f3a51160d25bedc2/cards?attachments=1').json() + requests.get('https://api.trello.com/1/lists/62be6966f3a51160d25bedc3/cards?attachments=1').json() + \
+    requests.get('https://api.trello.com/1/lists/62be6966f3a51160d25bedc4/cards?attachments=1').json() + requests.get('https://api.trello.com/1/lists/62be6966f3a51160d25bedc5/cards?attachments=1').json() + \
+    requests.get('https://api.trello.com/1/lists/62be6966f3a51160d25bedc6/cards?attachments=1').json() + requests.get('https://api.trello.com/1/lists/63dd721ca08f622cbde49838/cards?attachments=1').json()
+    skins_dict = {}
+    print(stands_dict)
+    for i in skins:
+        skin_rarity = 'Common'
+        is_limited = False
+        if len(i['labels']) != 0:
+            for v in i['labels']:
+                if v['name'] in ['Common', 'Uncommon', 'Epic', 'Legendary']:
+                    skin_rarity = v['name']
+                else:
+                    is_limited = True
+        skin_name = i['name'].title()
+        if skin_name.__contains__("'S"):
+            skin_name = skin_name.replace("'S", "'s")
+        if skin_name.__contains__(' - 18'):
+            skin_name = skin_name.replace(' - 18', '-18')
+        if skin_name.__contains__('Elf Pistol'):
+            skin_name = skin_name.replace('Elf Pistol', 'Elf Pistols')
+        if i['name'].__contains__('] '):
+            skin_name = i['name'].split('] ')[1]
+        stand = re.search('a stand skin for \[(.*)]', i['desc'].lower()).group(1).title()
+        if stand.__contains__('Trello'):
+            stand = 'Scary Monsters'
+        if stand.__contains__("'S"):
+            stand = stand.replace("'S", "'s")
+        if stand.__contains__(' :'):
+            stand = stand.replace(' :', ':')
+        if stand.__contains__('Btd'):
+            stand = stand.replace('Btd', 'Bites The Dust')
+        if stand.__contains__('D4C') and not stand.__contains__('Love Train'):
+            stand = stand.replace('D4C', 'Dirty Deeds Done Dirt Cheap')
+        if stand.__contains__(': Love Train'):
+            stand = stand.replace(': Love Train', ' Love Train')
+        if stand.__contains__('「'):
+            stand = stand.replace('「', '')
+        if stand.__contains__('」'):
+            stand = stand.replace('」', '')
+        stands_dict[stand]['skins'].append(skin_name)
+        skins_dict[skin_name] = {'image_url': i['cover']['scaled'][-1]['url'], 'rarity': skin_rarity, 'limited': is_limited, 'stand': stand}
+    return {'stands': stands_dict, 'skins': skins_dict}

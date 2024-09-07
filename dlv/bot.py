@@ -41,6 +41,7 @@ def get_yt_id(url, ignore_playlist=True):
             return query.path.split('/')[2]
 
 aredl_data_full = requests.get('https://api.aredl.net/api/aredl/levels/').json()
+aredl_data_full.insert(115, {'position': 114, 'name': 'MewneI', 'points': 170.1, 'level_id': 109447394, 'two_player': False})
 new_aredl_data_full = {}
 for i in aredl_data_full:
     try:
@@ -107,6 +108,7 @@ with open(r'C:\Users\Dani1\DLVLEFTMEMBERS.json', 'r') as f:
     dlv_left_members = json.load(f)
 
 def save():
+    dlv_aredl_videos['MewneI'] = 'https://www.youtube.com/watch?v=yWfbbEbTK9w'
     json.dump(dlv_list, open(r'C:\Users\Dani1\DLVLIST.json', 'w'))
     json.dump(dlv_users, open(r'C:\Users\Dani1\DLVUSERS.json', 'w'))
     json.dump(dlv_keys, open(r'C:\Users\Dani1\DLVKEYS.json', 'w'))
@@ -120,17 +122,6 @@ def save():
     json.dump(dlv_login_keys, open(r'C:\Users\Dani1\DLVLOGINKEYS.json', 'w'))
     json.dump(dlv_warn_saves, open(r'C:\Users\Dani1\DLVWARNSAVES.json', 'w'))
 
-def timer_countdown():
-    while True:
-        time.sleep(60)
-        for i in list(dlv_fish_saves.values()):
-            if i['timer'] != 0:
-                i['timer'] -= 1
-                json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
-
-t = threading.Thread(target=timer_countdown)
-t.start()
-
 for i in list(aredl_data_full.values()):
     if list(aredl_data_full.keys()) == list(dlv_aredl_videos.keys()):
         break
@@ -139,6 +130,8 @@ for i in list(aredl_data_full.values()):
         aredl_data_full[i['name']]['video'] = video_url
         dlv_aredl_videos[i['name']] = video_url
         print('Requested For', i['name'])
+    if i['name'].lower() not in list(dlv_name_to_id.keys()):
+        dlv_name_to_id[i['name'].lower()] = i['level_id']
     else:
         aredl_data_full[i['name']]['video'] = dlv_aredl_videos[i['name']]
     save()
@@ -162,7 +155,7 @@ updated = 0
 
 @client.event
 async def on_message(message):
-    dlv = message.guild
+    dlv = client.get_guild(1245200525037932565)
     global updated
     updated += 1
     try:
@@ -177,6 +170,9 @@ async def on_message(message):
     except:
         pass
     if updated == 10:
+        for i in dlv_list['main']:
+            if i not in list(dlv_list['verifiers'].keys()):
+                dlv_list['verifiers'][i] = [dlv_list['victors'][i][0][0], dlv_list['victors'][i][0][1]]
         for i in dlv.members:
             if str(i.id) not in list(dlv_users.keys()):
                 dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
@@ -206,62 +202,6 @@ async def on_message(message):
             if str(i.id) not in list(dlv_users.keys()):
                 dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
             save()
-        content = json.dumps(dlv_list)
-        encoded_content = base64.b64encode(content.encode()).decode()
-        url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvlist.json'
-        headers = {
-            'Authorization': f'token {secrets.GITHUB_TOKEN}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-        response = requests.get(url, headers=headers)
-        response_data = response.json()
-        file_sha = response_data['sha']
-        data = {
-            'message': 'Database Update',
-            'content': encoded_content,
-            'sha': file_sha,
-            'branch': 'main'
-        }
-        requests.put(url, headers=headers, data=json.dumps(data))
-        sorted_users = list(sorted(dlv_users.items(), key=lambda x: x[1]['xp'], reverse=True))
-        sorted_users = {x[0]: x[1] for x in sorted_users}
-        content = json.dumps(sorted_users)
-        encoded_content = base64.b64encode(content.encode()).decode()
-        url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvusers.json'
-        headers = {
-            'Authorization': f'token {secrets.GITHUB_TOKEN}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-        response = requests.get(url, headers=headers)
-        response_data = response.json()
-        file_sha = response_data['sha']
-        data = {
-            'message': 'Database Update',
-            'content': encoded_content,
-            'sha': file_sha,
-            'branch': 'main'
-        }
-        requests.put(url, headers=headers, data=json.dumps(data))
-        sorted_packs = list(sorted(dlv_packs.items(), key=lambda x: x[1]['xp_value'], reverse=True))
-        sorted_packs = {x[0]: x[1] for x in sorted_packs}
-        content = json.dumps(sorted_packs)
-        encoded_content = base64.b64encode(content.encode()).decode()
-        url = f'https://api.github.com/repos/CornBoar/CornBoar.github.io/contents/api/dlvpacks.json'
-        headers = {
-            'Authorization': f'token {secrets.GITHUB_TOKEN}',
-            'Accept': 'application/vnd.github.v3+json'
-        }
-        response = requests.get(url, headers=headers)
-        response_data = response.json()
-        file_sha = response_data['sha']
-        data = {
-            'message': 'Database Update',
-            'content': encoded_content,
-            'sha': file_sha,
-            'branch': 'main'
-        }
-        dlv_list['main'] = list(dict.fromkeys(dlv_list['main']))
-        requests.put(url, headers=headers, data=json.dumps(data))
         for i in dlv_list['main']:
             dlv_list['aredl_positions'][i] = aredl_data_full[dlv_list['og_case'][i]]['position']
             dlv_list['videos'][i] = dlv_aredl_videos[dlv_list['og_case'][i]]
@@ -332,9 +272,6 @@ async def on_message(message):
         sorted_list = list(sorted(list_dict.items(), key=lambda x: x[1], reverse=False))
         final_list = [y[0] for y in sorted_list]
         dlv_list['main'] = final_list
-        for i in list(dlv_users.values()):
-            if i['user_id'] not in list(dlv_fish_saves.values()):
-                dlv_fish_saves[i['user_id']] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
         save()
         for i in list(dlv_users.values()):
             if i['xp'] < 100:
@@ -459,6 +396,9 @@ async def force_update(interaction: discord.Interaction):
     if str(interaction.user.id) in admin_ids:
         print('e')
         dlv = interaction.guild
+        for i in dlv_list['main']:
+            if i not in list(dlv_list['verifiers'].keys()):
+                dlv_list['verifiers'][i] = [dlv_list['victors'][i][0][0], dlv_list['victors'][i][0][1]]
         for i in dlv.members:
             if str(i.id) not in list(dlv_users.keys()):
                 dlv_users[str(i.id)] = {'username': str(i.name), 'user_id': str(i.id), 'avatar_url': str(i.avatar), 'completions': {'main': [], 'verifications': [], 'first_victors': [], 'monthly_demons': []}, 'xp': 0, 'dlvbucks': 0}
@@ -564,9 +504,6 @@ async def force_update(interaction: discord.Interaction):
         sorted_list = list(sorted(list_dict.items(), key=lambda x: x[1], reverse=False))
         final_list = [y[0] for y in sorted_list]
         dlv_list['main'] = final_list
-        for i in list(dlv_users.values()):
-            if i['user_id'] not in list(dlv_fish_saves.keys()):
-                dlv_fish_saves[i['user_id']] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
         save()
         for i in list(dlv_users.values()):
             if i['xp'] < 100:
@@ -685,61 +622,234 @@ async def force_update(interaction: discord.Interaction):
 async def fish(interaction: discord.Interaction):
     with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
         dlv_fish_saves = json.load(f)
-    if dlv_fish_saves[str(interaction.user.id)]['timer'] == 0:
-        random_demon = random.choice(dlv_list['main'])
-        xp_amount = dlv_list['xp_values'][random_demon]
-        dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
-        dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount
-        dlv_fish_saves[str(interaction.user.id)]['timer'] = 60
+    if interaction.channel.id == 1251296055199273021:
+        hour_mins = datetime.datetime.now().hour * 60
+        total_minutes = hour_mins + datetime.datetime.now().minute
+        for i in list(dlv_users.values()):
+            if str(interaction.user.id) not in list(dlv_fish_saves.keys()):
+                dlv_fish_saves[str(interaction.user.id)] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
         json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
-        await interaction.response.send_message(embed=discord.Embed(title=f'You Fished {dlv_list["og_case"][random_demon]}! | +{round(int(xp_amount), 1)} XP', colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon][1:7]))))
+        if dlv_fish_saves[str(interaction.user.id)]['timer'] == 0:
+            random_demon = random.choice(dlv_list['main'])
+            xp_amount = dlv_list['xp_values'][random_demon]
+            dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
+            dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount
+            dlv_fish_saves[str(interaction.user.id)]['timer'] = f'{datetime.datetime.now().date()}${total_minutes}'
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            await interaction.response.send_message(embed=discord.Embed(title=f'You Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | +{round(int(xp_amount), 1)} XP',
+                                                                        colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon][1:7]))))
+        elif dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[0] != str(datetime.datetime.now().date()):
+            random_demon = random.choice(dlv_list['main'])
+            xp_amount = dlv_list['xp_values'][random_demon]
+            dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
+            dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount
+            dlv_fish_saves[str(interaction.user.id)]['timer'] = f'{datetime.datetime.now().date()}${total_minutes}'
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            await interaction.response.send_message(embed=discord.Embed(title=f'You Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | +{round(int(xp_amount), 1)} XP',
+                                                                        colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon][1:7]))))
+        elif total_minutes >= int(dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[1]) + 60:
+            random_demon = random.choice(dlv_list['main'])
+            xp_amount = dlv_list['xp_values'][random_demon]
+            dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
+            dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount
+            dlv_fish_saves[str(interaction.user.id)]['timer'] = f'{datetime.datetime.now().date()}${total_minutes}'
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            await interaction.response.send_message(embed=discord.Embed(title=f'You Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | +{round(int(xp_amount), 1)} XP',
+                                                                        colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon][1:7]))))
+        else:
+            fish_time = int(dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[1]) + 60
+            time_until_next_fish = fish_time - total_minutes
+            await interaction.response.send_message(embed=discord.Embed(title=f'You Are On Cooldown! You Can Fish Again In '
+                                                                              f'{time_until_next_fish} {"Minutes" if time_until_next_fish != 1 else "Minute"}', colour=discord.Colour.red()))
     else:
-        await interaction.response.send_message(embed=discord.Embed(title=f'You Are On Cooldown! You Can Fish Again In '
-                                                                          f'{dlv_fish_saves[str(interaction.user.id)]["timer"]} {"Minutes" if dlv_fish_saves[str(interaction.user.id)]["timer"] != 1 else "Minute"}', colour=discord.Colour.red()))
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Can Only Fish In <#1251296055199273021>!', colour=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='fishbattle', description='Fish at the same time as another user. Whoever gets the highest fish gets both!')
+async def fish_battle(interaction: discord.Interaction, user: discord.Member):
+    with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
+        dlv_fish_saves = json.load(f)
+    if interaction.channel.id == 1251296055199273021:
+        if not user.id == interaction.user.id:
+            hour_mins = datetime.datetime.now().hour * 60
+            total_minutes = hour_mins + datetime.datetime.now().minute
+            for i in list(dlv_users.values()):
+                if str(interaction.user.id) not in list(dlv_fish_saves.keys()):
+                    dlv_fish_saves[str(interaction.user.id)] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
+            json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+            for i in list(dlv_users.values()):
+                if str(user.id) not in list(dlv_fish_saves.keys()):
+                    dlv_fish_saves[str(user.id)] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
+            cooldown_done = False
+            if dlv_fish_saves[str(interaction.user.id)]['timer'] == 0:
+                cooldown_done = True
+            elif dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[0] != str(datetime.datetime.now().date()):
+                cooldown_done = True
+            elif total_minutes >= int(dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[1]) + 60:
+                cooldown_done = True
+            if cooldown_done:
+                cooldown_done = False
+                if dlv_fish_saves[str(user.id)]['timer'] == 0:
+                    cooldown_done = True
+                elif dlv_fish_saves[str(user.id)]['timer'].split('$')[0] != str(datetime.datetime.now().date()):
+                    cooldown_done = True
+                elif total_minutes >= int(dlv_fish_saves[str(user.id)]['timer'].split('$')[1]) + 60:
+                    cooldown_done = True
+                if cooldown_done:
+                    class fish_battle_view(discord.ui.View):
+                        @discord.ui.button(label=f'Click This Button To Accept If You Are {user.name}!', style=discord.ButtonStyle.green)
+                        async def fish_battle_button(self, button_press: discord.Interaction, button: discord.ui.Button):
+                            if button_press.user.id == user.id:
+                                total_minutes_2 = hour_mins + datetime.datetime.now().minute
+                                cooldown_done_2 = False
+                                if dlv_fish_saves[str(user.id)]['timer'] == 0:
+                                    cooldown_done_2 = True
+                                elif dlv_fish_saves[str(user.id)]['timer'].split('$')[0] != str(datetime.datetime.now().date()):
+                                    cooldown_done_2 = True
+                                elif total_minutes_2 >= int(dlv_fish_saves[str(user.id)]['timer'].split('$')[1]) + 60:
+                                    cooldown_done_2 = True
+                                cooldown_done_3 = False
+                                if dlv_fish_saves[str(interaction.user.id)]['timer'] == 0:
+                                    cooldown_done_3 = True
+                                elif dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[0] != str(datetime.datetime.now().date()):
+                                    cooldown_done_3 = True
+                                elif total_minutes_2 >= int(dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[1]) + 60:
+                                    cooldown_done_3 = True
+                                if cooldown_done_2:
+                                    if cooldown_done_3:
+                                        random_demon = random.choice(dlv_list['main'])
+                                        random_demon_button_presser = random.choice(dlv_list['main'])
+                                        xp_amount = dlv_list['xp_values'][random_demon]
+                                        xp_amount_button_presser = dlv_list['xp_values'][random_demon_button_presser]
+                                        winner = ''
+                                        if xp_amount > xp_amount_button_presser:
+                                            dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
+                                            dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon_button_presser)
+                                            dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount + xp_amount_button_presser
+                                            winner = f'{interaction.user.name} Wins! | +{xp_amount + xp_amount_button_presser} XP'
+                                            winner_color = dlv_list['colors'][random_demon]
+                                        elif xp_amount_button_presser > xp_amount:
+                                            dlv_fish_saves[str(user.id)]['history'].append(random_demon)
+                                            dlv_fish_saves[str(user.id)]['history'].append(random_demon_button_presser)
+                                            dlv_fish_saves[str(user.id)]['xp'] += xp_amount + xp_amount_button_presser
+                                            winner = f'{user.name} Wins! | +{xp_amount + xp_amount_button_presser} XP'
+                                            winner_color = dlv_list['colors'][random_demon_button_presser]
+                                        else:
+                                            dlv_fish_saves[str(interaction.user.id)]['history'].append(random_demon)
+                                            dlv_fish_saves[str(user.id)]['history'].append(random_demon_button_presser)
+                                            dlv_fish_saves[str(interaction.user.id)]['xp'] += xp_amount
+                                            dlv_fish_saves[str(user.id)]['xp'] += xp_amount_button_presser
+                                            winner = f'Tie! Both Users Get The XP From Their Fish.'
+                                            winner_color = dlv_list['colors'][random_demon]
+                                        dlv_fish_saves[str(interaction.user.id)]['timer'] = f'{datetime.datetime.now().date()}${total_minutes_2}'
+                                        dlv_fish_saves[str(user.id)]['timer'] = f'{datetime.datetime.now().date()}${total_minutes_2}'
+                                        json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+                                        await button_press.message.delete()
+                                        await button_press.response.send_message(embeds=[discord.Embed(title=f'{interaction.user.name} Fished {dlv_list["og_case"][random_demon]}! (#{dlv_list["main"].index(random_demon) + 1}) | Worth '
+                                                                                                            f'{round(int(xp_amount), 1)} XP',
+                                                                                                    colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon][1:7]))),
+                                                                                        discord.Embed(title=f'{user.name} Fished {dlv_list["og_case"][random_demon_button_presser]}! (#{dlv_list["main"].index(random_demon_button_presser) + 1}) | Worth '
+                                                                                                            f'{round(int(xp_amount_button_presser), 1)} XP',
+                                                                                                    colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][random_demon_button_presser][1:7]))),
+                                                                                        discord.Embed(title=f'{winner}',
+                                                                                                    colour=discord.Colour.from_rgb(*hex_to_rgb(winner_color[1:7])))])
+                                    else:
+                                        total_minutes = hour_mins + datetime.datetime.now().minute
+                                        fish_time = int(dlv_fish_saves[str(user.id)]['timer'].split('$')[1]) + 60
+                                        time_until_next_fish = fish_time - total_minutes
+                                        await button_press.response.send_message(embed=discord.Embed(title=f'{interaction.user.name} Is On Cooldown! They Can Fish Again In '
+                                                                                                          f'{time_until_next_fish} {"Minutes" if time_until_next_fish != 1 else "Minute"}', colour=discord.Colour.red()))
+                                else:
+                                    total_minutes = hour_mins + datetime.datetime.now().minute
+                                    fish_time = int(dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[1]) + 60
+                                    time_until_next_fish = fish_time - total_minutes
+                                    await button_press.response.send_message(embed=discord.Embed(title=f'You Are On Cooldown! You Can Fish Again In '
+                                                                                                      f'{time_until_next_fish} {"Minutes" if time_until_next_fish != 1 else "Minute"}', colour=discord.Colour.red()))
+                            else:
+                                await button_press.response.send_message(embed=discord.Embed(title=f'This Button Can Only Be Clicked By {user.name}!', color=discord.Colour.red()), ephemeral=True)
+                    await interaction.response.send_message(embed=discord.Embed(title=f'{interaction.user.name} Has Challenged {user.name} To A Fish Battle!',
+                                                                                description=f'If {user.name} accepts by pressing the button below, both users will fish at the same time and whoever gets the higher fish will keep both!',
+                                                                                colour=discord.Colour.blurple()), view=fish_battle_view())
+                else:
+                    total_minutes = hour_mins + datetime.datetime.now().minute
+                    fish_time = int(dlv_fish_saves[str(user.id)]['timer'].split('$')[1]) + 60
+                    time_until_next_fish = fish_time - total_minutes
+                    await interaction.response.send_message(embed=discord.Embed(title=f'{user.name} Is On Cooldown! They Can Fish Again In '
+                                                                                      f'{time_until_next_fish} {"Minutes" if time_until_next_fish != 1 else "Minute"}', colour=discord.Colour.red()))
+            else:
+                total_minutes = hour_mins + datetime.datetime.now().minute
+                fish_time = int(dlv_fish_saves[str(interaction.user.id)]['timer'].split('$')[1]) + 60
+                time_until_next_fish = fish_time - total_minutes
+                await interaction.response.send_message(embed=discord.Embed(title=f'You Are On Cooldown! You Can Fish Again In '
+                                                                                  f'{time_until_next_fish} {"Minutes" if time_until_next_fish != 1 else "Minute"}', colour=discord.Colour.red()))
+        else:
+            await interaction.response.send_message(embed=discord.Embed(title=f'You Cannot Fish Battle Yourself!', colour=discord.Colour.red()))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Can Only Fish In <#1251296055199273021>!', colour=discord.Colour.red()), ephemeral=True)
 
 @tree.command(name='fishstats', description="View a user's fishing statistics.")
 async def fish_stats(interaction: discord.Interaction, user: discord.Member=None):
     with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
         dlv_fish_saves = json.load(f)
-    if user is None:
-        user = interaction.user
-    if str(user.id) in list(dlv_fish_saves.keys()):
-        best_fish = ''
-        for i in dlv_list['main']:
-            if i in dlv_fish_saves[str(user.id)]['history']:
-                best_fish = dlv_list['og_case'][i]
-                break
-        if best_fish == '':
-            best_fish = 'No Fishes Yet'
-            color = discord.Colour.blurple()
+    if interaction.channel.id == 1251296055199273021:
+        hour_mins = datetime.datetime.now().hour * 60
+        total_minutes = hour_mins + datetime.datetime.now().minute
+        if user is None:
+            user = interaction.user
+        for i in list(dlv_users.values()):
+            if str(user.id) not in list(dlv_fish_saves.keys()):
+                dlv_fish_saves[str(user.id)] = {'history': [], 'xp': 0, 'timer': 0, 'user_id': i['user_id'], 'username': i['username']}
+        json.dump(dlv_fish_saves, open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'w'))
+        if str(user.id) in list(dlv_fish_saves.keys()):
+            best_fish = ''
+            for i in dlv_list['main']:
+                if i in dlv_fish_saves[str(user.id)]['history']:
+                    best_fish = dlv_list['og_case'][i]
+                    break
+            if best_fish == '':
+                best_fish = 'No Fishes Yet'
+                color = discord.Colour.blurple()
+            else:
+                color = discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][best_fish.lower()][1:7]))
+            fish_history = ''
+            for i in dlv_fish_saves[str(user.id)]['history'][::-1]:
+                fish_history += dlv_list['og_case'][i] + '\n'
+            if fish_history == '':
+                fish_history = 'No Fishes Yet\n'
+            minute = 'Minute'
+            minutes = 'Minutes'
+            this_user = 'This User'
+            you = 'You'
+            fish_time = int(str(dlv_fish_saves[str(user.id)]['timer']).split('$')[1]) + 60
+            time_until_next_fish = fish_time - total_minutes
+            await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Fish Stats", description=f'**FISH XP:**\n{round(dlv_fish_saves[str(user.id)]["xp"], 1)}\n\n**BEST FISH:**\n{best_fish}\n\n**FISH HISTORY:**\n{fish_history}'
+            f'\n{"This User Is Able To Fish Right Now!" if dlv_fish_saves[str(user.id)]["timer"] == 0 else f"{you if user == interaction.user else this_user} Can Fish Again In {time_until_next_fish} {minute if time_until_next_fish == 1 else minutes}."}',
+                                                                        colour=color))
         else:
-            color = discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][best_fish.lower()][1:7]))
-        fish_history = ''
-        for i in dlv_fish_saves[str(user.id)]['history']:
-            fish_history += dlv_list['og_case'][i] + '\n'
-        if fish_history == '':
-            fish_history = 'No Fishes Yet\n'
-        timer = 'timer'
-        minute = 'Minute'
-        minutes = 'Minutes'
-        this_user = 'This User'
-        you = 'You'
-        await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Fish Stats", description=f'**FISH XP:**\n{dlv_fish_saves[str(user.id)]["xp"]}\n\n**BEST FISH:**\n{best_fish}\n\n**FISH HISTORY:**\n{fish_history}'
-        f'\n{"This User Is Able To Fish Right Now!" if dlv_fish_saves[str(user.id)]["timer"] == 0 else f"{you if user == interaction.user else this_user} Can Fish Again In {dlv_fish_saves[str(user.id)][timer]} {minute if dlv_fish_saves[str(user.id)][timer] == 1 else minutes}."}', colour=color))
+            await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Fish Stats", description=f'**FISH XP:**\n0\n\n**BEST FISH:**\nNo Fishes Yet\n\n**FISH HISTORY:**\nNo Fishes Yet'
+            f'\n\nThis User Is Able To Fish Right Now!', colour=discord.Colour.blurple()))
     else:
-        await interaction.response.send_message(embed=discord.Embed(title=f"{user.name}'s Fish Stats", description=f'**FISH XP:**\n0\n\n**BEST FISH:**\nNo Fishes Yet\n\n**FISH HISTORY:**\nNo Fishes Yet'
-        f'\n\nThis User Is Able To Fish Right Now!', colour=discord.Colour.blurple()))
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Can Only Use This Command In <#1251296055199273021>!', colour=discord.Colour.red()), ephemeral=True)
 
 @tree.command(name='fishleaderboard', description='View the fishing leaderboard.')
 async def fish_leaderboard(interaction: discord.Interaction):
-    lb = ''
-    sorted_users = list(sorted(dlv_fish_saves.items(), key=lambda x: x[1]['xp'], reverse=True))
-    sorted_users = {x[0]: x[1] for x in sorted_users}
-    user_number = 1
-    for i in list(sorted_users.values()):
-        lb += f'**#{str(user_number)}**. {i["username"]}: Fish XP: {str(round(i["xp"], 1))}\n'
-        user_number += 1
-    await interaction.response.send_message(embed=discord.Embed(title='**FISH LEADERBOARD**', description=lb, colour=discord.Colour.blurple()))
+    with open(r'C:\Users\Dani1\DLVFISHSAVES.json', 'r') as f:
+        dlv_fish_saves = json.load(f)
+    if interaction.channel.id == 1251296055199273021:
+        lb = ''
+        sorted_users = list(sorted(dlv_fish_saves.items(), key=lambda x: x[1]['xp'], reverse=True))
+        sorted_users = {x[0]: x[1] for x in sorted_users}
+        user_number = 1
+        for i in list(sorted_users.values()):
+            try:
+                i['username'] = dlv_users[list(sorted_users.keys())[list(sorted_users.values()).index(i)]]['username']
+            except:
+                continue
+            if not i["xp"] == 0:
+                lb += f'**#{str(user_number)}**. {i["username"]}: Fish XP: {str(round(i["xp"], 1))}\n'
+                user_number += 1
+        await interaction.response.send_message(embed=discord.Embed(title='**FISH LEADERBOARD**', description=lb, colour=discord.Colour.blurple()))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Can Only Use This Command In <#1251296055199273021>!', colour=discord.Colour.red()), ephemeral=True)
 
 @tree.command(name='dreverything', description='Dr Slug 😊')
 async def dr_everything(interaction: discord.Interaction):
@@ -883,7 +993,7 @@ async def add_list_demon(interaction: discord.Interaction, demon: str, color_hex
                 return  # So PyCharm Shuts Up
             if str(aredl_data_full[demon]['name']).lower() in dlv_list['main']:
                 if dlv_name_to_id[str(aredl_data_full[demon]['name']).lower()] == str(level.id):
-                    await interaction.response.send_message(embed=discord.Embed(title='Level Is Already on The List!', color=discord.Colour.red()), ephemeral=True)
+                    await interaction.response.send_message(embed=discord.Embed(title='That Level Is Already On The List!', color=discord.Colour.red()), ephemeral=True)
             if color_hex_code.startswith('#') and len(color_hex_code) == 7:
                 dlv_name_to_id[str(aredl_data_full[demon]['name']).lower()] = str(level.id)
                 dlv_list['main'].append(str(aredl_data_full[demon]['name']).lower())
@@ -894,7 +1004,11 @@ async def add_list_demon(interaction: discord.Interaction, demon: str, color_hex
                 dlv_users[str(verifier.id)]['completions']['verifications'].append(str(aredl_data_full[demon]['name']).lower())
                 dlv_users[str(verifier.id)]['completions']['main'].append(str(aredl_data_full[demon]['name']).lower())
                 req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[str(aredl_data_full[demon]["name"]).lower()]}').json()
-                xp_amount = float(req['points'])
+                try:
+                    xp_amount = float(req['points'])
+                except:
+                    req = aredl_data_full[aredl_data_full[demon]['name']]
+                    xp_amount = float(req['points'])
                 if 75 < int(req['position']) < 151:
                     xp_amount = xp_amount * 1.1
                 if int(req['position']) < 76:
@@ -1029,7 +1143,7 @@ async def xp(interaction: discord.Interaction, user: discord.Member=None):
 
 @tree.command(name='recordsubmit', description='Submit a record.')
 @app_commands.autocomplete(demon=record_submit_command_autocompletion)
-async def record_submit(interaction: discord.Interaction, demon: str, proof_link: str, additional_notes: str=None):
+async def record_submit(interaction: discord.Interaction, demon: str, proof_link: str, additional_notes: str=None, color_hex_code_suggestion: str=None):
     if demon.lower() in aredl_all_demons:
         for i in list(dlv_records.values()):
             if i['user_id'] == str(interaction.user.id):
@@ -1045,10 +1159,10 @@ async def record_submit(interaction: discord.Interaction, demon: str, proof_link
                 if record_id not in list(dlv_records.keys()):
                     break
             dlv_records[record_id] = {'record_id': record_id, 'user_id': str(interaction.user.id), 'username': str(interaction.user.name), 'demon': demon.lower(), 'proof_link': proof_link, 'additional_notes': additional_notes, 'status': 'pending',
-                                      'reject_reason': None}
+                                      'color_suggestion': color_hex_code_suggestion, 'reject_reason': None}
             save()
             await record_review_channel.send(embed=discord.Embed(title=f'Record Submitted By {str(interaction.user.name)} ({str(interaction.user.id)}) For {demon} ({aredl_data_full[demon]["level_id"]})',
-                                                                 description=f'Proof Link: {proof_link}\nAdditional Notes: {additional_notes}\nRecord ID: {record_id}'))
+                                                                 description=f'Proof Link: {proof_link}\nAdditional Notes: {additional_notes}\nColor Hex Code Suggestion: {color_hex_code_suggestion}\nRecord ID: {record_id}'))
             await interaction.response.send_message(embed=discord.Embed(title=f'Your Record For {demon} Has Been Submitted!', colour=discord.Colour.green()))
         else:
             await interaction.response.send_message(embed=discord.Embed(title='You Have Already Completed/Submitted This Demon!', colour=discord.Colour.red()), ephemeral=True)
@@ -1080,7 +1194,11 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
                             if dlv_records[record_id]['demon'] == dlv_monthly_demons[str(datetime.date.today().month) + '-' + str(datetime.date.today().year)]:
                                 dlv_users[dlv_records[record_id]['user_id']]['completions']['monthly_demons'].append(dlv_records[record_id]['demon'].lower())
                             req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[dlv_records[record_id]["demon"].lower()]}').json()
-                            xp_amount = float(req['points'])
+                            try:
+                                xp_amount = float(req['points'])
+                            except:
+                                req = aredl_data_full[aredl_data_full[dlv_records[record_id]['demon']]]
+                                xp_amount = float(req['points'])
                             if 75 < int(req['position']) < 151:
                                 xp_amount = xp_amount * 1.1
                             if int(req['position']) < 76:
@@ -1106,7 +1224,7 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
                                 return  # So PyCharm Shuts Up
                             if str(level.name).lower() in dlv_list['main']:
                                 if dlv_name_to_id[str(level.name).lower()] == str(level.id):
-                                    await interaction.response.send_message(embed=discord.Embed(title='Level Is Already on The List!', color=discord.Colour.red()), ephemeral=True)
+                                    await interaction.response.send_message(embed=discord.Embed(title='That Level Is Already On The List!', color=discord.Colour.red()), ephemeral=True)
                             if color_hex_code.startswith('#') and len(color_hex_code) == 7:
                                 dlv_name_to_id[str(level.name).lower()] = str(level.id)
                                 dlv_list['main'].append(str(level.name).lower())
@@ -1117,7 +1235,11 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
                                 dlv_users[dlv_records[record_id]['user_id']]['completions']['verifications'].append(str(level.name).lower())
                                 dlv_users[dlv_records[record_id]['user_id']]['completions']['main'].append(str(level.name).lower())
                                 req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[str(level.name).lower()]}').json()
-                                xp_amount = float(req['points'])
+                                try:
+                                    xp_amount = float(req['points'])
+                                except:
+                                    req = aredl_data_full[aredl_data_full[str(level.name)]['name']]
+                                    xp_amount = float(req['points'])
                                 if 75 < int(req['position']) < 151:
                                     xp_amount = xp_amount * 1.1
                                 if int(req['position']) < 76:
@@ -1151,6 +1273,113 @@ async def record_accept(interaction: discord.Interaction, record_id: str, color_
                     await interaction.response.send_message(embed=discord.Embed(title=f'That record Has Already Been Accepted/Rejected!', colour=discord.Colour.red()), ephemeral=True)
             else:
                 await interaction.response.send_message(embed=discord.Embed(title=f'Invalid Record ID!', colour=discord.Colour.red()), ephemeral=True)
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Are Not An Admin!', colour=discord.Colour.red()), ephemeral=True)
+
+async def add_user_level(demon, user_id, username):
+    if demon.lower() not in dlv_list['main']:
+        if demon in list(aredl_data_full.keys()):
+            try:
+                gd_level_id = aredl_data_full[demon]['level_id']
+                level_search = await gda.search_level(str(gd_level_id))
+                level = level_search[0]
+            except Exception as error:
+                print(error)  # So PyCharm Shuts Up
+                return  # So PyCharm Shuts Up
+            if str(aredl_data_full[demon]['name']).lower() in dlv_list['main']:
+                if dlv_name_to_id[str(aredl_data_full[demon]['name']).lower()] == str(level.id):
+                    return
+            color_hex_code = '#FFFFFF'
+            class _verifier:
+                def __init__(self):
+                    self.id = user_id
+                    self.name = username
+            verifier = _verifier()
+            if color_hex_code.startswith('#') and len(color_hex_code) == 7:
+                dlv_name_to_id[str(aredl_data_full[demon]['name']).lower()] = str(level.id)
+                dlv_list['main'].append(str(aredl_data_full[demon]['name']).lower())
+                dlv_list['colors'][str(aredl_data_full[demon]['name']).lower()] = color_hex_code
+                dlv_list['victors'][str(aredl_data_full[demon]['name']).lower()] = {}
+                dlv_list['verifiers'][str(aredl_data_full[demon]['name']).lower()] = [str(verifier.id), str(verifier.name)]
+                dlv_list['victors'][str(aredl_data_full[demon]['name']).lower()][str(verifier.id)] = str(verifier.name)
+                dlv_users[str(verifier.id)]['completions']['verifications'].append(str(aredl_data_full[demon]['name']).lower())
+                dlv_users[str(verifier.id)]['completions']['main'].append(str(aredl_data_full[demon]['name']).lower())
+                req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[str(aredl_data_full[demon]["name"]).lower()]}').json()
+                xp_amount = float(req['points'])
+                if 75 < int(req['position']) < 151:
+                    xp_amount = xp_amount * 1.1
+                if int(req['position']) < 76:
+                    xp_amount = xp_amount * 1.25
+                dlv_users[str(verifier.id)]['xp'] += xp_amount
+                try:
+                    copy_password = requests.get(f'https://api.aredl.net/api/aredl/levels/{str(level.id)}').json()['level_password']
+                except Exception as error:
+                    print(error)  # So PyCharm Shuts Up
+                    copy_password = 'Not Copyable'
+                copy_password = 'Not Copyable' if copy_password == 'No Copy' else 'Free Copy' if copy_password == 'Free to Copy' else copy_password
+                dlv_list['level_stats'][str(aredl_data_full[demon]['name']).lower()] = {'level_id': str(level.id), 'publisher': str(level.author.name), 'level_length': str(level.length), 'song_name': str(level.songName), 'song_id': str(level.songID),
+                                                                                        'song_author': str(level.songAuthor), 'object_count': str(level.objects), 'copy_password': copy_password}
+                dlv_list['og_case'][str(aredl_data_full[demon]['name']).lower()] = str(aredl_data_full[demon]['name'])
+                save()
+                try:
+                    await on_message('')
+                except:
+                    pass
+    class _user:
+        def __init__(self):
+           self.id = user_id
+           self.name = username
+    user = _user()
+    if demon.lower() in dlv_users[str(user.id)]['completions']['main']:
+        return
+    dlv_list['victors'][str(user.id)] = str(user.name)
+    dlv_users[str(user.id)]['completions']['main'].append(demon.lower())
+    dlv_users[str(user.id)]['completions']['first_victors'].append(demon.lower())
+    req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[demon.lower()]}').json()
+    completions_dict = {}
+    for e in dlv_users[str(user.id)]['completions']['main']:
+        if e in dlv_list['main']:
+            completions_dict[e] = dlv_list['main'].index(e)
+    sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
+    final_completions = [y[0] for y in sorted_completions]
+    dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['main'] = final_completions
+    completions_dict = {}
+    for e in dlv_users[str(user.id)]['completions']['verifications']:
+        if e in dlv_list['main']:
+            completions_dict[e] = dlv_list['main'].index(e)
+    sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
+    final_completions = [y[0] for y in sorted_completions]
+    dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['verifications'] = final_completions
+    xp_amount = float(req['points'])
+    if 75 < int(req['position']) < 151:
+        xp_amount = xp_amount * 1.1
+    if int(req['position']) < 76:
+        xp_amount = xp_amount * 1.25
+    dlv_users[str(user.id)]['xp'] += xp_amount
+    save()
+    await on_message('')
+
+@tree.command(name='transferaredl', description='Automatically add every completion a user has on AREDL. Can only be used by admins.')
+async def transfer_aredl(interaction: discord.Interaction, user: discord.Member, aredl_id: str):
+    if str(interaction.user.id) in admin_ids:
+        profile = requests.get(f'https://api.aredl.net/api/aredl/profiles/{aredl_id}/').json()
+        if 'code' in list(profile.keys()):
+            await interaction.response.send_message(embed=discord.Embed(title=f'Invalid AREDL ID!', colour=discord.Colour.red()), ephemeral=True)
+        else:
+            for i in profile['records']:
+                await add_user_level(i['level']['name'], str(user.id), str(user.name))
+            await interaction.response.send_message(embed=discord.Embed(title=f'Success!', colour=discord.Colour.green()))
+    else:
+        await interaction.response.send_message(embed=discord.Embed(title=f'You Are Not An Admin!', colour=discord.Colour.red()), ephemeral=True)
+
+@tree.command(name='transferpointercrate', description='Automatically add every completion a user has on Pointercrate. Can only be used by admins.')
+async def transfer_pointercrate(interaction: discord.Interaction, user: discord.Member, pointercrate_id: str):
+    if str(interaction.user.id) in admin_ids:
+        profile = requests.get(f'https://pointercrate.com/api/v1/players/{pointercrate_id}/').json()
+        for i in profile['data']['records']:
+            if i['progress'] == 100 and i['status'] == 'approved':
+                await add_user_level(i['demon']['name'], str(user.id), str(user.name))
+        await interaction.response.send_message(embed=discord.Embed(title=f'Success!', colour=discord.Colour.green()))
     else:
         await interaction.response.send_message(embed=discord.Embed(title=f'You Are Not An Admin!', colour=discord.Colour.red()), ephemeral=True)
 
@@ -1282,9 +1511,10 @@ async def leaderboard(interaction: discord.Interaction):
     sorted_users = {x[0]: x[1] for x in sorted_users}
     user_number = 1
     for i in list(sorted_users.values()):
-        lb += f'**#{str(user_number)}**. {i["username"]}: Level: {str(i["xp"] // 100).split(".")[0]}, XP: {str(round(i["xp"], 1))}\n'
-        user_number += 1
-    await interaction.response.send_message(embed=discord.Embed(title='**TOP 100 USERS**', description=lb, colour=discord.Colour.blurple()))
+        if not i["xp"] == 0:
+            lb += f'**#{str(user_number)}**. {i["username"]}: Level: {str(i["xp"] // 100).split(".")[0]}, XP: {str(round(i["xp"], 1))}\n'
+            user_number += 1
+    await interaction.response.send_message(embed=discord.Embed(title='**LEADERBOARD**', description=lb, colour=discord.Colour.blurple()))
 
 @tree.command(name='generatekey', description='Generate a key for the admin website. Can only be used by admins.')
 async def generate_key(interaction: discord.Interaction):
@@ -1345,7 +1575,11 @@ async def add_completion_command(interaction: discord.Interaction, user: discord
             sorted_completions = list(sorted(completions_dict.items(), key=lambda x: x[1], reverse=False))
             final_completions = [y[0] for y in sorted_completions]
             dlv_users[dlv_users[str(user.id)]['user_id']]['completions']['verifications'] = final_completions
-            xp_amount = float(req['points'])
+            try:
+                xp_amount = float(req['points'])
+            except:
+                req = aredl_data_full[aredl_data_full[demon]['name']]
+                xp_amount = float(req['points'])
             if 75 < int(req['position']) < 151:
                 xp_amount = xp_amount * 1.1
             if int(req['position']) < 76:
@@ -1375,7 +1609,11 @@ async def remove_completion_command(interaction: discord.Interaction, user: disc
                 if demon.lower() in dlv_users[str(user.id)]['completions']['first_victors']:
                     dlv_users[str(user.id)]['completions']['first_victors'].remove(demon.lower())
                 req = requests.get(f'https://api.aredl.net/api/aredl/levels/{dlv_name_to_id[demon.lower()]}').json()
-                xp_amount = float(req['points'])
+                try:
+                    xp_amount = float(req['points'])
+                except:
+                    req = aredl_data_full[aredl_data_full[demon]['name']]
+                    xp_amount = float(req['points'])
                 if 75 < int(req['position']) < 151:
                     xp_amount = xp_amount * 1.1
                 if int(req['position']) < 76:
@@ -1398,45 +1636,6 @@ async def demon_list_command(interaction: discord.Interaction):
     for i in dlv_list['main']:
             formatted_list += f'**{dlv_list["main"].index(i) + 1}**. {dlv_list["og_case"][i]}\n'
     await interaction.response.send_message(embed=discord.Embed(title='Demon List', description=formatted_list, colour=discord.Colour.from_rgb(*hex_to_rgb(dlv_list['colors'][dlv_list['main'][0]].strip('#')))))
-
-class connect_account_prompt(discord.ui.Modal, title='Connect Account'):
-    email = discord.ui.TextInput(label='Email Address:', style=discord.TextStyle.paragraph)
-    password = discord.ui.TextInput(label='Password:', style=discord.TextStyle.paragraph)
-    async def on_submit(self, interaction: discord.Interaction):
-        try:
-            print(str(self.email))
-            print(list(dlv_accounts.keys()))
-            if str(self.email) in list(dlv_accounts.keys()):
-                if str(self.password) == dlv_accounts[str(self.email)]['password']:
-                    if dlv_accounts[str(self.email)]['verified']:
-                        if not dlv_accounts[str(self.email)]['discord_account_id']:
-                            dlv_accounts[str(self.email)]['discord_account_id'] = str(interaction.user.id)
-                            save()
-                            await interaction.response.send_message(embed=discord.Embed(title='Successfully Connected Your Account!', colour=discord.Colour.green()))
-                        else:
-                            class disconnect_account_button(discord.ui.View):
-                                email = str(self.email)
-                                @discord.ui.button(label=f'Disconnect "{dlv_accounts[str(self.email)]["discord_account_id"]}"', style=discord.ButtonStyle.red)
-                                async def disconnect_account_button(self, button_press: discord.Interaction, button: discord.ui.Button):
-                                    print(button)  # So PyCharm Shuts Up
-                                    dlv_accounts[str(self.email)]['discord_account_id'] = None
-                                    save()
-                                    await button_press.response.send_message(embed=discord.Embed(title='Successfully Disconnected Account', colour=discord.Colour.green()), ephemeral=True)
-
-                            await interaction.response.send_message(embed=discord.Embed(title='This Account Already Has A Discord Account Connected To It', colour=discord.Colour.red()), ephemeral=True, view=disconnect_account_button())
-                    else:
-                        await interaction.response.send_message(embed=discord.Embed(title='Account Is Not Verified', colour=discord.Colour.red()), ephemeral=True)
-                else:
-                    await interaction.response.send_message(embed=discord.Embed(title='Invalid Password', colour=discord.Colour.red()), ephemeral=True)
-            else:
-                await interaction.response.send_message(embed=discord.Embed(title='Invalid Email', colour=discord.Colour.red()), ephemeral=True)
-        except Exception as error:
-            print(error)  # So PyCharm shuts up
-            await interaction.response.send_message(embed=discord.Embed(title='Error', description='An Error Occured', colour=discord.Colour.red()), ephemeral=True)
-
-@tree.command(name='connectaccount', description='Connect your Discord account to your DLV account.')
-async def link_account_command(interaction: discord.Interaction):
-    await interaction.response.send_modal(connect_account_prompt())
 
 @client.event
 async def on_ready():
