@@ -11,8 +11,8 @@ function delay(ms) {
 }
 
 async function calculateBpm() {
-    await delay(15000);
-    document.getElementById("number").innerHTML = clicks * 4;
+    document.getElementById("e").style.display = "none";
+    await delay(5000);
+    let bpm = clicks * 12;
+    document.getElementById("number").innerHTML = bpm / 4;
 }
-
-calculateBpm();
