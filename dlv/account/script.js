@@ -40,21 +40,23 @@ if (userId != null) {
                 return Response.json()
             }).then((data3) => {
                 function getColors() {
-                    for (let i in Object.values(data)) {
-                    if (Object.keys(Object.values(data)[i]).includes("colors")) {
-                        return Object.values(data)[i]["colors"];
+                    for (let i in Object.values(data3)) {
+                    if (Object.keys(Object.values(data3)[i]).includes("colors")) {
+                        return Object.values(data3)[i]["colors"];
                     }
                     }
                 }
                 function getOgCase() {
-                for (let i in Object.values(data)) {
-                    if (Object.keys(Object.values(data)[i]).includes("og_case")) {
-                        return Object.values(data)[i]["og_case"];
+                for (let i in Object.values(data3)) {
+                    if (Object.keys(Object.values(data3)[i]).includes("og_case")) {
+                        return Object.values(data3)[i]["og_case"];
                     }
                 }
                 }
                 colors = getColors();
                 ogCase = getOgCase();
+                console.log(colors);
+                console.log(data);
                 let hardestColor = colors[data[userId]["completions"]["main"][0]];
                 if (data[userId]["completions"]["main"].length === 0) {
                     hardestColor = "#FFFFFF";
