@@ -13,7 +13,7 @@ if (userId != null) {
             window.location.replace("https://cornboar.com/dlv/account/");
         }
     });
-    fetch(`https://api.aredl.net/api/aredl/levels/`).then((Response) => {
+    fetch(`https://api.cornboar.com/getaredl/`).then((Response) => {
         return Response.json()
     }).then((data) => {
         for (i in data) {
