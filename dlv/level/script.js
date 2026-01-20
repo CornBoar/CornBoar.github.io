@@ -11,7 +11,6 @@ function youtubeId(url){
 
 const urlParams = new URLSearchParams(window.location.search);
 var level = urlParams.get("l");
-level = "kowareta";
 
 function packRedirect(packName) {
     window.location.replace(`https://cornboar.com/dlv/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}`);
