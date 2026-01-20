@@ -11,6 +11,7 @@ function youtubeId(url){
 
 const urlParams = new URLSearchParams(window.location.search);
 var level = urlParams.get("l");
+level = "kowareta";
 
 function packRedirect(packName) {
     window.location.replace(`https://cornboar.com/dlv/packs/?p=${packName.replaceAll("blackmonkeys123", " ")}`);
@@ -41,14 +42,17 @@ fetch("https://api.cornboar.com/dlvlist").then((Response) => {
                     colorList += data["colors"][data3[data["packs"][level][i]]["levels"][e]] + ",";
                 }
                 colorList = colorList.substring(0, colorList.length - 1);
-                console.log(colorList);
                 packs += `<h2 onclick=packRedirect("${data["packs"][level][i].replaceAll(" ", "blackmonkeys123")}") style="color: transparent; -webkit-background-clip: text; background-clip: text; background-image: linear-gradient(to right, ${colorList}); font-family: 'Poppins', sans-serif;">${data["packs"][level][i]}</h2>`;
             }
             if (packs === "") {
                 packs = `<h2 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif;">Not In Any Packs</h2>`;
             }
+            let verifierColor = data["colors"][level]; 
+            if (Object.keys(data2).includes(parseInt(data["verifiers"][level][0]))) {
+                verifierColor = data["colors"][data2[parseInt(data["verifiers"][level][0])]["completions"]["main"][0]];
+            }
             document.getElementById("stuff").innerHTML = `<h1 style="color: ${data["colors"][level]}; font-family: 'Poppins', sans-serif; text-align: center; font-size: 100px; bottom: 80px; position: relative;">#${data["main"].indexOf(level) + 1}. ${data["og_case"][level]}</h1>
-            <h3 onclick=userRedirect("${data["verifiers"][level][0]}") style="font-family: 'Poppins', sans-serif; text-align: center; color: ${data["colors"][level]}; position: relative; bottom: 165px;">Verified By <a onclick=userRedirect("${data["verifiers"][level][0]}") style="color: ${data["colors"][data2[data["verifiers"][level][0]]["completions"]["main"][0]]}">${data["verifiers"][level][1]}</a></h3>
+            <h3 onclick=userRedirect("${data["verifiers"][level][0]}") style="font-family: 'Poppins', sans-serif; text-align: center; color: ${data["colors"][level]}; position: relative; bottom: 165px;">Verified By <a onclick=userRedirect("${data["verifiers"][level][0]}") style="color: ${verifierColor}">${data["verifiers"][level][1]}</a></h3>
             <img id="backbuttonbg_" onclick=back() src="https://cornboar.com/assets/backbuttonbg.png">
             <img id="backbutton_" onclick=back() onmouseover=backButtonHover() onmouseleave=backButtonUnhover() src="https://cornboar.com/assets/backbutton.png">
             <div style="text-align: center;">
