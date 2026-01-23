@@ -277,7 +277,12 @@ function fish() {
     fetch(`https://api.cornboar.com/dlvfish/${localStorage.getItem("DLVAUTHDONOTSHARE")}/`).then((Response) => {
         return Response.json()
     }).then((data) => {
-        alert(data["main"]);
+        if (data["main"] === undefined) {
+            alert(data[1]);
+        }
+        else {
+            alert(data["main"]);
+        }
     });
 }
 
