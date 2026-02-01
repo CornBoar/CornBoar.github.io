@@ -278,7 +278,12 @@ function fish() {
         return Response.json()
     }).then((data) => {
         if (data["main"] === undefined) {
-            alert(data[1]);
+            if (data[1] !== "main") {
+                alert(data[1]);
+            }
+            else {
+                alert(data[0]);
+            }
         }
         else {
             alert(data["main"]);
