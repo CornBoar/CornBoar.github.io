@@ -1,6 +1,7 @@
 fetch("https://api.cornboar.com/extremedledata/").then((Response) => {
     return Response.json()}).then((data) => {
     document.getElementById("levels").innerHTML = data[1];
+    document.getElementById("levels2").innerHTML = data[1];
     localStorage.setItem("demonData", JSON.stringify(data[0]));
 });
 
@@ -77,6 +78,14 @@ function submit() {
             verificationDate += " ↑";
         }
         let feedBackString = `Name: ${name} | Position: ${position} | Two Player: ${twoPlayer} | Game Version: ${gameVersion} | Average Enjoyment Rating: ${enjoyment} | Publisher: ${publisher} | Verifier: ${verifier} | Verification Year: ${verificationDate}`;
-        document.getElementById("feedback").innerHTML += feedBackString + "<br/>";
+        document.getElementById("feedback").innerHTML += feedBackString + "<br/><br/>";
+    });
+}
+
+function submit2() {
+    fetch(`https://api.cornboar.com/extremedledata/${document.getElementById("levelSelect2").value}`).then((Response) => {
+        return Response.json()}).then((data) => {
+        localStorage.setItem("demonData", JSON.stringify(data));
+        document.getElementById("levelSelect2").value = "";
     });
 }
