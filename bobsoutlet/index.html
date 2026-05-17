@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bob's Outlet | Furniture & Decor in Sauk City, WI</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f7f7f7;
+    }
+
+    header {
+      background: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1600&auto=format&fit=crop')
+      center/cover no-repeat;
+      color: white;
+      padding: 120px 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .hero-content h1 {
+      font-size: 4rem;
+      margin-bottom: 10px;
+    }
+
+    .hero-content p {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #d62828;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 8px;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #b71c1c;
+    }
+
+    section {
+      padding: 70px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      color: #222;
+    }
+
+    .about {
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+      font-size: 1.1rem;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 15px;
+      color: #d62828;
+    }
+
+    .reviews {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .review {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .review p {
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .review strong {
+      color: #d62828;
+    }
+
+    .info-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .info-box p {
+      margin: 12px 0;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 50px;
+    }
+
+    iframe {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      margin-top: 25px;
+      height: 350px;
+    }
+
+    @media(max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hero-content">
+      <h1>Bob's Outlet</h1>
+      <p>Affordable Furniture & Decor in Sauk City Since 1977</p>
+
+      <a href="tel:16086433500" class="btn">Call Now</a>
+      <a href="#visit" class="btn">Plan Your Visit</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>Welcome to Bob’s Outlet</h2>
+
+    <div class="about">
+      <p>
+        Welcome to Bob's Outlet, your trusted local destination for furniture
+        and decor in Sauk City, Wisconsin. We pride ourselves on offering
+        friendly service, affordable prices, and quality furniture to help make
+        your home feel special.
+      </p>
+
+      <br/>
+
+      <p>
+        Whether you're redecorating, moving into a new home, or simply looking
+        for a great deal, Bob’s Outlet has been serving the community with
+        excellent selection and value since 1977.
+      </p>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>Great Prices</h3>
+        <p>Affordable furniture and decor for every room in your home.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Friendly Service</h3>
+        <p>Local experts ready to help you find exactly what you need.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Wide Selection</h3>
+        <p>Browse furniture, decor, and home essentials all in one place.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Trusted Since 1977</h3>
+        <p>Serving Sauk City families for decades with quality and care.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What Customers Are Saying</h2>
+
+    <div class="reviews">
+      <div class="review">
+        <p>
+          "Great options at a great price delivered by a group of great people."
+        </p>
+        <strong>— Brett Merkes</strong>
+      </div>
+
+      <div class="review">
+        <p>"Great prices, selection & service."</p>
+        <strong>— Pete Fandrich</strong>
+      </div>
+
+      <div class="review">
+        <p>
+          "This is the one place my husband will actually go shopping for furniture."
+        </p>
+        <strong>— Donna Miller</strong>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <h2>Visit Bob’s Outlet</h2>
+
+    <div class="info-box">
+      <p><strong>Address:</strong> 616 Van Buren St, Sauk City, WI 53583</p>
+
+      <p><strong>Phone:</strong> (608) 643-3500</p>
+
+      <p><strong>Hours:</strong> Opens 10 AM Monday</p>
+
+      <p><strong>Google Rating:</strong> ★ 4.7 / 5</p>
+
+      <p><strong>Typical Visit:</strong> 15–45 minutes</p>
+
+      <iframe
+        src="https://www.google.com/maps?q=616+Van+Buren+St+Sauk+City+WI+53583&output=embed"
+        allowfullscreen=""
+        loading="lazy">
+      </iframe>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Bob's Outlet • Sauk City, Wisconsin</p>
+    <p>Furniture • Decor • Friendly Service • Affordable Prices</p>
+  </footer>
+
+</body>
+</html>
